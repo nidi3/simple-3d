@@ -15,13 +15,12 @@
  */
 package guru.nidi.simple3d.model
 
-data class Polygon(val vertices: List<Vertex>, val props: Map<String, *> = mapOf<String, String>()) {
+data class Polygon(val vertices: List<Vertex>) {
     constructor(vararg vs: Vertex) : this(vs.asList())
-    constructor(props: Map<String, *>, vararg vs: Vertex) : this(vs.asList(), props)
 
     val plane = Plane.fromPoints(vertices[0].pos, vertices[1].pos, vertices[2].pos)
 
-    operator fun unaryMinus() = Polygon(vertices.reversed().map { -it }, props)
+    operator fun unaryMinus() = Polygon(vertices.reversed().map { -it })
 
     fun boundingBox(): Pair<Vector, Vector> {
         var minX = Double.MAX_VALUE
@@ -47,7 +46,7 @@ data class Polygon(val vertices: List<Vertex>, val props: Map<String, *> = mapOf
     fun toTriangles(): List<Polygon> {
         val res = mutableListOf<Polygon>()
         for (i in 2 until vertices.size) {
-            res.add(Polygon(listOf(vertices[0], vertices[i - 1], vertices[i]), props))
+            res.add(Polygon(vertices[0], vertices[i - 1], vertices[i]))
         }
         return res
     }

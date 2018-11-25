@@ -60,7 +60,7 @@ class AffineTransform private constructor(val m00: Double, val m01: Double, val 
 
     fun applyTo(t: Vertex) = Vertex(applyTo(t.pos), applyTo(t.normal))
 
-    fun applyTo(t: Polygon) = Polygon(t.vertices.map { applyTo(it) }, t.props)
+    fun applyTo(t: Polygon) = Polygon(t.vertices.map { applyTo(it) })
 
     fun applyTo(t: Csg) = Csg(t.polygons.map { applyTo(it) })
 }
