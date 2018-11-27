@@ -36,11 +36,10 @@ fun cube(center: Vector = unit, radius: Vector = unit) = Csg(
                     })
                 })
 
-fun convexPrism(length: Double, vararg points: Vector) =
-        convexPrism(length, points.toList())
+fun prism(length: Double, rightHand: Boolean, vararg points: Vector) = prism(length, rightHand, points.toList())
 
-fun convexPrism(length: Double, points: List<Vector>): Csg {
-    val p = Plane.fromPoints(points[0], points[1], points[2])
+fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
+    val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
     if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
 
     fun side(p1: Vector, p2: Vector) = Plane.fromPoints(p1, p2, p2 + p.normal * length).let { side ->

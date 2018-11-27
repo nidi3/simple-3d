@@ -28,10 +28,12 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
     }
 
     companion object {
-        fun fromPoints(a: Vector, b: Vector, c: Vector): Plane {
-            val n = ((b - a) x (c - a)).unit()
+        fun fromPoints(a: Vector, b: Vector, c: Vector, rightHand: Boolean = true): Plane {
+            val n = (if (rightHand) 1 else -1) * ((b - a) x (c - a)).unit()
             return Plane(n, n * a)
         }
+
+        fun fromVertex(a: Vertex) = Plane(a.normal, a.normal * a.pos)
     }
 
     operator fun contains(point: Vector) = abs((normal * point) - w) < EPSILON

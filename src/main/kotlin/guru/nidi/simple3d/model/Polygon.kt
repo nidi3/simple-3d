@@ -15,10 +15,17 @@
  */
 package guru.nidi.simple3d.model
 
+import kotlin.math.sign
+
 data class Polygon(val vertices: List<Vertex>) {
     constructor(vararg vs: Vertex) : this(vs.asList())
 
-    val plane = Plane.fromPoints(vertices[0].pos, vertices[1].pos, vertices[2].pos)
+    val plane = Plane.fromVertex(vertices[0])
+
+    init {
+        val nonPlanar = vertices.filter { it.pos !in plane }
+        if (nonPlanar.isNotEmpty()) throw IllegalArgumentException("not all points in a plane: $nonPlanar")
+    }
 
     operator fun unaryMinus() = Polygon(vertices.reversed().map { -it })
 
@@ -42,12 +49,74 @@ data class Polygon(val vertices: List<Vertex>) {
 
     fun size() = boundingBox().let { (it.second - it.first).abs() }
 
-    //TODO support concave
-    fun toTriangles(): List<Polygon> {
-        val res = mutableListOf<Polygon>()
-        for (i in 2 until vertices.size) {
-            res.add(Polygon(vertices[0], vertices[i - 1], vertices[i]))
-        }
-        return res
+    fun toTriangles(): List<Polygon> = triangulate(vertices)
+}
+
+private const val CONCAVE = -1
+private const val CONVEX = 1
+
+private fun triangulate(points: List<Vertex>): List<Polygon> {
+    val cs = points.toMutableList()
+    val tris = mutableListOf<Polygon>()
+
+    fun pred(i: Int) = if (i == 0) cs.lastIndex else i - 1
+    fun succ(i: Int) = if (i == cs.lastIndex) 0 else i + 1
+
+    fun spannedAreaSign(p1: Vertex, p2: Vertex, p3: Vertex): Int {
+        val t = (p2.pos - p1.pos) x (p3.pos - p2.pos)
+        return sign(t * p1.normal).toInt()
     }
+
+    fun classify(n: Int) = spannedAreaSign(cs[pred(n)], cs[n], cs[succ(n)])
+
+    fun addTriangle(n: Int) = try {
+        tris += Polygon(cs[pred(n)], cs[n], cs[succ(n)])
+    } catch (e: IllegalArgumentException) {
+        //3 points in a line: ignore
+    }
+
+    val vertexType = cs.mapIndexedTo(mutableListOf()) { i, _ -> classify(i) }
+
+    fun isEarTip(n: Int): Boolean {
+        if (vertexType[n] == CONCAVE) return false
+        val prev = pred(n)
+        val next = succ(n)
+        var i = succ(next)
+        while (i != prev) {
+            if (vertexType[i] != CONVEX
+                    && spannedAreaSign(cs[next], cs[prev], cs[i]) >= 0
+                    && spannedAreaSign(cs[prev], cs[n], cs[i]) >= 0
+                    && spannedAreaSign(cs[n], cs[next], cs[i]) >= 0) return false
+            i = succ(i)
+        }
+        return true
+    }
+
+    fun findEarTip(): Int {
+        for (i in 0 until cs.size) if (isEarTip(i)) return i
+        for (i in 0 until cs.size) if (vertexType[i] != CONCAVE) return i
+        return 0
+    }
+
+    fun cutEarTip(n: Int) {
+        addTriangle(n)
+        cs.removeAt(n)
+        vertexType.removeAt(n)
+    }
+
+    while (cs.size > 3) {
+        val n = findEarTip()
+        cutEarTip(n)
+
+        val prev = pred(n)
+        val next = if (n == cs.size) 0 else n
+        vertexType[prev] = classify(prev)
+        vertexType[next] = classify(next)
+    }
+
+    if (cs.size == 3) {
+        addTriangle(1)
+    }
+
+    return tris
 }

@@ -15,13 +15,32 @@
  */
 package guru.nidi.simple3d.model
 
-class AffineTransform private constructor(val m00: Double, val m01: Double, val m02: Double, val m03: Double,
-                                          val m10: Double, val m11: Double, val m12: Double, val m13: Double,
-                                          val m20: Double, val m21: Double, val m22: Double, val m23: Double) {
+data class AffineTransform constructor(val m00: Double, val m01: Double, val m02: Double, val m03: Double,
+                                       val m10: Double, val m11: Double, val m12: Double, val m13: Double,
+                                       val m20: Double, val m21: Double, val m22: Double, val m23: Double) {
     constructor() : this(
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
             0.0, 0.0, 1.0, 0.0)
+
+    fun transpose() = AffineTransform(m00, m10, m20, 0.0, m01, m11, m21, 0.0, m02, m12, m22, 0.0)
+
+    fun determinant() = m00 * (m11 * m22 - m12 * m21) - m10 * (m01 * m22 - m02 * m21) + m20 * (m01 * m12 - m02 * m11)
+
+    fun adjugate(): AffineTransform {
+        val x = m00 * m11 * m22 + m01 * m12 * m20 + m02 * m10 * m21 - m02 * m11 * m20 - m01 * m10 * m22 - m00 * m12 * m21
+        return AffineTransform(
+                m11 * m22 - m12 * m21, -m01 * m22 + m02 * m21, m01 * m12 - m02 * m11, (-m01 * m12 * m23 - m02 * m13 * m21 - m03 * m11 * m22 + m03 * m12 * m21 + m02 * m11 * m23 + m01 * m13 * m22),
+                -m10 * m22 + m12 * m20, m00 * m22 - m02 * m20, -m00 * m12 + m02 * m10, (m00 * m12 * m23 + m02 * m13 * m20 + m03 * m10 * m22 - m03 * m12 * m20 - m02 * m10 * m23 - m00 * m13 * m22),
+                m10 * m21 - m11 * m20, -m00 * m21 + m01 * m20, m00 * m11 - m01 * m10, (-m00 * m11 * m23 - m01 * m13 * m20 - m03 * m10 * m21 + m03 * m11 * m20 + m01 * m10 * m23 + m00 * m13 * m21)
+        )
+    }
+
+    fun inverse() = (1.0 / determinant()) * adjugate()
+
+    operator fun Double.times(a: AffineTransform) = AffineTransform(this * a.m00, this * a.m01, this * a.m02, this * a.m03,
+            this * a.m10, this * a.m11, this * a.m12, this * a.m13,
+            this * a.m20, this * a.m21, this * a.m22, this * a.m23)
 
     fun translate(v: Vector) = AffineTransform(
             m00, m01, m02, m03 + m00 * v.x + m01 * v.y + m02 * v.z,
@@ -58,11 +77,16 @@ class AffineTransform private constructor(val m00: Double, val m01: Double, val 
             m10 * p.x + m11 * p.y + m12 * p.z + m13,
             m20 * p.x + m21 * p.y + m22 * p.z + m23)
 
-    fun applyTo(t: Vertex) = Vertex(applyTo(t.pos), applyTo(t.normal))
+    fun applyTo(t: Vertex) = Vertex(applyTo(t.pos), inverse().transpose().applyTo(t.normal))
 
     fun applyTo(t: Polygon) = Polygon(t.vertices.map { applyTo(it) })
 
     fun applyTo(t: Csg) = Csg(t.polygons.map { applyTo(it) })
+
+    override fun toString(): String {
+        val f = "%6.2f %6.2f %6.2f %6.2f%n"
+        return String.format(f, m00, m01, m02, m03) + String.format(f, m10, m11, m12, m13) + String.format(f, m20, m21, m22, m23)
+    }
 }
 
 fun translate(v: Vector) = AffineTransform().translate(v)

@@ -17,23 +17,13 @@ package guru.nidi.simple3d
 
 import guru.nidi.simple3d.model.*
 import java.io.File
-import kotlin.math.sqrt
 
 fun main() {
     model {
-        val diff = .00
-        transform(scale(v(10, 10, 10))) {
-            val s = 1.5 * sqrt(2.0) - 2 - diff
-            val q = cube(2.0 * unit, 2.0 * unit)
-            val a = v(1 + s, 4 - s, 4)
-            val b = v(4 - s, 1 + s, 4)
-            val c = v(3 - s, 0 + s, 0)
-            val d = v(0 + s, 3 - s, 0)
-            val n = -4.0 * Plane.fromPoints(a, b, c).normal
-            add((q - prism(8.0, true, a + n, b + n, c + n, d + n)).rotateX(0.deg()))
-            add((q and prism(8.0, true, a + n, b + n, c + n, d + n)).translate(v(10, 0, 0)))
-            add(q.translate(v(5, 0, 0)))
-        }
-        write(File("target/rupert.stl"), "rupert")
+        val vs = listOf(v(0, 0, 0), v(1, 1, 0), v(0, 2, 0), v(3, 2, 0), v(2, 1, 0), v(3, 0, 0))
+        val xs = listOf(v(1, 1, 0), v(0, 2, 0), v(3, 2, 0), v(2, 1, 0), v(3, 0, 0), v(0, 0, 0))
+        add(prism(10.0, true, xs))
+        add(prism(10.0, false, vs).translate(v(5, 0, 0)))
+        write(File("target/concave.stl"), "fix")
     }
 }

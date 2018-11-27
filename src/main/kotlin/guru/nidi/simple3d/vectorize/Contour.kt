@@ -1,9 +1,10 @@
 package guru.nidi.simple3d.vectorize
 
+import guru.nidi.simple3d.model.Vector
 import java.awt.image.BufferedImage
 import java.lang.Integer.signum
 
-//TODO only one countour supported
+//TODO only one contour supported, endless loop is first point has no neighbors
 fun contour(image: BufferedImage, classifier: (Int) -> Boolean): List<Point> {
     fun isBlack(x: Int, y: Int) = classifier(image.getRGB(x, y))
     fun isBlack(p: Point) = isBlack(p.x, p.y)
@@ -27,6 +28,8 @@ fun contour(image: BufferedImage, classifier: (Int) -> Boolean): List<Point> {
 data class Point(val x: Int, val y: Int) {
     fun isOneLine(p1: Point, p2: Point) = signum(p1.x - this.x) == signum(p2.x - p1.x)
             && signum(p1.y - this.y) == signum(p2.y - p1.y)
+
+    fun toVector() = Vector(x.toDouble(), y.toDouble(), 0.0)
 }
 
 data class DirPoint(val dx: Int, val dy: Int, val x: Int, val y: Int) {
