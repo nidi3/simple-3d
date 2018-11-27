@@ -32,7 +32,7 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
     constructor(node: Node) : this(node.allPolygons(), node)
 
     companion object {
-        fun ofPolygons(steps: (PolygonSink) -> Unit): Csg {
+        fun ofPolygons(steps: PolygonSink.() -> Unit): Csg {
             val polys = PolygonList(mutableListOf())
             steps(polys)
             return Csg(polys.list)

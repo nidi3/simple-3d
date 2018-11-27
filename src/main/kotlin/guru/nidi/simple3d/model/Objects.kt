@@ -48,12 +48,12 @@ fun convexPrism(length: Double, points: List<Vector>): Csg {
                 Vertex(p2 + p.normal * length, side.normal), Vertex(p1 + p.normal * length, side.normal))
     }
 
-    return Csg.ofPolygons { sink ->
-        sink.add(Polygon(points.reversed().map { Vertex(it, -p.normal) }))
-        sink.add(Polygon(points.map { Vertex(it + p.normal * length, p.normal) }))
-        sink.add(side(points[points.size - 1], points[0]))
+    return Csg.ofPolygons {
+        add(Polygon(points.reversed().map { Vertex(it, -p.normal) }))
+        add(Polygon(points.map { Vertex(it + p.normal * length, p.normal) }))
+        add(side(points[points.size - 1], points[0]))
         for (i in 0..points.size - 2) {
-            sink.add(side(points[i], points[i + 1]))
+            add(side(points[i], points[i + 1]))
         }
     }
 }
@@ -65,7 +65,7 @@ fun sphere(center: Vector = unit, radius: Double = 1.0, slices: Int = 32, stacks
         return Vertex(center + dir * (radiusFunc?.invoke(phi, theta) ?: radius), dir)
     }
 
-    return Csg.ofPolygons { sink ->
+    return Csg.ofPolygons {
         for (i in 0 until slices) {
             val id = i.toDouble()
             for (j in 0 until stacks) {
@@ -75,7 +75,7 @@ fun sphere(center: Vector = unit, radius: Double = 1.0, slices: Int = 32, stacks
                 if (j > 0) vertices.add(vertex((id + 1) / slices, jd / stacks))
                 if (j < stacks - 1) vertices.add(vertex((id + 1) / slices, (jd + 1) / stacks))
                 vertices.add(vertex(id / slices, (jd + 1) / stacks))
-                sink.add(Polygon(vertices))
+                add(Polygon(vertices))
             }
         }
     }
@@ -98,19 +98,19 @@ fun cylinder(start: Vector = Vector(0.0, -1.0, 0.0), end: Vector = Vector(0.0, 1
         return Vertex(pos, normal)
     }
 
-    return Csg.ofPolygons { sink ->
+    return Csg.ofPolygons {
         for (i in 0 until slices) {
             val id = i.toDouble()
             val t0 = id / slices
             val t1 = (id + 1) / slices
-            sink.add(Polygon(s, point(0.0, t0, -1.0), point(0.0, t1, -1.0)))
+            add(Polygon(s, point(0.0, t0, -1.0), point(0.0, t1, -1.0)))
             for (j in 0 until stacks) {
                 val jd = j.toDouble()
                 val j0 = jd / stacks
                 val j1 = (jd + 1) / stacks
-                sink.add(Polygon(point(j0, t1, 0.0), point(j0, t0, 0.0), point(j1, t0, 0.0), point(j1, t1, 0.0)))
+                add(Polygon(point(j0, t1, 0.0), point(j0, t0, 0.0), point(j1, t0, 0.0), point(j1, t1, 0.0)))
             }
-            sink.add(Polygon(e, point(1.0, t1, 1.0), point(1.0, t0, 1.0)))
+            add(Polygon(e, point(1.0, t1, 1.0), point(1.0, t0, 1.0)))
         }
     }
 }
@@ -127,17 +127,17 @@ fun ring(center: Vector = unit, radius: Double = 1.0, r: Double = 1.0, h: Double
     val da = 2 * PI / slices
     var a = 0.0
     val down = Vector(0.0, 0.0, 1.0)
-    return Csg.ofPolygons { sink ->
+    return Csg.ofPolygons {
         while (a < 2 * PI + da / 2) {
             var b = (PI - h / radius) / 2
-            sink.add(Polygon(vertex(radius, a, b, down), vertex(radius + r, a, b, down), vertex(radius + r, a + da, b, down), vertex(radius, a + da, b, down)))
+            add(Polygon(vertex(radius, a, b, down), vertex(radius + r, a, b, down), vertex(radius + r, a + da, b, down), vertex(radius, a + da, b, down)))
             val db = h / radius
             while (b < (PI + h / radius) / 2) {
-                sink.add(Polygon(vertex(radius, a, b, -1), vertex(radius, a + da, b, -1), vertex(radius, a + da, b + db, -1), vertex(radius, a, b + db, -1)))
-                sink.add(Polygon(vertex(radius + r, a, b, 1), vertex(radius + r, a, b + db, 1), vertex(radius + r, a + da, b + db, 1), vertex(radius + r, a + da, b, 1)))
+                add(Polygon(vertex(radius, a, b, -1), vertex(radius, a + da, b, -1), vertex(radius, a + da, b + db, -1), vertex(radius, a, b + db, -1)))
+                add(Polygon(vertex(radius + r, a, b, 1), vertex(radius + r, a, b + db, 1), vertex(radius + r, a + da, b + db, 1), vertex(radius + r, a + da, b, 1)))
                 b += db
             }
-            sink.add(Polygon(vertex(radius, a, b, -down), vertex(radius, a + da, b, -down), vertex(radius + r, a + da, b, -down), vertex(radius + r, a, b, -down)))
+            add(Polygon(vertex(radius, a, b, -down), vertex(radius, a + da, b, -down), vertex(radius + r, a + da, b, -down), vertex(radius + r, a, b, -down)))
             a += da
         }
     }
