@@ -21,12 +21,12 @@ import kotlin.test.assertEquals
 class PlaneTest {
     @Test
     fun splitPolygonSimple() {
-        val xyPlane = Plane.fromPoints(Vector(0.0, 0.0, 0.0), Vector(1.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0))
-        val n = Vector(0.0, 0.0, 1.0)
-        val high = Polygon(Vertex(Vector(0.0, 0.0, 1.0), n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, 1.0), n))
-        val low = Polygon(Vertex(Vector(0.0, 0.0, -1.0), n), Vertex(Vector(1.0, 0.0, -1.0), n), Vertex(Vector(0.0, 1.0, -1.0), n))
-        val zero = Polygon(Vertex(Vector(0.0, 0.0, 0.0), n), Vertex(Vector(1.0, 0.0, 0.0), n), Vertex(Vector(0.0, 1.0, 0.0), n))
-        val mzero = Polygon(Vertex(Vector(0.0, 0.0, 0.0), n), Vertex(Vector(0.0, 1.0, 0.0), n), Vertex(Vector(1.0, 0.0, 0.0), n))
+        val xyPlane = Plane.fromPoints(origin, xUnit, yUnit)
+        val n = zUnit
+        val high = Polygon(Vertex(zUnit, n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, 1.0), n))
+        val low = Polygon(Vertex(-zUnit, n), Vertex(Vector(1.0, 0.0, -1.0), n), Vertex(Vector(0.0, 1.0, -1.0), n))
+        val zero = Polygon(Vertex(origin, n), Vertex(Vector(1.0, 0.0, 0.0), n), Vertex(Vector(0.0, 1.0, 0.0), n))
+        val mzero = Polygon(Vertex(origin, n), Vertex(yUnit, n), Vertex(xUnit, n))
         test(xyPlane, high, listOf(listOf(), listOf(), listOf(high), listOf()))
         test(xyPlane, low, listOf(listOf(), listOf(), listOf(), listOf(low)))
         test(xyPlane, zero, listOf(listOf(zero), listOf(), listOf(), listOf()))
@@ -35,12 +35,20 @@ class PlaneTest {
 
     @Test
     fun splitPolygon() {
-        val xyPlane = Plane.fromPoints(Vector(0.0, 0.0, 0.0), Vector(1.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0))
-        val n = Vector(0.0, 0.0, 1.0)
-        val p = Polygon(Vertex(Vector(0.0, 0.0, 1.0), n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, -1.0), n))
-        val up = Polygon(Vertex(Vector(0.0, 0.0, 1.0), n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.5, 0.5, 0.0), n), Vertex(Vector(0.0, 0.5, 0.0), n))
+        val xyPlane = Plane.fromPoints(origin, xUnit, yUnit)
+        val n = zUnit
+        val p = Polygon(Vertex(zUnit, n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, -1.0), n))
+        val up = Polygon(Vertex(zUnit, n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.5, 0.5, 0.0), n), Vertex(Vector(0.0, 0.5, 0.0), n))
         val down = Polygon(Vertex(Vector(0.5, 0.5, 0.0), n), Vertex(Vector(0.0, 1.0, -1.0), n), Vertex(Vector(0.0, 0.5, 0.0), n))
         test(xyPlane, p, listOf(listOf(), listOf(), listOf(up), listOf(down)))
+    }
+
+    @Test
+    fun intersect() {
+        val p1 = Plane.fromVertex(Vertex(v(1, 0, 2), v(0, 0, 1)))
+        val p2 = Plane.fromVertex(Vertex(v(0, 0, 0), v(1, 0, 1)))
+        val l = p1 and p2
+        println(l)
     }
 }
 

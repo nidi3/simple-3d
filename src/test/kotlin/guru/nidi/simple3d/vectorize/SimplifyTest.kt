@@ -22,7 +22,7 @@ class SimplifyTest {
     @Test
     fun simple() {
         val ps = listOf(Point(0, 0), Point(11, 10), Point(20, 20))
-        assertEquals(ps, simplify(ps, .1))
-        assertEquals(listOf(Point(0, 0), Point(20, 20)), simplify(ps, 1.0))
+        assertEquals(ps, ps.simplify(.1))
+        assertEquals(listOf(Point(0, 0), Point(20, 20)), ps.simplify(1.0))
     }
 }

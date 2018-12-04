@@ -25,11 +25,10 @@ import javax.imageio.ImageIO
 fun main() {
     model {
         val img = ImageIO.read(Thread.currentThread().contextClassLoader.getResourceAsStream("brontosaurus-pattern.gif"))
-        val c = contour(img) { rgb ->
-            rgb < 0xffffff
-        }
-        val d = simplify(c, 5.0)
-        add(prism(10.0, true, d.map { it.toVector() / 10.0 }))
+        val c = contour(img) { rgb -> rgb < 0xffffff }
+                .simplify(5.0)
+                .map { it.toVector() / 10.0 }
+        add(prism(10.0, true, c))
         write(File("target/dino.stl"), "dino")
     }
 }

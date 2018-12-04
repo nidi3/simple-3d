@@ -41,18 +41,61 @@ fun prism(length: Double, rightHand: Boolean, vararg points: Vector) = prism(len
 fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
     val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
     if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
+    val n = p.normal
+    val dn = n * length
 
-    fun side(p1: Vector, p2: Vector) = Plane.fromPoints(p1, p2, p2 + p.normal * length).let { side ->
-        Polygon(Vertex(p1, side.normal), Vertex(p2, side.normal),
-                Vertex(p2 + p.normal * length, side.normal), Vertex(p1 + p.normal * length, side.normal))
+    fun side(p1: Vector, p2: Vector): Polygon {
+        val r = n x (p1 - p2).unit()
+        return Polygon(Vertex(p1, r), Vertex(p2, r), Vertex(p2 + dn, r), Vertex(p1 + dn, r))
     }
 
     return Csg.ofPolygons {
-        add(Polygon(points.reversed().map { Vertex(it, -p.normal) }))
-        add(Polygon(points.map { Vertex(it + p.normal * length, p.normal) }))
-        add(side(points[points.size - 1], points[0]))
-        for (i in 0..points.size - 2) {
-            add(side(points[i], points[i + 1]))
+        add(Polygon(points.reversed().map { Vertex(it, -n) }))
+        add(Polygon(points.map { Vertex(it + dn, n) }))
+        for (i in 0 until points.size) {
+            add(side(points(i), points(i + 1)))
+        }
+    }
+}
+
+fun prismRing(width: Double, length: Double, rightHand: Boolean, vararg points: Vector) = prismRing(width, length, rightHand, points.toList())
+
+fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Vector>): Csg {
+    val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
+    if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
+    val n = p.normal
+    val dn = n * length
+
+    fun side(p0: Vector, p1: Vector, p2: Vector, p3: Vector): List<Polygon> {
+        val r0 = n x (p1 - p0).unit()
+        val r1 = n x (p2 - p1).unit()
+        val r2 = n x (p3 - p2).unit()
+        val e1 = Plane.fromVertex(Vertex(p1 + r1 * width, r1))
+        val f1 = Plane.fromVertex(Vertex(p1 - r1 * width, -r1))
+        val dr = width * r1
+        val (p11, p12) = if (r0 == r1) Pair(p1 + dr, p1 - dr)
+        else {
+            val e0 = Plane.fromVertex(Vertex(p0 + r0 * width, r0))
+            val f0 = Plane.fromVertex(Vertex(p0 - r0 * width, -r0))
+            Pair((Plane.fromVertex(Vertex(p1, n)) and (e0 and e1)).pos, (Plane.fromVertex(Vertex(p1, n)) and (f0 and f1)).pos)
+        }
+        val (p21, p22) = if (r1 == r2) Pair(p2 + dr, p2 - dr)
+        else {
+            val e2 = Plane.fromVertex(Vertex(p2 + r2 * width, r2))
+            val f2 = Plane.fromVertex(Vertex(p2 - r2 * width, -r2))
+            Pair((Plane.fromVertex(Vertex(p2, n)) and (e1 and e2)).pos, (Plane.fromVertex(Vertex(p2, n)) and (f1 and f2)).pos)
+        }
+        return listOf(
+                Polygon(Vertex(p11, r1), Vertex(p21, r1), Vertex(p21 + dn, r1), Vertex(p11 + dn, r1)),
+                Polygon(Vertex(p12, -r1), Vertex(p22, -r1), Vertex(p22 + dn, -r1), Vertex(p12 + dn, -r1)),
+                Polygon(Vertex(p11, -n), Vertex(p21, -n), Vertex(p22, -n), Vertex(p12, -n)),
+                Polygon(Vertex(p11 + dn, n), Vertex(p21 + dn, n), Vertex(p22 + dn, n), Vertex(p12 + dn, n))
+        )
+    }
+
+    return Csg.ofPolygons {
+        for (i in 0 until points.size) {
+            addAll(side(points(i), points(i + 1), points(i + 2), points(i + 3)))
         }
     }
 }
@@ -80,21 +123,18 @@ fun sphere(center: Vector = unit, radius: Double = 1.0, slices: Int = 32, stacks
     }
 }
 
-fun cylinder(start: Vector = Vector(0.0, -1.0, 0.0), end: Vector = Vector(0.0, 1.0, 0.0), radius: Double = 1.0,
+fun cylinder(start: Vector = -yUnit, end: Vector = yUnit, radius: Double = 1.0,
              slices: Int = 32, stacks: Int = 16, radiusFunc: ((Double, Double) -> Double)? = null): Csg {
     val ray = end - start
     val axisZ = ray.unit()
     val isY = if (abs(axisZ.y) > 0.5) 1.0 else 0.0
     val axisX = (Vector(isY, 1.0 - isY, 0.0) x axisZ).unit()
     val axisY = (axisX x axisZ).unit()
-    val s = Vertex(start, -axisZ)
-    val e = Vertex(end, axisZ.unit())
-    fun point(stack: Double, slice: Double, normalBlend: Double): Vertex {
+
+    fun point(stack: Double, slice: Double): Vector {
         val angle = slice * PI * 2
         val out = axisX * cos(angle) + axisY * sin(angle)
-        val pos = start + ray * stack + out * (radiusFunc?.invoke(angle, stack) ?: radius)
-        val normal = out * (1 - abs(normalBlend)) + axisZ * normalBlend
-        return Vertex(pos, normal)
+        return start + ray * stack + out * (radiusFunc?.invoke(angle, stack) ?: radius)
     }
 
     return Csg.ofPolygons {
@@ -102,14 +142,14 @@ fun cylinder(start: Vector = Vector(0.0, -1.0, 0.0), end: Vector = Vector(0.0, 1
             val id = i.toDouble()
             val t0 = id / slices
             val t1 = (id + 1) / slices
-            add(Polygon(s, point(0.0, t0, -1.0), point(0.0, t1, -1.0)))
+            add(Polygon(true, start, point(0.0, t0), point(0.0, t1)))
             for (j in 0 until stacks) {
                 val jd = j.toDouble()
                 val j0 = jd / stacks
                 val j1 = (jd + 1) / stacks
-                add(Polygon(point(j0, t1, 0.0), point(j0, t0, 0.0), point(j1, t0, 0.0), point(j1, t1, 0.0)))
+                add(Polygon(true, point(j0, t1), point(j0, t0), point(j1, t0), point(j1, t1)))
             }
-            add(Polygon(e, point(1.0, t1, 1.0), point(1.0, t0, 1.0)))
+            add(Polygon(true, end, point(1.0, t1), point(1.0, t0)))
         }
     }
 }
@@ -125,18 +165,17 @@ fun ring(center: Vector = unit, radius: Double = 1.0, r: Double = 1.0, h: Double
 
     val da = 2 * PI / slices
     var a = 0.0
-    val down = Vector(0.0, 0.0, 1.0)
     return Csg.ofPolygons {
         while (a < 2 * PI + da / 2) {
             var b = (PI - h / radius) / 2
-            add(Polygon(vertex(radius, a, b, down), vertex(radius + r, a, b, down), vertex(radius + r, a + da, b, down), vertex(radius, a + da, b, down)))
+            add(Polygon(vertex(radius, a, b, zUnit), vertex(radius + r, a, b, zUnit), vertex(radius + r, a + da, b, zUnit), vertex(radius, a + da, b, zUnit)))
             val db = h / radius
             while (b < (PI + h / radius) / 2) {
                 add(Polygon(vertex(radius, a, b, -1), vertex(radius, a + da, b, -1), vertex(radius, a + da, b + db, -1), vertex(radius, a, b + db, -1)))
                 add(Polygon(vertex(radius + r, a, b, 1), vertex(radius + r, a, b + db, 1), vertex(radius + r, a + da, b + db, 1), vertex(radius + r, a + da, b, 1)))
                 b += db
             }
-            add(Polygon(vertex(radius, a, b, -down), vertex(radius, a + da, b, -down), vertex(radius + r, a + da, b, -down), vertex(radius + r, a, b, -down)))
+            add(Polygon(vertex(radius, a, b, -zUnit), vertex(radius, a + da, b, -zUnit), vertex(radius + r, a + da, b, -zUnit), vertex(radius + r, a, b, -zUnit)))
             a += da
         }
     }

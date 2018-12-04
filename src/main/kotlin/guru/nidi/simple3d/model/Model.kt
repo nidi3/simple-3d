@@ -52,3 +52,4 @@ fun model(actions: Model.() -> Unit) = Model().apply(actions)
 fun Int.deg() = this * PI / 180
 fun Double.deg() = this * PI / 180
 fun Double.rad() = this
+operator fun <T> List<T>.invoke(i: Int) = get(((i % size) + size) % size)

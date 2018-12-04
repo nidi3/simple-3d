@@ -40,6 +40,38 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
 
     operator fun unaryMinus() = Plane(-normal, -w)
 
+    infix fun isParallel(p: Plane) = (normal x p.normal).length() < EPSILON
+
+    infix fun intersect(p: Plane): Vertex {
+        val n = normal x p.normal
+        return when {
+            n.x != 0.0 -> {
+                val y = (w * p.normal.z - p.w * normal.z) / (normal.y * p.normal.z - normal.z * p.normal.y)
+                val z = (w * p.normal.y - p.w * normal.y) / (normal.z * p.normal.y - normal.y * p.normal.z)
+                Vertex(v(0, y, z), n)
+            }
+            n.y != 0.0 -> {
+                val x = (w * p.normal.z - p.w * normal.z) / (normal.x * p.normal.z - normal.z * p.normal.x)
+                val z = (w * p.normal.x - p.w * normal.x) / (normal.z * p.normal.x - normal.x * p.normal.z)
+                Vertex(v(x, 0, z), n)
+            }
+            n.z != 0.0 -> {
+                val x = (w * p.normal.y - p.w * normal.y) / (normal.x * p.normal.y - normal.y * p.normal.x)
+                val y = (w * p.normal.x - p.w * normal.x) / (normal.y * p.normal.x - normal.x * p.normal.y)
+                Vertex(v(x, y, 0), n)
+            }
+            else -> throw IllegalArgumentException("Parallel planes")
+        }
+    }
+
+    infix fun intersect(v: Vertex): Vertex {
+        val t = (w - v.pos * normal) / (v.normal * normal)
+        return Vertex(v(v.pos.x + t * v.normal.x, v.pos.y + t * v.normal.y, v.pos.z + t * v.normal.z), v.normal)
+    }
+
+    infix fun and(p: Plane) = this intersect p
+    infix fun and(v: Vertex) = this intersect v
+
     fun splitPolygon(polygon: Polygon,
                      coplanarFront: MutableList<Polygon>, coplanarBack: MutableList<Polygon>,
                      front: MutableList<Polygon>, back: MutableList<Polygon>) {

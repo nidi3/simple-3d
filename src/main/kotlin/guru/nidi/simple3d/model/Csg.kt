@@ -17,11 +17,16 @@ package guru.nidi.simple3d.model
 
 interface PolygonSink {
     fun add(p: Polygon)
+    fun addAll(ps: List<Polygon>)
 }
 
 private class PolygonList(val list: MutableList<Polygon>) : PolygonSink {
     override fun add(p: Polygon) {
         list.add(p)
+    }
+
+    override fun addAll(ps: List<Polygon>) {
+        list.addAll(ps)
     }
 }
 
@@ -78,7 +83,7 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
 
     operator fun unaryMinus() = Csg(polygons.map { -it })
 
-    fun boundingBox(): Pair<Vector, Vector> {
+    fun boundingBox(): Box {
         var minX = Double.MAX_VALUE
         var maxX = Double.MIN_VALUE
         var minY = Double.MAX_VALUE
@@ -94,17 +99,20 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
             if (b.first.z < minZ) minZ = b.first.z
             if (b.second.z > maxZ) maxZ = b.second.z
         }
-        return Pair(Vector(minX, minY, minZ), Vector(maxX, maxY, maxZ))
+        return Box(Vector(minX, minY, minZ), Vector(maxX, maxY, maxZ))
     }
 
-    fun size() = boundingBox().let { (it.second - it.first).abs() }
+    fun size() = boundingBox().size()
 
     fun growLinear(value: Double) = growLinear(Vector(value, value, value))
 
     fun growLinear(value: Vector): Csg {
         val b = boundingBox()
-        val size = (b.second - b.first).abs()
-        val dist = b.first + size / 2.0
-        return AffineTransform().translate(dist).scale(unit + (value scaleInv size)).translate(-dist).applyTo(this)
+        val dist = b.from + b.size() / 2.0
+        return AffineTransform().translate(dist).scale(unit + (value scaleInv b.size())).translate(-dist).applyTo(this)
     }
+}
+
+data class Box(val from: Vector, val to: Vector) {
+    fun size() = to - from
 }

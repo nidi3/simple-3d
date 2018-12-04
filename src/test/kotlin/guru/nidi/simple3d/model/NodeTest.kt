@@ -21,10 +21,9 @@ import kotlin.test.assertEquals
 class NodeTest {
     @Test
     fun convexNode() {
-        val n = Vector(0.0, 0.0, 1.0)
-        val p1 = Polygon(Vertex(Vector(0.0, 0.0, 0.0), n), Vertex(Vector(1.0, 0.0, 0.0), n), Vertex(Vector(0.0, 1.0, 0.0), n))
-        val p2 = Polygon(Vertex(Vector(0.0, 0.0, 1.0), n), Vertex(Vector(1.0, 0.0, 0.0), n), Vertex(Vector(0.0, 0.0, 0.0), n))
-        val p3 = Polygon(Vertex(Vector(0.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, 0.0), n), Vertex(Vector(0.0, 0.0, 0.0), n))
+        val p1 = Polygon(Vertex(origin, zUnit), Vertex(xUnit, zUnit), Vertex(yUnit, zUnit))
+        val p2 = Polygon(Vertex(zUnit, yUnit), Vertex(xUnit, yUnit), Vertex(origin, yUnit))
+        val p3 = Polygon(Vertex(zUnit, xUnit), Vertex(yUnit, xUnit), Vertex(origin, xUnit))
         val no = Node(listOf(p1, p2, p3))
         assertEquals(listOf(p1, p2, p3), no.allPolygons())
     }

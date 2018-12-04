@@ -44,6 +44,9 @@ operator fun Double.times(a: Vector) = a * this
 
 val origin = v(0, 0, 0)
 val unit = v(1, 1, 1)
+val xUnit = v(1, 0, 0)
+val yUnit = v(0, 1, 0)
+val zUnit = v(0, 0, 1)
 
 fun v(a: Double, b: Double, c: Double) = Vector(a, b, c)
 fun v(a: Int, b: Double, c: Double) = Vector(a.toDouble(), b, c)
