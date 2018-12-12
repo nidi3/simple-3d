@@ -17,9 +17,8 @@ package guru.nidi.simple3d.io
 
 import guru.nidi.simple3d.model.*
 import java.io.*
-import java.lang.Math.abs
 
-class StlBinaryWriter(val file: File, val name: String) : AutoCloseable {
+class StlBinaryWriter(val file: File) : AutoCloseable {
     private val out = DataOutputStream(BufferedOutputStream(FileOutputStream(file)))
     private var count = 0
 
@@ -28,25 +27,15 @@ class StlBinaryWriter(val file: File, val name: String) : AutoCloseable {
         out.writeInt(0)
     }
 
-    fun write(t: Csg, normals: Boolean = false) = write(t.polygons, normals)
+    fun write(csg: Csg) = write(csg.polygons)
 
-    fun write(t: Polygon, normals: Boolean = false) {
-        write(t.vertices[0].pos, t.vertices[1].pos, t.vertices[2].pos)
-        if (normals) {
-            t.vertices.forEach { v ->
-                val n = v.normal.unit()
-                val p = when {
-                    abs(n.y) > .2 -> Vector(0.0, -n.z, -n.y)
-                    abs(n.z) > .2 -> Vector(-n.z, 0.0, -n.x)
-                    abs(n.x) > .2 -> Vector(-n.y, -n.x, 0.0)
-                    else -> Vector(0.0, 0.0, 0.0)
-                }
-                write(v.pos, v.pos + n, v.pos + p)
-            }
+    fun write(ps: List<Polygon>) = ps.forEach { write(it) }
+
+    fun write(p: Polygon) {
+        if (p.vertices.size > 3) write(p.toTriangles()) else {
+            write(p.vertices[0].pos, p.vertices[1].pos, p.vertices[2].pos)
         }
     }
-
-    fun write(t: List<Polygon>, normals: Boolean = false) = t.map { write(it, normals) }
 
     fun write(a: Vector, b: Vector, c: Vector) {
         wr(0.0)
@@ -76,5 +65,11 @@ class StlBinaryWriter(val file: File, val name: String) : AutoCloseable {
             it.seek(80)
             it.writeInt(java.lang.Integer.reverseBytes(count))
         }
+    }
+}
+
+fun Model.writeBinaryStl(f: File) {
+    StlBinaryWriter(f).use { out ->
+        csgs.forEach { out.write(it) }
     }
 }

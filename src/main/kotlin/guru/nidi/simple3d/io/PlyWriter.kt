@@ -18,6 +18,7 @@ package guru.nidi.simple3d.io
 import guru.nidi.simple3d.model.Vector
 import java.io.*
 
+//TODO not finished
 object PlyWriter {
     fun write(file: File, points: List<Vector>) {
         PrintWriter(OutputStreamWriter(FileOutputStream(file))).use { out ->

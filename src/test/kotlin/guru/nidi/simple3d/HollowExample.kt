@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import guru.nidi.simple3d.vectorize.contour
 import guru.nidi.simple3d.vectorize.simplify
@@ -120,6 +121,6 @@ fun main() {
 //            add(inner.rotateZ(90.deg()).translate(v(d2, 0, b2)))
 //            add(inner.rotateZ(90.deg()).translate(v(-d2, 0, b2)))
 //        }
-        write(File("target/cube.stl"), "csg")
+        writeBinaryStl(File("target/cube.stl"))
     }
 }

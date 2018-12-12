@@ -58,7 +58,7 @@ data class Polygon(val vertices: List<Vertex>) {
 
     fun size() = boundingBox().let { (it.second - it.first).abs() }
 
-    fun toTriangles(): List<Polygon> = triangulate(vertices)
+    fun toTriangles() = triangulate(vertices)
 }
 
 private const val CONCAVE = -1

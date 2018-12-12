@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import java.io.File
 
@@ -24,6 +25,6 @@ fun main() {
         val xs = listOf(v(1, 1, 0), v(0, 2, 0), v(3, 2, 0), v(2, 1, 0), v(3, 0, 0), v(0, 0, 0))
         add(prism(10.0, true, xs))
         add(prism(10.0, false, vs).translate(v(5, 0, 0)))
-        write(File("target/concave.stl"), "fix")
+        writeBinaryStl(File("target/concave.stl"))
     }
 }

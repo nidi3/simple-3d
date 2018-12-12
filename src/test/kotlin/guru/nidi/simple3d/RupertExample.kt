@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import java.io.File
 import kotlin.math.sqrt
@@ -34,6 +35,6 @@ fun main() {
             add((q and prism(8.0, true, a + n, b + n, c + n, d + n)).translate(v(10, 0, 0)))
             add(q.translate(v(5, 0, 0)))
         }
-        write(File("target/rupert.stl"), "rupert")
+        writeBinaryStl(File("target/rupert.stl"))
     }
 }

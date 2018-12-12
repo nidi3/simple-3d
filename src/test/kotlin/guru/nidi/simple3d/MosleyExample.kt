@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import java.io.File
 
@@ -78,6 +79,6 @@ fun main() {
 
         menger(15.0, 2)
 
-        write(File("target/mosley.stl"), "mosley")
+        writeBinaryStl(File("target/mosley.stl"))
     }
 }

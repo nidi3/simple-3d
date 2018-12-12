@@ -15,17 +15,27 @@
  */
 package guru.nidi.simple3d.io
 
-import guru.nidi.simple3d.model.Vector
+import guru.nidi.simple3d.model.*
 import java.io.*
 
-class StlWriter(file: File, val name: String) : AutoCloseable {
+class StlWriter(file: File, private val name: String) : AutoCloseable {
     private val out = PrintWriter(OutputStreamWriter(FileOutputStream(file)))
 
     init {
         out.println("solid $name")
     }
 
-    fun writeTriangle(a: Vector, b: Vector, c: Vector) {
+    fun write(csg: Csg) = write(csg.polygons)
+
+    fun write(ps: List<Polygon>) = ps.forEach { write(it) }
+
+    fun write(p: Polygon) {
+        if (p.vertices.size > 3) write(p.toTriangles()) else {
+            write(p.vertices[0].pos, p.vertices[1].pos, p.vertices[2].pos)
+        }
+    }
+
+    fun write(a: Vector, b: Vector, c: Vector) {
         out.println("facet normal 0 0 0")
         out.println("outer loop")
         out.println("vertex ${a.x} ${a.y} ${a.z}")
@@ -38,5 +48,11 @@ class StlWriter(file: File, val name: String) : AutoCloseable {
     override fun close() {
         out.println("endsolid $name")
         out.close()
+    }
+}
+
+fun Model.writeStl(f: File, name: String) {
+    StlWriter(f, name).use { out ->
+        csgs.forEach { out.write(it) }
     }
 }

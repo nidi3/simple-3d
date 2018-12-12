@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import java.io.File
 
@@ -160,7 +161,7 @@ fun main() {
         val level = 1
         transform(scale(unit * size.toDouble())) {
             menger(level)
-            write(File("target/menger-$level-$size.stl"), "menger")
+            writeBinaryStl(File("target/menger-$level-$size.stl"))
 
 //                    mosely(level)
 //                    write(File("target/mosely-$level-$size.stl"), "mosely")

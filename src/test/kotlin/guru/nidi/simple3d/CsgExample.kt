@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import java.io.File
 
@@ -49,6 +50,6 @@ fun main() {
             ops(c, r)
         }
 
-        write(File("target/csg.stl"), "csg")
+        writeBinaryStl(File("target/csg.stl"))
     }
 }
