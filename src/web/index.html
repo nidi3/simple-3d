@@ -1,10 +1,39 @@
 <html>
+<style>
+    .full {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .back {
+        z-index: -10;
+        background: url('background.png')
+    }
+
+    .back2 {
+        z-index: -5;
+        background-color: #fffffff0
+    }
+
+    html, body {
+        position: relative;
+    }
+</style>
 <body>
 <script src="kotlin.js"></script>
 <script src="simple3d.js"></script>
 <script src="stl_viewer.min.js"></script>
 
-<h1>Upload an image</h1>
+<div class="full back"></div>
+<div class="full back2"></div>
+
+<h1>How to create 3D printable cookie forms</h1>
+With a little kotlin and the <a href="https://github.com/nidi3/simple-3d" target="_blank">simple-3d</a> library.
+
+<h2>1. Upload an image</h2>
 It should have a simple form surrounded by a white background.
 <br><br>
 <button onclick="loadUrl('round-dino.png')">Example Dinosaur</button>
@@ -13,20 +42,20 @@ or
 <br>
 <canvas id="canvas"></canvas>
 
-<h1>Finding the outline</h1>
+<h2>2. Finding the outline</h2>
 <canvas id="canvas2"></canvas>
 
-<h1>Finding straight lines and simplify the form</h1>
+<h2>3. Finding straight lines and simplify the form</h2>
 <canvas id="canvas3"></canvas>
 
-<h1>Extrude the form into a 3D model</h1>
+<h2>4. Extrude the form into a 3D model</h2>
 <div id="stl" style="width: 300px; height: 300px; border: 1px solid black"></div>
 Adjust the size
 <input id="scale" type="range" min=".1" max="10" step="any" value="1"
        onchange="updateModel()">
 <span id="width">0</span>x<span id="height">0</span>
 
-<h1>Download the 3D model</h1>
+<h2>5. Download the 3D model</h2>
 <a id="download">Download</a>
 
 <script>
