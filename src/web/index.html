@@ -1,0 +1,100 @@
+<html>
+<body>
+<script src="kotlin.js"></script>
+<script src="simple3d.js"></script>
+<script src="stl_viewer.min.js"></script>
+
+<h1>Upload an image</h1>
+It should have a simple form surrounded by a white background.
+<br>
+<input id="input" type="file" onchange="load(this)">
+<br>
+<canvas id="canvas"></canvas>
+
+<h1>Finding the outline</h1>
+<canvas id="canvas2"></canvas>
+
+<h1>Finding straight lines and simplify the form</h1>
+<canvas id="canvas3"></canvas>
+
+<h1>Extrude the form into a 3D model</h1>
+<div id="stl" style="width: 300px; height: 300px; border: 1px solid black"></div>
+Adjust the size
+<input id="scale" type="range" min=".1" max="10" step="any" value="1"
+       onchange="updateModel()">
+<span id="width">0</span>x<span id="height">0</span>
+
+<h1>Download the 3D model</h1>
+<a id="download">Download</a>
+
+<script>
+let s3d = simple3d.guru.nidi.simple3d
+let filename, inputImage
+let scaleElem = document.getElementById('scale')
+
+function load(file) {
+    let img = new Image()
+    img.onload = draw
+    img.onerror = () => alert('The file could not be loaded, try another one.')
+    img.src = URL.createObjectURL(file.files[0])
+    filename = file.files[0].name
+    let pos = filename.lastIndexOf('.')
+    filename = filename.substring(0, pos)
+}
+
+function draw() {
+    let factor = 200 / this.width
+    let inputCanvas = document.getElementById('canvas')
+    let outlineCanvas = document.getElementById('canvas2')
+    let simpleCanvas = document.getElementById('canvas3')
+    inputCanvas.width = outlineCanvas.width = simpleCanvas.width = factor * this.width
+    inputCanvas.height = outlineCanvas.height = simpleCanvas.height = factor * this.height
+    inputCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, inputCanvas.width, inputCanvas.height)
+    inputImage = new s3d.vectorize.Image(inputCanvas)
+    let form = s3d.example.createForm(inputImage,
+        new s3d.vectorize.Image(outlineCanvas),
+        new s3d.vectorize.Image(simpleCanvas),
+        isBlack, 2, 1, 1.0, 20)
+    let bb = form.boundingBox()
+    let size = ((bb.to.x - bb.from.x) + (bb.to.y - bb.from.y)) / 2
+    let scale = 50 / size
+    scaleElem.min = scale / 2
+    scaleElem.max = scale * 2
+    scaleElem.value = scale
+    updateModel()
+}
+
+function isBlack(rgb) {
+    let alpha = (rgb >>> 24) & 0xFF
+    let red = (rgb >>> 16) & 0xFF
+    let green = (rgb >>> 8) & 0xFF
+    let blue = (rgb >>> 0) & 0xFF
+    let luminance = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255
+    return luminance < 0.9
+}
+
+function updateModel() {
+    if (!inputImage) return
+    s3d.model.model(m => {
+        let form = s3d.example.createForm(inputImage, null, null, isBlack, 2, scaleElem.value, .2, 20).or(
+            s3d.example.createForm(inputImage, null, null, isBlack, 2, scaleElem.value, 2, 2.5))
+        m.add(form)
+        let bb = form.boundingBox()
+        document.getElementById('width').textContent = Math.round(bb.to.x - bb.from.x) + 'mm'
+        document.getElementById('height').textContent = Math.round(bb.to.y - bb.from.y) + 'mm'
+        let f = s3d.io.StlBinaryWriter.Companion.write(m)
+        let file = new File([f], 'out.stl')
+        let d = document.getElementById('download')
+        d.href = URL.createObjectURL(file)
+        d.download = filename + '.stl'
+        let stl = new StlViewer(document.getElementById('stl'))
+        stl.remove_model(0)
+        stl.add_model({id: 0, local_file: file})
+        stl.model_loaded_callback = () => stl.set_color(0, '80ff0000')
+    })
+}
+
+</script>
+
+</body>
+</html>
