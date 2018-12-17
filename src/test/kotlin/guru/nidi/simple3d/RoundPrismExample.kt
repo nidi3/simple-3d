@@ -25,9 +25,18 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 fun main() {
+    fun isBlack(rgb: Int): Boolean {
+        val red = (rgb ushr 16) and 0xFF
+        val green = (rgb ushr 8) and 0xFF
+        val blue = (rgb ushr 0) and 0xFF
+        val luminance = (red * 0.2126f + green * 0.7152f + blue * 0.0722f) / 255
+        return luminance < 0.9
+    }
+
     fun dino(w: Double, h: Double): Csg {
-        val img = ImageIO.read(Thread.currentThread().contextClassLoader.getResourceAsStream("round-dino.png"))
-        val c = contour(img) { rgb -> rgb != 0 }
+        val img = ImageIO.read(Thread.currentThread().contextClassLoader.getResourceAsStream("fatdino.jpg"))
+//        val img = ImageIO.read(Thread.currentThread().contextClassLoader.getResourceAsStream("Monolophosaurus.jpg"))
+        val c = contour(img) { isBlack(it) }
                 .simplify(2.0)
                 .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prismRing(w, h, true, c)
@@ -36,7 +45,7 @@ fun main() {
 
     fun dinoFull(h: Double): Csg {
         val img = ImageIO.read(Thread.currentThread().contextClassLoader.getResourceAsStream("round-dino.png"))
-        val c = contour(img) { rgb -> rgb != 0 }
+        val c = contour(img) { isBlack(it) }
                 .simplify(2.0)
                 .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prism(h, true, c)
@@ -77,8 +86,8 @@ fun main() {
     }
 
     model {
-        add(puller())
-//                add(dinoForm())
+        //        add(puller())
+        add(dinoForm())
 //        add(round().translate(v(35, -25, 0)))
 //        add(small().translate(v(60, 20, 0)))
         writeBinaryStl(File("target/round.stl"))
