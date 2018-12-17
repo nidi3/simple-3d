@@ -60,7 +60,9 @@ fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
 
 fun prismRing(width: Double, length: Double, rightHand: Boolean, vararg points: Vector) = prismRing(width, length, rightHand, points.toList())
 
-fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Vector>): Csg {
+fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Vector>) = prismRing(width, width, length, rightHand, points)
+
+fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points: List<Vector>): Csg {
     val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
     if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
     val n = p.normal
@@ -70,26 +72,25 @@ fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Ve
         val r0 = n x (p1 - p0).unit()
         val r1 = n x (p2 - p1).unit()
         val r2 = n x (p3 - p2).unit()
-        val e1 = Plane.fromVertex(Vertex(p1 + r1 * width, r1))
-        val f1 = Plane.fromVertex(Vertex(p1 - r1 * width, -r1))
-        val dr = width * r1
-        val (p11, p12) = if (r0 == r1) Pair(p1 + dr, p1 - dr)
+        val e1 = Plane.fromVertex(Vertex(p1 + r1 * w1, r1))
+        val f1 = Plane.fromVertex(Vertex(p1 - r1 * w2, -r1))
+        val (p11, p12) = if (r0 == r1) Pair(p1 + r1 * w1, p1 - r1 * w2)
         else {
-            val e0 = Plane.fromVertex(Vertex(p0 + r0 * width, r0))
-            val f0 = Plane.fromVertex(Vertex(p0 - r0 * width, -r0))
+            val e0 = Plane.fromVertex(Vertex(p0 + r0 * w1, r0))
+            val f0 = Plane.fromVertex(Vertex(p0 - r0 * w2, -r0))
             Pair((Plane.fromVertex(Vertex(p1, n)) and (e0 and e1)).pos, (Plane.fromVertex(Vertex(p1, n)) and (f0 and f1)).pos)
         }
-        val (p21, p22) = if (r1 == r2) Pair(p2 + dr, p2 - dr)
+        val (p21, p22) = if (r1 == r2) Pair(p2 + r1 * w1, p2 - r1 * w2)
         else {
-            val e2 = Plane.fromVertex(Vertex(p2 + r2 * width, r2))
-            val f2 = Plane.fromVertex(Vertex(p2 - r2 * width, -r2))
+            val e2 = Plane.fromVertex(Vertex(p2 + r2 * w1, r2))
+            val f2 = Plane.fromVertex(Vertex(p2 - r2 * w2, -r2))
             Pair((Plane.fromVertex(Vertex(p2, n)) and (e1 and e2)).pos, (Plane.fromVertex(Vertex(p2, n)) and (f1 and f2)).pos)
         }
         return listOf(
-                Polygon(Vertex(p11, r1), Vertex(p21, r1), Vertex(p21 + dn, r1), Vertex(p11 + dn, r1)),
+                Polygon(Vertex(p11, r1), Vertex(p11 + dn, r1), Vertex(p21 + dn, r1), Vertex(p21, r1)),
                 Polygon(Vertex(p12, -r1), Vertex(p22, -r1), Vertex(p22 + dn, -r1), Vertex(p12 + dn, -r1)),
                 Polygon(Vertex(p11, -n), Vertex(p21, -n), Vertex(p22, -n), Vertex(p12, -n)),
-                Polygon(Vertex(p11 + dn, n), Vertex(p21 + dn, n), Vertex(p22 + dn, n), Vertex(p12 + dn, n))
+                Polygon(Vertex(p11 + dn, n), Vertex(p12 + dn, n), Vertex(p22 + dn, n), Vertex(p21 + dn, n))
         )
     }
 
