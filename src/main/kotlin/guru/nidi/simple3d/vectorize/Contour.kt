@@ -21,7 +21,10 @@ import java.lang.Integer.signum
 
 //TODO only one contour supported, endless loop is first point has no neighbors
 fun contour(image: BufferedImage, classifier: (Int) -> Boolean): List<Point> {
-    fun isBlack(x: Int, y: Int) = classifier(image.getRGB(x, y))
+    fun isBlack(x: Int, y: Int) =
+            if (x < 0 || x >= image.width || y < 0 || y >= image.height) false
+            else classifier(image.getRGB(x, y))
+
     fun isBlack(p: Point) = isBlack(p.x, p.y)
 
     val edges = mutableListOf<Point>()
@@ -50,9 +53,19 @@ data class Point(val x: Int, val y: Int) {
 data class DirPoint(val dx: Int, val dy: Int, val x: Int, val y: Int) {
     companion object {
         fun findStart(width: Int, height: Int, isBlack: (Int, Int) -> Boolean): DirPoint? {
+            fun hasBlackNeighbour(x: Int, y: Int): Boolean {
+                for (i in x - 1..x + 1) {
+                    for (j in y - 1..y + 1) {
+                        if ((i != x || j != y) && isBlack(i, j)) return true
+                    }
+                }
+                return false
+            }
             for (x in 0 until width) {
                 for (y in 0 until height) {
-                    if (isBlack(x, y)) return DirPoint(-1, 0, x, y)
+                    if (isBlack(x, y) && hasBlackNeighbour(x, y)) {
+                        return DirPoint(-1, 0, x, y)
+                    }
                 }
             }
             return null
