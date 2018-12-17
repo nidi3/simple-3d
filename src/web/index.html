@@ -6,7 +6,9 @@
 
 <h1>Upload an image</h1>
 It should have a simple form surrounded by a white background.
-<br>
+<br><br>
+<button onclick="loadUrl('round-dino.png')">Example Dinosaur</button>
+or
 <input id="input" type="file" onchange="load(this)">
 <br>
 <canvas id="canvas"></canvas>
@@ -31,6 +33,12 @@ Adjust the size
 let s3d = simple3d.guru.nidi.simple3d
 let filename, inputImage
 let scaleElem = document.getElementById('scale')
+
+function loadUrl(url) {
+    fetch(url)
+        .then(res => res.blob())
+        .then(blob => load({files: [new File([blob], 'nice-dino.png')]}))
+}
 
 function load(file) {
     let img = new Image()
@@ -70,7 +78,7 @@ function isBlack(rgb) {
     let green = (rgb >>> 8) & 0xFF
     let blue = (rgb >>> 0) & 0xFF
     let luminance = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255
-    return luminance < 0.9
+    return alpha > .5 && luminance < 0.9
 }
 
 function updateModel() {
@@ -89,7 +97,7 @@ function updateModel() {
         d.download = filename + '.stl'
         let stl = new StlViewer(document.getElementById('stl'))
         stl.remove_model(0)
-        stl.add_model({id: 0, local_file: file})
+        stl.ready_callback = () => stl.add_model({id: 0, local_file: file})
         stl.model_loaded_callback = () => stl.set_color(0, '80ff0000')
     })
 }
