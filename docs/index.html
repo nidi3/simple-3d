@@ -49,11 +49,14 @@ or
 <canvas id="canvas3"></canvas>
 
 <h2>4. Extrude the form into a 3D model</h2>
+Drag with the mouse to rotate the model.
 <div id="stl" style="width: 300px; height: 300px; border: 1px solid black"></div>
 Adjust the size
 <input id="scale" type="range" min=".1" max="10" step="any" value="1"
        onchange="updateModel()">
-<span id="width">0</span>x<span id="height">0</span>
+<span id="width">0</span>
+x
+<span id="height">0</span>
 
 <h2>5. Download the 3D model</h2>
 <a id="download">Download</a>
@@ -62,6 +65,7 @@ Adjust the size
 let s3d = simple3d.guru.nidi.simple3d
 let filename, inputImage
 let scaleElem = document.getElementById('scale')
+let stl = new StlViewer(document.getElementById('stl'))
 
 function loadUrl(url) {
     fetch(url)
@@ -124,9 +128,12 @@ function updateModel() {
         let d = document.getElementById('download')
         d.href = URL.createObjectURL(file)
         d.download = filename + '.stl'
-        let stl = new StlViewer(document.getElementById('stl'))
         stl.remove_model(0)
-        stl.ready_callback = () => stl.add_model({id: 0, local_file: file})
+        try {
+            stl.add_model({id: 0, local_file: file})
+        }catch(e){
+            stl.ready_callback = () => stl.add_model({id: 0, local_file: file})
+        }
         stl.model_loaded_callback = () => stl.set_color(0, '80ff0000')
     })
 }
