@@ -67,7 +67,8 @@ fun prismRing(width: Double, length: Double, rightHand: Boolean, vararg points: 
     prismRing(width, length, rightHand, points.toList())
 
 @JsName("prismRing")
-fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Vector>) = prismRing(width, width, length, rightHand, points)
+fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Vector>) =
+    prismRing(width, width, length, rightHand, points)
 
 fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points: List<Vector>): Csg {
     val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
@@ -85,13 +86,19 @@ fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points
         else {
             val e0 = Plane.fromVertex(Vertex(p0 + r0 * w1, r0))
             val f0 = Plane.fromVertex(Vertex(p0 - r0 * w2, -r0))
-            Pair((Plane.fromVertex(Vertex(p1, n)) and (e0 and e1)).pos, (Plane.fromVertex(Vertex(p1, n)) and (f0 and f1)).pos)
+            Pair(
+                (Plane.fromVertex(Vertex(p1, n)) and (e0 and e1)).pos,
+                (Plane.fromVertex(Vertex(p1, n)) and (f0 and f1)).pos
+            )
         }
         val (p21, p22) = if (r1 == r2) Pair(p2 + r1 * w1, p2 - r1 * w2)
         else {
             val e2 = Plane.fromVertex(Vertex(p2 + r2 * w1, r2))
             val f2 = Plane.fromVertex(Vertex(p2 - r2 * w2, -r2))
-            Pair((Plane.fromVertex(Vertex(p2, n)) and (e1 and e2)).pos, (Plane.fromVertex(Vertex(p2, n)) and (f1 and f2)).pos)
+            Pair(
+                (Plane.fromVertex(Vertex(p2, n)) and (e1 and e2)).pos,
+                (Plane.fromVertex(Vertex(p2, n)) and (f1 and f2)).pos
+            )
         }
         return listOf(
             Polygon(Vertex(p11, r1), Vertex(p11 + dn, r1), Vertex(p21 + dn, r1), Vertex(p21, r1)),
@@ -217,6 +224,77 @@ fun ring(center: Vector = unit, radius: Double = 1.0, r: Double = 1.0, h: Double
                 )
             )
             a += da
+        }
+    }
+}
+
+fun heightModel(height: List<List<Double>>): Csg {
+    val xd = height.size - 1
+    val yd = height[0].size - 1
+    return Csg.ofPolygons {
+        add(
+            Polygon(
+                Vertex(v(0, 0, 0), v(0, 0, -1)),
+                Vertex(v(0, yd, 0), v(0, 0, -1)),
+                Vertex(v(xd, yd, 0), v(0, 0, -1)),
+                Vertex(v(xd, 0, 0), v(0, 0, -1))
+            )
+        )
+        for (x in 0 until xd) {
+            add(
+                Polygon(
+                    Vertex(v(x, 0, 0), v(0, -1, 0)),
+                    Vertex(v(x + 1, 0, 0), v(0, -1, 0)),
+                    Vertex(v(x + 1, 0, height[x + 1][0]), v(0, -1, 0)),
+                    Vertex(v(x, 0, height[x][0]), v(0, -1, 0))
+                )
+            )
+            add(
+                Polygon(
+                    Vertex(v(x, yd, 0), v(0, 1, 0)),
+                    Vertex(v(x, yd, height[x][yd]), v(0, 1, 0)),
+                    Vertex(v(x + 1, yd, height[x + 1][yd]), v(0, 1, 0)),
+                    Vertex(v(x + 1, yd, 0), v(0, 1, 0))
+                )
+            )
+        }
+        for (y in 0 until yd) {
+            add(
+                Polygon(
+                    Vertex(v(0, y, 0), v(-1, 0, 0)),
+                    Vertex(v(0, y, height[0][y]), v(-1, 0, 0)),
+                    Vertex(v(0, y + 1, height[0][y + 1]), v(-1, 0, 0)),
+                    Vertex(v(0, y + 1, 0), v(-1, 0, 0))
+                )
+            )
+            add(
+                Polygon(
+                    Vertex(v(xd, y, 0), v(1, 0, 0)),
+                    Vertex(v(xd, y + 1, 0), v(1, 0, 0)),
+                    Vertex(v(xd, y + 1, height[xd][y + 1]), v(1, 0, 0)),
+                    Vertex(v(xd, y, height[xd][y]), v(1, 0, 0))
+                )
+            )
+        }
+        for (x in 0 until xd) {
+            for (y in 0 until yd) {
+                add(
+                    Polygon(
+                        true,
+                        v(x, y, height[x][y]),
+                        v(x + 1, y, height[x + 1][y]),
+                        v(x + 1, y + 1, height[x + 1][y + 1])
+                    )
+                )
+                add(
+                    Polygon(
+                        true,
+                        v(x + 1, y + 1, height[x + 1][y + 1]),
+                        v(x, y + 1, height[x][y + 1]),
+                        v(x, y, height[x][y])
+                    )
+                )
+            }
         }
     }
 }
