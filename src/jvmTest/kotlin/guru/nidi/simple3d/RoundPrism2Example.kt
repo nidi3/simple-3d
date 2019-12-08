@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
 
 fun main() {
@@ -51,8 +52,23 @@ fun main() {
         ImageIO.write(b, "png", File("target/blackAndWhite.png"))
     }
 
+    fun fist(): List<Vector> {
+        val img = Image.fromClasspath("fist.jpg")
+        return outline(img) { isBlack(it) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
+    }
+
     fun hand(w: Double, h: Double): Csg {
         val img = Image.fromClasspath("middle.jpg")
+        val c = outline(img) { isBlack(it) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
+        val dino = prismRing(w, h, true, c)
+        return dino.translate(v(0, 0, h))
+    }
+
+    fun peaceForm(w: Double, h: Double, img: Image): Csg {
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(v(.15, .15, 1)) }
@@ -128,13 +144,13 @@ fun main() {
     fun peace(): Image {
         val img = BufferedImage(200, 200, BufferedImage.TYPE_INT_ARGB)
         val g = img.createGraphics()
-        g.stroke = BasicStroke(25f)
+        g.stroke = BasicStroke(35f)
         g.color = Color.WHITE
         g.fillRect(0, 0, 200, 200)
         g.color = Color.BLACK
         g.drawLine(100, 0, 100, 200)
-        g.drawLine(100, 100, 0, 200)
-        g.drawLine(100, 100, 200, 200)
+        g.drawLine(100, 90, 0, 200)
+        g.drawLine(100, 90, 200, 200)
         g.color = Color.WHITE
         for (x in 0 until 200) {
             for (y in 0 until 200) {
@@ -159,7 +175,6 @@ fun main() {
         val base = prismRing(1.5, 2.5, false, points).translate(v(0, 0, 2.5))
         val rest = prismRing(.2, 20.0, false, points).translate(v(0, 0, 20.0))
         return p + q + base + rest
-
     }
 
     fun small(): Csg {
@@ -172,6 +187,132 @@ fun main() {
         val long = prismRing(.2, 22.5, false, points).translate(v(0, 0, 20))
         val longFull = prism(25.0, true, points).translate(v(0, 0, -5))
         val base = cube(center = origin, radius = v(12, 25, 2.5))
+        return (base - longFull + long - m).translate(v(0, 0, 2.5))
+    }
+
+    fun smallFist(): Csg {
+        val r2 = 20.0
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
+
+        val ps = fist()
+        val min = ps.fold(v(1000, 1000, 1000)) { a, n -> v(min(a.x, n.x), min(a.y, n.y), min(a.z, n.z)) }
+        val points = ps.map { .25 * v(it.x - min.x, it.y - min.y, it.z - min.z) }
+        val long = prismRing(.2, 22.5, true, points).translate(v(-10.5, -13.5, 20))
+        val longFull = prism(25.0, true, points).translate(v(-10.5, -13.5, 20))
+        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        return (base - longFull + long - m).translate(v(0, 0, 2.5))
+    }
+
+    fun smallFlower(): Csg {
+        val r2 = 20.0
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
+
+        val r = 5.0
+        val r3 = 4.8
+        val f = 4
+        val d = f * Math.sqrt(3.0) / 2
+        val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
+        val points2 = (0 until 360 step 9).map { v(r3 * cos(it.deg()), r3 * sin(it.deg()), 0) }
+        val long = prismRing(.2, 22.5, false, points).translate(v(-d, 0, 20)) +
+                prismRing(.2, 22.5, false, points).translate(v(d, f, 20)) +
+                prismRing(.2, 22.5, false, points).translate(v(d, -f, 20))
+        val longFull = prism(35.0, true, points2).translate(v(d, -f, -5)) +
+                prism(35.0, true, points2).translate(v(d, f, -5)) +
+                prism(35.0, true, points2).translate(v(-d, 0, -5))
+        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        return (base + long - longFull - m).translate(v(0, 0, 2.5))
+    }
+
+    fun smallCross(): Csg {
+        val r2 = 20.0
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
+
+        val r = 20.0
+        val points = listOf(
+            v(r / 3, 0, 0),
+            v(2 * r / 3, 0, 0),
+            v(2 * r / 3, r / 3, 0),
+            v(r, r / 3, 0),
+            v(r, 2 * r / 3, 0),
+            v(2 * r / 3, 2 * r / 3, 0),
+            v(2 * r / 3, r, 0),
+            v(r / 3, r, 0),
+            v(r / 3, 2 * r / 3, 0),
+            v(0, 2 * r / 3, 0),
+            v(0, r / 3, 0),
+            v(r / 3, r / 3, 0)
+        )
+        val long = prismRing(.2, 22.5, false, points).translate(v(-r / 2, -r / 2, 20))
+        val longFull = prism(25.0, true, points).translate(v(-r / 2, -r / 2, -5))
+        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        return (base - longFull + long - m).translate(v(0, 0, 2.5))
+    }
+
+    fun smallFlash(): Csg {
+        val r2 = 20.0
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
+
+        val r = 13.5
+        val xs = 1.5
+        val points = listOf(
+            v(2 * r / 3, 0, 0),
+            v(r, 0, 0),
+            v(2 * r / 3, 2 * r / 3, 0),
+            v(r, 2 * r / 3, 0),
+            v(0, 2 * r, 0),
+            v(r / 3, r, 0),
+            v(0, r, 0)
+        ).map { v(it.x * xs, it.y, it.z) }
+        val long = prismRing(.2, 22.5, false, points).translate(v(-r * xs / 2, -r, 20))
+        val longFull = prism(25.0, true, points).translate(v(-r * xs / 2, -r, -5))
+        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        return (base - longFull + long - m).translate(v(0, 0, 2.5))
+    }
+
+    fun smallLambda(): Csg {
+        val r2 = 20.0
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
+
+        val r = 13.5
+        val xs = 1.5
+        val points = listOf(
+            v(0, 0, 0),
+            v(r / 3, 0, 0),
+            v(r, 2 * r, 0),
+            v(2 * r / 3, 2 * r, 0),
+            v(r / 2, 4 * r / 3, 0),
+            v(r / 3, 2 * r, 0),
+            v(0, 2 * r, 0),
+            v(r / 3, r, 0)
+        ).map { v(it.x * xs, it.y, it.z) }
+        val long = prismRing(.2, 22.5, false, points).translate(v(-r * xs / 2, -r, 20))
+        val longFull = prism(25.0, true, points).translate(v(-r * xs / 2, -r, -5))
+        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        return (base - longFull + long - m).translate(v(0, 0, 2.5))
+    }
+
+
+    fun smallPeace(): Csg {
+        val r2 = 20.0
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
+
+        val c = outline(peace()) { isBlack(it) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.2, .2, 1)) }
+        val long = prismRing(.2, 22.5, true, c).translate(v(-20, -20, 20))
+        val longFull = prism(25.0, true, c).translate(v(-20, -20, 20))
+//        val q = prismRing(3.5, .2, 2.5, false, c).translate(v(-20, -20, 0))
+
+//        val long = prismRing(.2, 22.5, false, points).translate(v(0, 0, 20))
+//        val longFull = prism(25.0, true, points).translate(v(0, 0, -5))
+
+        val base = cube(center = origin, radius = v(15, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 
@@ -189,9 +330,10 @@ fun main() {
         //        add(puller())
 //        add(handForm())
 //        add(fingerForm().translate(v(50, 0, 0)))
-        add(round())
-//        add(small().translate(v(60, 20, 0)))
-        writeBinaryStl(File("target/peace.stl"))
+//        asBlackAndWhite(peace())
+//        add(smallFlower().translate(v(60, 20, 0)))
+        add(smallFist())
+        writeBinaryStl(File("target/small-fist.stl"))
     }
 
 }

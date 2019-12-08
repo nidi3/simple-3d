@@ -34,11 +34,11 @@ fun main() {
     }
 
     fun dino(w: Double, h: Double): Csg {
-        val img = Image.fromClasspath("fatdino.jpg")
+        val img = Image.fromClasspath("guitar.jpg")
 //        val img = Image.fromClasspath("Monolophosaurus.jpg")
         val c = outline(img) { isBlack(it) }
                 .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+                .map { it.toVector().scale(v(.05, .05, 1)) }
         val dino = prismRing(w, h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -90,7 +90,7 @@ fun main() {
         add(dinoForm())
 //        add(round().translate(v(35, -25, 0)))
 //        add(small().translate(v(60, 20, 0)))
-        writeBinaryStl(File("target/round.stl"))
+        writeBinaryStl(File("target/guitar.stl"))
     }
 
 }
