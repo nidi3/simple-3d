@@ -15,11 +15,26 @@
  */
 package guru.nidi.simple3d.io
 
-import guru.nidi.simple3d.model.*
+import guru.nidi.simple3d.model.Csg
+import guru.nidi.simple3d.model.Model
+import guru.nidi.simple3d.model.Polygon
+import guru.nidi.simple3d.model.Vector
 import java.io.*
 
+fun model(file: File, actions: Model.() -> Unit) =
+    Model().also(actions).writeBinaryStl(file)
+
+fun Model.writeBinaryStl(f: File) {
+    StlBinaryWriter(f).use { out ->
+        csgs.forEach { out.write(it) }
+    }
+}
+
 class StlBinaryWriter(val file: File) : AutoCloseable {
-    private val out = DataOutputStream(BufferedOutputStream(FileOutputStream(file)))
+    private val out = file.let {
+        it.parentFile.mkdirs()
+        DataOutputStream(BufferedOutputStream(FileOutputStream(it)))
+    }
     private var count = 0
 
     init {
@@ -65,11 +80,5 @@ class StlBinaryWriter(val file: File) : AutoCloseable {
             it.seek(80)
             it.writeInt(java.lang.Integer.reverseBytes(count))
         }
-    }
-}
-
-fun Model.writeBinaryStl(f: File) {
-    StlBinaryWriter(f).use { out ->
-        csgs.forEach { out.write(it) }
     }
 }

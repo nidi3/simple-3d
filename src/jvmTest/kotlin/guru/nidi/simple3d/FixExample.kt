@@ -15,12 +15,12 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
 fun main() {
-    model {
+    model(File("target/fix.stl")) {
         val base = prism(30.0, true, v(-2, 0, 0), v(-4, 0, 4), v(4, 0, 4), v(2, 0, 0))
 //                val bigConn = conn.scale(1.2 * unit)
         val conn = base.rotateZ(45.deg())
@@ -35,7 +35,5 @@ fun main() {
 
         val neg = cube(v(30, 10, 0), v(10, 10, 5)) - bigConn.translate(v(15, 5, -5)) - bigConn.translate(v(25, -5, -5))
         add(neg.rotateX(180.deg()).translate(v(0, 0, 5)))
-
-        writeBinaryStl(File("target/fix.stl"))
     }
 }

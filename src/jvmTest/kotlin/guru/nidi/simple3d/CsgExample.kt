@@ -15,12 +15,12 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
 fun main() {
-    model {
+    model(File("target/csg.stl")) {
         val cy = cylinder()
         val r = ring(center = v(2, 2, 0), radius = 2.0)
         val s = sphere(center = v(0, 8, 0), radius = 2.0)
@@ -49,7 +49,5 @@ fun main() {
         transform(translate(v(0, 25, 0))) {
             ops(c, r)
         }
-
-        writeBinaryStl(File("target/csg.stl"))
     }
 }

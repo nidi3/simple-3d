@@ -15,7 +15,7 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import guru.nidi.simple3d.vectorize.Image
 import guru.nidi.simple3d.vectorize.outline
@@ -86,7 +86,7 @@ fun main() {
                 inner2.rotateZ(90.deg()).translate(v(0, -(r - 1.5 * b), b))
     }
 
-    model {
+    model(File("target/cube.stl")) {
         val r = 15.0
         val h = r
         val b = 1.0
@@ -123,6 +123,5 @@ fun main() {
 //            add(inner.rotateZ(90.deg()).translate(v(d2, 0, b2)))
 //            add(inner.rotateZ(90.deg()).translate(v(-d2, 0, b2)))
 //        }
-        writeBinaryStl(File("target/cube.stl"))
     }
 }

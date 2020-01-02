@@ -15,7 +15,7 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import guru.nidi.simple3d.vectorize.Image
 import guru.nidi.simple3d.vectorize.outline
@@ -39,7 +39,11 @@ fun main() {
         val b = BufferedImage(img.width, img.height, BufferedImage.TYPE_INT_ARGB)
         for (x in 0 until img.width) {
             for (y in 0 until img.height) {
-                if (isBlack(img.getRGB(x, y))) b.setRGB(x, y, 0xff000000.toInt()) else b.setRGB(x, y, 0xffffffff.toInt())
+                if (isBlack(img.getRGB(x, y))) b.setRGB(x, y, 0xff000000.toInt()) else b.setRGB(
+                    x,
+                    y,
+                    0xffffffff.toInt()
+                )
             }
         }
         ImageIO.write(b, "png", File("target/blackAndWhite.png"))
@@ -48,8 +52,8 @@ fun main() {
     fun hand(w: Double, h: Double): Csg {
         val img = Image.fromClasspath("middle.jpg")
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prismRing(w, h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -57,8 +61,8 @@ fun main() {
     fun finger(w: Double, h: Double): Csg {
         val img = Image.fromClasspath("middleOnly.png")
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prismRing(w, h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -66,8 +70,8 @@ fun main() {
     fun fingerOpen(w: Double, h: Double): Csg {
         val img = Image.fromClasspath("middleOpen2.png")
         val c = outline(img) { isBlack(it) }
-                .simplify(1.5)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(1.5)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prismRing(w, h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -76,8 +80,8 @@ fun main() {
         val img = Image.fromClasspath("nail.png")
         asBlackAndWhite(img.img)
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prismRing(w, h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -86,8 +90,8 @@ fun main() {
         val img = Image.fromClasspath("nail.png")
         asBlackAndWhite(img.img)
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prism(h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -95,8 +99,8 @@ fun main() {
     fun fingerFull(h: Double): Csg {
         val img = Image.fromClasspath("middleOnly.png")
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prism(h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -110,7 +114,10 @@ fun main() {
     fun fingerForm(): Csg {
         val base = fingerOpen(1.8, 2.5) //- cube(center = v(25, 4, 1.25), radius = v(10, 8, 1.25))
         val rest = fingerOpen(.2, 17.5).translate(v(0, 0, 2.5))
-        val top = cube(center = v(25, 4, 1.25), radius = v(4, 8, 1.25)) + cube(center = v(35, 4, 1.25), radius = v(4, 8, 1.25))
+        val top = cube(center = v(25, 4, 1.25), radius = v(4, 8, 1.25)) + cube(
+            center = v(35, 4, 1.25),
+            radius = v(4, 8, 1.25)
+        )
 //        val nail = nail(.2, 20.0)
 //        val holder = cube(center = origin, radius = v(6, 6, 1.25)).translate(v(26, 8, 1.25))
         return base + rest// +top// +holder - nailFull(2.5) + nail + base
@@ -119,7 +126,12 @@ fun main() {
     fun round(): Csg {
         val r = 20.0
         val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
-        return prismRing(2.0, 2.5, false, points).translate(v(0, 0, 2.5)) + prismRing(.2, 20.0, false, points).translate(v(0, 0, 20.0))
+        return prismRing(2.0, 2.5, false, points).translate(v(0, 0, 2.5)) + prismRing(
+            .2,
+            20.0,
+            false,
+            points
+        ).translate(v(0, 0, 20.0))
     }
 
     fun small(): Csg {
@@ -136,16 +148,21 @@ fun main() {
     }
 
     fun puller(): Csg {
-        return (fingerFull(2.5) - finger(1.0, 2.5)).scale(v(-1, 1, 1)) + cylinder(radius = 5.0).scale(v(1, 12, 1)).rotateX(90.deg()).translate(v(-21, 52, 12))
+        return (fingerFull(2.5) - finger(1.0, 2.5)).scale(v(-1, 1, 1)) + cylinder(radius = 5.0).scale(
+            v(
+                1,
+                12,
+                1
+            )
+        ).rotateX(90.deg()).translate(v(-21, 52, 12))
     }
 
-    model {
+    model(File("target/round2.stl")) {
         //        add(puller())
 //        add(handForm())
         add(fingerForm().translate(v(50, 0, 0)))
 //        add(round().translate(v(35, -25, 0)))
 //        add(small().translate(v(60, 20, 0)))
-        writeBinaryStl(File("target/round2.stl"))
     }
 
 }

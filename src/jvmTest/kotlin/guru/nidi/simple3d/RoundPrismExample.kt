@@ -15,7 +15,7 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import guru.nidi.simple3d.vectorize.Image
 import guru.nidi.simple3d.vectorize.outline
@@ -37,8 +37,8 @@ fun main() {
         val img = Image.fromClasspath("guitar.jpg")
 //        val img = Image.fromClasspath("Monolophosaurus.jpg")
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.05, .05, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.05, .05, 1)) }
         val dino = prismRing(w, h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -46,8 +46,8 @@ fun main() {
     fun dinoFull(h: Double): Csg {
         val img = Image.fromClasspath("round-dino.png")
         val c = outline(img) { isBlack(it) }
-                .simplify(2.0)
-                .map { it.toVector().scale(v(.15, .15, 1)) }
+            .simplify(2.0)
+            .map { it.toVector().scale(v(.15, .15, 1)) }
         val dino = prism(h, true, c)
         return dino.translate(v(0, 0, h))
     }
@@ -65,7 +65,12 @@ fun main() {
     fun round(): Csg {
         val r = 20.0
         val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
-        return prismRing(2.0, 2.5, false, points).translate(v(0, 0, 2.5)) + prismRing(.2, 20.0, false, points).translate(v(0, 0, 20.0))
+        return prismRing(2.0, 2.5, false, points).translate(v(0, 0, 2.5)) + prismRing(
+            .2,
+            20.0,
+            false,
+            points
+        ).translate(v(0, 0, 20.0))
     }
 
     fun small(): Csg {
@@ -82,15 +87,16 @@ fun main() {
     }
 
     fun puller(): Csg {
-        return (dinoFull(2.5) - dino(1.0, 2.5)).scale(v(-1, 1, 1)) + cylinder(radius = 5.0).scale(v(1, 12, 1)).rotateX(90.deg()).translate(v(-21, 52, 12))
+        return (dinoFull(2.5) - dino(1.0, 2.5)).scale(v(-1, 1, 1)) + cylinder(radius = 5.0).scale(v(1, 12, 1)).rotateX(
+            90.deg()
+        ).translate(v(-21, 52, 12))
     }
 
-    model {
+    model(File("target/guitar.stl")) {
         //        add(puller())
         add(dinoForm())
 //        add(round().translate(v(35, -25, 0)))
 //        add(small().translate(v(60, 20, 0)))
-        writeBinaryStl(File("target/guitar.stl"))
     }
 
 }

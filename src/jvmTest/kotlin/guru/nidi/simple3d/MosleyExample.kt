@@ -15,12 +15,12 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
 fun main() {
-    model {
+    model(File("target/mosley.stl")) {
 
         fun menger(r: Double, level: Int): Csg {
             var c = cube(center = origin, radius = unit * r)
@@ -78,7 +78,5 @@ fun main() {
         }
 
         menger(15.0, 2)
-
-        writeBinaryStl(File("target/mosley.stl"))
     }
 }

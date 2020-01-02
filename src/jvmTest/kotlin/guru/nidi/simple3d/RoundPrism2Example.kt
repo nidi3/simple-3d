@@ -15,7 +15,6 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
 import guru.nidi.simple3d.model.*
 import guru.nidi.simple3d.vectorize.Image
 import guru.nidi.simple3d.vectorize.outline
@@ -326,14 +325,13 @@ fun main() {
         ).rotateX(90.deg()).translate(v(-21, 52, 12))
     }
 
-    model {
+    model(File("target/small-fist.stl")) {
         //        add(puller())
 //        add(handForm())
 //        add(fingerForm().translate(v(50, 0, 0)))
 //        asBlackAndWhite(peace())
 //        add(smallFlower().translate(v(60, 20, 0)))
         add(smallFist())
-        writeBinaryStl(File("target/small-fist.stl"))
     }
 
 }

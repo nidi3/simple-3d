@@ -15,13 +15,13 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 import kotlin.math.sqrt
 
 fun main() {
-    model {
+    model(File("target/rupert.stl")) {
         val diff = .00
         transform(scale(v(10, 10, 10))) {
             val s = 1.5 * sqrt(2.0) - 2 - diff
@@ -35,6 +35,5 @@ fun main() {
             add((q and prism(8.0, true, a + n, b + n, c + n, d + n)).translate(v(10, 0, 0)))
             add(q.translate(v(5, 0, 0)))
         }
-        writeBinaryStl(File("target/rupert.stl"))
     }
 }

@@ -15,14 +15,14 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 import kotlin.math.*
 
 fun main() {
-    model {
-//        val c = cylinder() { angle, _ -> 1 / cos(PI / 4 - angle % (PI / 2)) }
+    model(File("target/ambCylinder.stl")) {
+        //        val c = cylinder() { angle, _ -> 1 / cos(PI / 4 - angle % (PI / 2)) }
 //        val c2 = cylinder() { angle, _ -> 1 / (.5 + .5 * cos(PI / 4 - angle % (PI / 2))) }
 //            add(c)
 //            add(c2.translate(v(2, 0, 0)))
@@ -47,6 +47,5 @@ fun main() {
         add((r - h).rotateZ(45.deg()).scale(v(1.5, 1.5, 1)))
 //        add((r - h).scale(v(1.2, 1.2, 1)))
 //        add(h)
-        writeBinaryStl(File("target/ambCylinder.stl"))
     }
 }

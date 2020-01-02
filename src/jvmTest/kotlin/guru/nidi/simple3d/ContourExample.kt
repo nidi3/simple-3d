@@ -15,8 +15,7 @@
  */
 package guru.nidi.simple3d
 
-import guru.nidi.simple3d.io.writeBinaryStl
-import guru.nidi.simple3d.model.model
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.prism
 import guru.nidi.simple3d.vectorize.Image
 import guru.nidi.simple3d.vectorize.outline
@@ -24,12 +23,11 @@ import guru.nidi.simple3d.vectorize.simplify
 import java.io.File
 
 fun main() {
-    model {
+    model(File("target/dino.stl")) {
         val img = Image.fromClasspath("brontosaurus-pattern.gif")
         val c = outline(img) { rgb -> rgb < 0xffffff }
             .simplify(5.0)
             .map { it.toVector() / 10.0 }
         add(prism(10.0, true, c))
-        writeBinaryStl(File("target/dino.stl"))
     }
 }
