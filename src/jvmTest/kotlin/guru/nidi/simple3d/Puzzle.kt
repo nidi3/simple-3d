@@ -47,10 +47,10 @@ fun main() {
 
 
     fun round(len: Double, r: Double): Csg {
-        val corner = (cube(center = origin) -
+        val corner = (cube() -
                 cylinder(end = 2.0 * yUnit, radius = 2.0, slices = 64).rotateX(90.deg).translate(v(-1, -1, 0)))
             .scale(v(r, r, h * 2))
-        return cube().scale(v(len / 2, len / 2, h / 2)) -
+        return cube(center = unit).scale(v(len / 2, len / 2, h / 2)) -
                 corner.rotateZ(0.deg).translate(v(len - r, len - r, 0)) -
                 corner.rotateZ(180.deg).translate(v(r, r, 0)) -
                 corner.rotateZ(90.deg).translate(v(len - r, r, 0)) -

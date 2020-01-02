@@ -24,7 +24,7 @@ fun main() {
         val cy = cylinder()
         val r = ring(center = v(2, 2, 0), radius = 2.0)
         val s = sphere(center = v(0, 8, 0), radius = 2.0)
-        val c = cube(radius = v(2, 3, 5))
+        val c = cube(center = unit, radius = v(2, 3, 5))
         val c2 = cube(center = v(3, 4, 2), radius = v(3, 4, 2))
         add(cy.translate(v(0, 0, 10)))
         add(r)

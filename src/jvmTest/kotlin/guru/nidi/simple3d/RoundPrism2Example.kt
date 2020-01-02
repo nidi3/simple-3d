@@ -28,6 +28,7 @@ import javax.imageio.ImageIO
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 fun main() {
     fun isBlack(rgb: Int): Boolean {
@@ -186,7 +187,7 @@ fun main() {
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = prismRing(.2, 22.5, false, points).translate(v(0, 0, 20))
         val longFull = prism(25.0, true, points).translate(v(0, 0, -5))
-        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 
@@ -200,7 +201,7 @@ fun main() {
         val points = ps.map { .25 * v(it.x - min.x, it.y - min.y, it.z - min.z) }
         val long = prismRing(.2, 22.5, true, points).translate(v(-10.5, -13.5, 20))
         val longFull = prism(25.0, true, points).translate(v(-10.5, -13.5, 20))
-        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 
@@ -212,7 +213,7 @@ fun main() {
         val r = 5.0
         val r3 = 4.8
         val f = 4
-        val d = f * Math.sqrt(3.0) / 2
+        val d = f * sqrt(3.0) / 2
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val points2 = (0 until 360 step 9).map { v(r3 * cos(it.deg), r3 * sin(it.deg), 0) }
         val long = prismRing(.2, 22.5, false, points).translate(v(-d, 0, 20)) +
@@ -221,7 +222,7 @@ fun main() {
         val longFull = prism(35.0, true, points2).translate(v(d, -f, -5)) +
                 prism(35.0, true, points2).translate(v(d, f, -5)) +
                 prism(35.0, true, points2).translate(v(-d, 0, -5))
-        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        val base = cube(radius = v(12, 25, 2.5))
         return (base + long - longFull - m).translate(v(0, 0, 2.5))
     }
 
@@ -247,7 +248,7 @@ fun main() {
         )
         val long = prismRing(.2, 22.5, false, points).translate(v(-r / 2, -r / 2, 20))
         val longFull = prism(25.0, true, points).translate(v(-r / 2, -r / 2, -5))
-        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 
@@ -269,7 +270,7 @@ fun main() {
         ).map { v(it.x * xs, it.y, it.z) }
         val long = prismRing(.2, 22.5, false, points).translate(v(-r * xs / 2, -r, 20))
         val longFull = prism(25.0, true, points).translate(v(-r * xs / 2, -r, -5))
-        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 
@@ -292,7 +293,7 @@ fun main() {
         ).map { v(it.x * xs, it.y, it.z) }
         val long = prismRing(.2, 22.5, false, points).translate(v(-r * xs / 2, -r, 20))
         val longFull = prism(25.0, true, points).translate(v(-r * xs / 2, -r, -5))
-        val base = cube(center = origin, radius = v(12, 25, 2.5))
+        val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 
@@ -312,7 +313,7 @@ fun main() {
 //        val long = prismRing(.2, 22.5, false, points).translate(v(0, 0, 20))
 //        val longFull = prism(25.0, true, points).translate(v(0, 0, -5))
 
-        val base = cube(center = origin, radius = v(15, 25, 2.5))
+        val base = cube(radius = v(15, 25, 2.5))
         return (base - longFull + long - m).translate(v(0, 0, 2.5))
     }
 

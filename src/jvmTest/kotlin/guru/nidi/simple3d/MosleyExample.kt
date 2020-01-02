@@ -23,7 +23,7 @@ fun main() {
     model(File("target/mosley.stl")) {
 
         fun menger(r: Double, level: Int): Csg {
-            var c = cube(center = origin, radius = unit * r)
+            var c = cube(radius = unit * r)
 
             fun step(r: Double, level: Int) {
                 val e = r / 3
@@ -37,9 +37,9 @@ fun main() {
                 c -= cube(center = v(d, -d, -d), radius = unit * e)
                 c -= cube(center = v(-d, d, -d), radius = unit * e)
                 c -= cube(center = v(-d, -d, -d), radius = unit * e)
-//                        addToModel(cube(center = origin, radius = v(r / 3, r / 3, 1.1 * r)))
-//                        addToModel(cube(center = origin, radius = v(r / 3, 1.1 * r, r / 3)))
-//                        addToModel(cube(center = origin, radius = v(1.1 * r, r / 3, r / 3)))
+//                        addToModel(cube(radius = v(r / 3, r / 3, 1.1 * r)))
+//                        addToModel(cube(radius = v(r / 3, 1.1 * r, r / 3)))
+//                        addToModel(cube(radius = v(1.1 * r, r / 3, r / 3)))
                 if (level > 0) {
                     transform(scale(unit / 3.0)) {
                         transform(translate(v(d, 0, 0))) { step(r, level - 1) }

@@ -71,14 +71,14 @@ class StlBinaryWriter(val file: File) : AutoCloseable {
 
     private fun wr(v: Double) {
         val i = java.lang.Float.floatToIntBits(v.toFloat())
-        out.writeInt(java.lang.Integer.reverseBytes(i))
+        out.writeInt(Integer.reverseBytes(i))
     }
 
     override fun close() {
         out.close()
         RandomAccessFile(file, "rw").use {
             it.seek(80)
-            it.writeInt(java.lang.Integer.reverseBytes(count))
+            it.writeInt(Integer.reverseBytes(count))
         }
     }
 }

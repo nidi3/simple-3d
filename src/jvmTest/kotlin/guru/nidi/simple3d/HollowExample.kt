@@ -22,11 +22,12 @@ import guru.nidi.simple3d.vectorize.outline
 import guru.nidi.simple3d.vectorize.simplify
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.math.min
 
 fun main() {
     fun base(r: Double, b: Double, h: Double): Csg {
-        val base = cube(center = origin, radius = v(r, r, b / 2))
-        val corner = cube(center = origin, radius = v(b, b, h)) +
+        val base = cube(radius = v(r, r, b / 2))
+        val corner = cube(radius = v(b, b, h)) +
                 cube(center = v(b / 2, b * 2, 0), radius = v(b / 2, b, h)) +
                 cube(center = v(b * 2, b / 2, 0), radius = v(b, b / 2, h))
 
@@ -41,8 +42,8 @@ fun main() {
         val b2 = 1.0
         val d2 = r - 2.5 * b2
         val d3 = r - .5 * b2
-        val base = cube(center = origin, radius = v(r, r, b / 2))
-        val inner = cube(center = origin, radius = v(r - 2 * b2, b2 / 2, b2))
+        val base = cube(radius = v(r, r, b / 2))
+        val inner = cube(radius = v(r - 2 * b2, b2 / 2, b2))
         val innerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 4.75 - .5 * z }
         val outerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 5.75 - .5 * z }
         val cone = base + outerC - innerC
@@ -73,12 +74,12 @@ fun main() {
     fun side(r: Double, b: Double, h: Double): Csg {
         val f = r - 4.5 * b
         val dino = dino(b)
-        val factor = Math.min(1.7 * f / dino.width, 1.7 * h / dino.height)
+        val factor = min(1.7 * f / dino.width, 1.7 * h / dino.height)
         val scaleDino = dino.csg.scale(v(factor, factor, 1))
 
-        val side = cube(center = origin, radius = v(r - 2 * b, h - b, b / 2))
-        val inner1 = cube(center = origin, radius = (v(b / 2, h - b, b)))
-        val inner2 = cube(center = origin, radius = (v(b / 2, r - 4.5 * b, b)))
+        val side = cube(radius = v(r - 2 * b, h - b, b / 2))
+        val inner1 = cube(radius = (v(b / 2, h - b, b)))
+        val inner2 = cube(radius = (v(b / 2, r - 4.5 * b, b)))
         val base = side - scaleDino.translate(v(-dino.width * factor / 2, -dino.height * factor / 2, b / 2))
         return base + inner1.translate(v(f, 0, b)) +
                 inner1.translate(v(-f, 0, b)) +

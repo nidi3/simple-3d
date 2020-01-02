@@ -16,7 +16,10 @@
 package guru.nidi.simple3d
 
 import guru.nidi.simple3d.io.model
-import guru.nidi.simple3d.model.*
+import guru.nidi.simple3d.model.cube
+import guru.nidi.simple3d.model.deg
+import guru.nidi.simple3d.model.prism
+import guru.nidi.simple3d.model.v
 import java.io.File
 
 fun main() {
@@ -30,8 +33,8 @@ fun main() {
 //                add(bigConn)
 
         add(cube(v(0, 0, 3), v(10, 10, 3)))
-        add(conn.translate(v(-15, -5, 6)) and cube(origin, v(10, 10, 10)))
-        add(conn.translate(v(-5, -15, 6)) and cube(origin, v(10, 10, 10)))
+        add(conn.translate(v(-15, -5, 6)) and cube(radius = v(10, 10, 10)))
+        add(conn.translate(v(-5, -15, 6)) and cube(radius = v(10, 10, 10)))
 
         val neg = cube(v(30, 10, 0), v(10, 10, 5)) - bigConn.translate(v(15, 5, -5)) - bigConn.translate(v(25, -5, -5))
         add(neg.rotateX(180.deg).translate(v(0, 0, 5)))

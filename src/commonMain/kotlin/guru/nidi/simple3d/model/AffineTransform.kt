@@ -15,7 +15,6 @@
  */
 package guru.nidi.simple3d.model
 
-import kotlin.js.JsName
 import kotlin.math.cos
 import kotlin.math.sin
 

@@ -21,7 +21,7 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun cube(center: Vector = unit, radius: Vector = unit) = Csg(
+fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
     listOf(
         listOf(listOf(0, 4, 6, 2), listOf(-1, 0, 0)),
         listOf(listOf(1, 3, 7, 5), listOf(+1, 0, 0)),
@@ -44,9 +44,7 @@ fun cube(center: Vector = unit, radius: Vector = unit) = Csg(
 fun prism(length: Double, rightHand: Boolean, vararg points: Vector) = prism(length, rightHand, points.toList())
 
 fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
-    val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
-    if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
-    val n = p.normal
+    val n = Plane.fromPoints(points, rightHand).normal
     val dn = n * length
 
     fun side(p1: Vector, p2: Vector): Polygon {
@@ -57,7 +55,7 @@ fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
     return Csg.ofPolygons {
         add(Polygon(points.reversed().map { Vertex(it, -n) }))
         add(Polygon(points.map { Vertex(it + dn, n) }))
-        for (i in 0 until points.size) {
+        for (i in points.indices) {
             add(side(points(i), points(i + 1)))
         }
     }
@@ -71,9 +69,7 @@ fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Ve
     prismRing(width, width, length, rightHand, points)
 
 fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points: List<Vector>): Csg {
-    val p = Plane.fromPoints(points[0], points[1], points[2], rightHand)
-    if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
-    val n = p.normal
+    val n = Plane.fromPoints(points, rightHand).normal
     val dn = n * length
 
     fun side(p0: Vector, p1: Vector, p2: Vector, p3: Vector): List<Polygon> {
@@ -109,14 +105,14 @@ fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points
     }
 
     return Csg.ofPolygons {
-        for (i in 0 until points.size) {
+        for (i in points.indices) {
             addAll(side(points(i), points(i + 1), points(i + 2), points(i + 3)))
         }
     }
 }
 
 fun sphere(
-    center: Vector = unit, radius: Double = 1.0, slices: Int = 32, stacks: Int = 16,
+    center: Vector = origin, radius: Double = 1.0, slices: Int = 32, stacks: Int = 16,
     radiusFunc: ((Double, Double) -> Double)? = null
 ): Csg {
     fun vertex(phi: Double, theta: Double): Vertex {
@@ -173,7 +169,7 @@ fun cylinder(
     }
 }
 
-fun ring(center: Vector = unit, radius: Double = 1.0, r: Double = 1.0, h: Double = 1.0, slices: Int = 32): Csg {
+fun ring(center: Vector = origin, radius: Double = 1.0, r: Double = 1.0, h: Double = 1.0, slices: Int = 32): Csg {
     fun vertex(r: Double, a: Double, b: Double, norm: Vector) =
         Vertex(center + Vector.ofSpherical(r, b, a), norm)
 

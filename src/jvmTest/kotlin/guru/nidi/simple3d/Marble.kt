@@ -21,27 +21,31 @@ import java.io.File
 
 fun main() {
     val hole = cylinder().scale(v(2, 20, 2))
-    val stud = cube(center = origin).scale(v(1.5, 1.5, 1.5)).translate(v(0, 0, .5)) +
-            (cube(center = origin).scale(v(2, 2, 1.25)).translate(v(0, 0, .75)) *
+    val stud = cube().scale(v(1.5, 1.5, 1.5)).translate(v(0, 0, .5)) +
+            (cube().scale(v(2, 2, 1.25)).translate(v(0, 0, .75)) *
                     hole.translate(v(0, 0, 2)) *
                     hole.rotateZ(90.deg).translate(v(0, 0, 2)))
 
-    fun base(len: Int): Csg {
-        return cube(center = origin).scale(v(7.5, 7.5 * len, 7.5)).translate(v(0, 0, 7.5)) -
-                hole.translate(v(0, 0, 14)) -
-                hole.translate(v(0, 0, 1)) -
-                hole.translate(v(6.5, 0, 7.5)) -
-                hole.translate(v(-6.5, 0, 7.5)) -
-                hole.rotateZ(90.deg).translate(v(0, 7.5 * len - 1, 7.5)) +
-                stud.rotateX(90.deg).translate(v(0, -7.5 * len, 7.5))
+    fun base(len: Double): Csg {
+        return cube().scale(v(7.5, 7.5 * len, 7.5)).translate(v(0, 0, 0)) -
+                hole.translate(v(0, 0, 6.5)) -
+                hole.translate(v(0, 0, -6.5)) -
+                hole.translate(v(6.5, 0, 0)) -
+                hole.translate(v(-6.5, 0, 0)) -
+                hole.rotateZ(90.deg).translate(v(0, 7.5 * len - 1, 0)) +
+                stud.rotateX(90.deg).translate(v(0, -7.5 * len, 0))
     }
 
     model(File("target/m/base.stl")) {
-        add(base(1).rotateX(90.deg))
+        add(base(.5))
+        add(base(.5).rotateX(270.deg).translate(v(20, 0, 0)))
 //        add(base(2).translate(v(20, 0, 0)))
     }
 
     model(File("target/m/stud.stl")) {
-        add(cube(center = origin).scale(v(7.5, 7.5, 1)).translate(v(0, 0, 1)) + stud.translate(v(0, 0, 2)))
+        add(
+            cube().scale(v(7.5, 7.5, 1)).translate(v(0, 0, 1)) +
+                    stud.translate(v(0, 0, 2))
+        )
     }
 }

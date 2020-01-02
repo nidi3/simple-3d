@@ -27,9 +27,9 @@ fun main() {
 //                    var c = cube(center = origin, radius = unit * r)
 
             fun step(r: Double, level: Int) {
-                c += cube(center = origin, radius = v(r / 3, r / 3, 1.1 * r))
-                c += cube(center = origin, radius = v(r / 3, 1.1 * r, r / 3))
-                c += cube(center = origin, radius = v(1.1 * r, r / 3, r / 3))
+                c += cube(radius = v(r / 3, r / 3, 1.1 * r))
+                c += cube(radius = v(r / 3, 1.1 * r, r / 3))
+                c += cube(radius = v(1.1 * r, r / 3, r / 3))
 //                        addToModel(cube(center = origin, radius = v(r / 3, r / 3, 1.1 * r)))
 //                        addToModel(cube(center = origin, radius = v(r / 3, 1.1 * r, r / 3)))
 //                        addToModel(cube(center = origin, radius = v(1.1 * r, r / 3, r / 3)))

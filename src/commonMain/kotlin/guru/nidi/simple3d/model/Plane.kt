@@ -33,6 +33,12 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
             return Plane(n, n * a)
         }
 
+        fun fromPoints(points: List<Vector>, rightHand: Boolean = true): Plane {
+            return fromPoints(points[0], points[1], points[2], rightHand).also { p ->
+                if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
+            }
+        }
+
         fun fromVertex(a: Vertex) = Plane(a.normal, a.normal * a.pos)
     }
 
@@ -72,9 +78,11 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
     infix fun and(p: Plane) = this intersect p
     infix fun and(v: Vertex) = this intersect v
 
-    fun splitPolygon(polygon: Polygon,
-                     coplanarFront: MutableList<Polygon>, coplanarBack: MutableList<Polygon>,
-                     front: MutableList<Polygon>, back: MutableList<Polygon>) {
+    fun splitPolygon(
+        polygon: Polygon,
+        coplanarFront: MutableList<Polygon>, coplanarBack: MutableList<Polygon>,
+        front: MutableList<Polygon>, back: MutableList<Polygon>
+    ) {
         var polygonType = COPLANAR
         val types = polygon.vertices.map { v ->
             val t = (normal * v.pos) - w
