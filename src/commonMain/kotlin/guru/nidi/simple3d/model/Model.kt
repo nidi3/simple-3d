@@ -38,7 +38,9 @@ class Model {
 
 @JsName("model")
 fun model(actions: Model.() -> Unit) = Model().apply(actions)
-fun Int.deg() = this * PI / 180
-fun Double.deg() = this * PI / 180
-fun Double.rad() = this
+
+val Int.deg get() = this * PI / 180
+val Double.deg get() = this * PI / 180
+val Double.rad get() = this
+
 operator fun <T> List<T>.invoke(i: Int) = get(((i % size) + size) % size)

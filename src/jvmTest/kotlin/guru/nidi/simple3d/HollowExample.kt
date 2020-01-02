@@ -31,9 +31,9 @@ fun main() {
                 cube(center = v(b * 2, b / 2, 0), radius = v(b, b / 2, h))
 
         val e = r - b
-        return base + corner.rotateZ(180.deg()).translate(v(e, e, h)) +
-                corner.rotateZ(270.deg()).translate(v(e, -e, h)) +
-                corner.rotateZ(90.deg()).translate(v(-e, e, h)) +
+        return base + corner.rotateZ(180.deg).translate(v(e, e, h)) +
+                corner.rotateZ(270.deg).translate(v(e, -e, h)) +
+                corner.rotateZ(90.deg).translate(v(-e, e, h)) +
                 corner.translate(v(-e, -e, h))
     }
 
@@ -50,10 +50,10 @@ fun main() {
                 inner.translate(v(0, d3, b2)) +
                 inner.translate(v(0, -d2, b2)) +
                 inner.translate(v(0, -d3, b2))
-        val outerBorders = inner.rotateZ(90.deg()).translate(v(d2, 0, b2)) +
-                inner.rotateZ(90.deg()).translate(v(d3, 0, b2)) +
-                inner.rotateZ(90.deg()).translate(v(-d2, 0, b2)) +
-                inner.rotateZ(90.deg()).translate(v(-d3, 0, b2))
+        val outerBorders = inner.rotateZ(90.deg).translate(v(d2, 0, b2)) +
+                inner.rotateZ(90.deg).translate(v(d3, 0, b2)) +
+                inner.rotateZ(90.deg).translate(v(-d2, 0, b2)) +
+                inner.rotateZ(90.deg).translate(v(-d3, 0, b2))
         return cone + innerBorders + outerBorders
     }
 
@@ -82,8 +82,8 @@ fun main() {
         val base = side - scaleDino.translate(v(-dino.width * factor / 2, -dino.height * factor / 2, b / 2))
         return base + inner1.translate(v(f, 0, b)) +
                 inner1.translate(v(-f, 0, b)) +
-                inner2.rotateZ(90.deg()).translate(v(0, r - 1.5 * b, b)) +
-                inner2.rotateZ(90.deg()).translate(v(0, -(r - 1.5 * b), b))
+                inner2.rotateZ(90.deg).translate(v(0, r - 1.5 * b, b)) +
+                inner2.rotateZ(90.deg).translate(v(0, -(r - 1.5 * b), b))
     }
 
     model(File("target/cube.stl")) {

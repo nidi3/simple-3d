@@ -29,8 +29,8 @@ fun main() {
         val points = (0 until 360 step 5).map { a ->
             //            val r = 9.0 / (.5 + .5 * cos((45 - a % 90).deg()))
 //            Vector(r * sin((a + 0).deg()), r * cos((a + 0).deg()), 0.0)
-            val c = cos((a + 0).deg())
-            val s = sin((a + 0).deg())
+            val c = cos((a + 0).deg)
+            val s = sin((a + 0).deg)
             Vector(9.0 * sqrt(abs(c)) * sign(c), 9.0 * sqrt(abs(s)) * sign(s), 0.0)
         }
         val len = 25.0
@@ -43,8 +43,8 @@ fun main() {
             }
             xh.add(yh)
         }
-        val h = heightModel(xh).translate(v(-10, -10, -len)).rotateX(180.deg())
-        add((r - h).rotateZ(45.deg()).scale(v(1.5, 1.5, 1)))
+        val h = heightModel(xh).translate(v(-10, -10, -len)).rotateX(180.deg)
+        add((r - h).rotateZ(45.deg).scale(v(1.5, 1.5, 1)))
 //        add((r - h).scale(v(1.2, 1.2, 1)))
 //        add(h)
     }

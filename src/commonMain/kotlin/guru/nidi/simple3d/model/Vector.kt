@@ -34,8 +34,8 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     operator fun div(a: Double) = Vector(x / a, y / a, z / a)
     operator fun times(a: Vector) = x * a.x + y * a.y + z * a.z
     infix fun x(a: Vector) = Vector(y * a.z - z * a.y, z * a.x - x * a.z, x * a.y - y * a.x)
-    fun length() = sqrt(this * this)
-    fun unit() = this / length()
+    val length get() = sqrt(this * this)
+    fun unit() = this / length
     fun interpolate(a: Vector, t: Double) = this + (a - this) * t
     fun abs() = Vector(abs(x), abs(y), abs(z))
     infix fun scale(a: Vector) = Vector(x * a.x, y * a.y, z * a.z)

@@ -40,7 +40,7 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
 
     operator fun unaryMinus() = Plane(-normal, -w)
 
-    infix fun isParallel(p: Plane) = (normal x p.normal).length() < EPSILON
+    infix fun isParallel(p: Plane) = (normal x p.normal).length < EPSILON
 
     infix fun intersect(p: Plane): Vertex {
         val n = normal x p.normal

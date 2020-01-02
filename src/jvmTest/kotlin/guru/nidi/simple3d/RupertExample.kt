@@ -31,7 +31,7 @@ fun main() {
             val c = v(3 - s, 0 + s, 0)
             val d = v(0 + s, 3 - s, 0)
             val n = -4.0 * Plane.fromPoints(a, b, c).normal
-            add((q - prism(8.0, true, a + n, b + n, c + n, d + n)).rotateX(0.deg()))
+            add((q - prism(8.0, true, a + n, b + n, c + n, d + n)).rotateX(0.deg))
             add((q and prism(8.0, true, a + n, b + n, c + n, d + n)).translate(v(10, 0, 0)))
             add(q.translate(v(5, 0, 0)))
         }

@@ -57,7 +57,7 @@ class VectorTest {
 
     @Test
     fun length() {
-        assertEquals(sqrt(4.0 + 9.0 + 16.0), Vector(2.0, 3.0, 4.0).length())
+        assertEquals(sqrt(4.0 + 9.0 + 16.0), Vector(2.0, 3.0, 4.0).length)
     }
 
     @Test

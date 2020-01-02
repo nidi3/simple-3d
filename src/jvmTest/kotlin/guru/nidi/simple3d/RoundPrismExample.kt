@@ -64,7 +64,7 @@ fun main() {
 
     fun round(): Csg {
         val r = 20.0
-        val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
+        val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         return prismRing(2.0, 2.5, false, points).translate(v(0, 0, 2.5)) + prismRing(
             .2,
             20.0,
@@ -75,11 +75,11 @@ fun main() {
 
     fun small(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val r = 10.0
-        val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
+        val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = prismRing(.2, 22.5, false, points).translate(v(0, 0, 20))
         val longFull = prism(25.0, true, points).translate(v(0, 0, -5))
         val base = cube(center = origin, radius = v(12, 25, 2.5))
@@ -88,7 +88,7 @@ fun main() {
 
     fun puller(): Csg {
         return (dinoFull(2.5) - dino(1.0, 2.5)).scale(v(-1, 1, 1)) + cylinder(radius = 5.0).scale(v(1, 12, 1)).rotateX(
-            90.deg()
+            90.deg
         ).translate(v(-21, 52, 12))
     }
 

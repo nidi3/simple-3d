@@ -15,6 +15,7 @@
  */
 package guru.nidi.simple3d
 
+import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import guru.nidi.simple3d.vectorize.Image
 import guru.nidi.simple3d.vectorize.outline
@@ -170,7 +171,7 @@ fun main() {
         val q = prismRing(3.5, .2, 2.5, false, c).translate(v(-20, -20, 0))
 
         val r = 20.0
-        val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
+        val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val base = prismRing(1.5, 2.5, false, points).translate(v(0, 0, 2.5))
         val rest = prismRing(.2, 20.0, false, points).translate(v(0, 0, 20.0))
         return p + q + base + rest
@@ -178,11 +179,11 @@ fun main() {
 
     fun small(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val r = 10.0
-        val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
+        val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = prismRing(.2, 22.5, false, points).translate(v(0, 0, 20))
         val longFull = prism(25.0, true, points).translate(v(0, 0, -5))
         val base = cube(center = origin, radius = v(12, 25, 2.5))
@@ -191,7 +192,7 @@ fun main() {
 
     fun smallFist(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val ps = fist()
@@ -205,15 +206,15 @@ fun main() {
 
     fun smallFlower(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val r = 5.0
         val r3 = 4.8
         val f = 4
         val d = f * Math.sqrt(3.0) / 2
-        val points = (0 until 360 step 9).map { v(r * cos(it.deg()), r * sin(it.deg()), 0) }
-        val points2 = (0 until 360 step 9).map { v(r3 * cos(it.deg()), r3 * sin(it.deg()), 0) }
+        val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
+        val points2 = (0 until 360 step 9).map { v(r3 * cos(it.deg), r3 * sin(it.deg), 0) }
         val long = prismRing(.2, 22.5, false, points).translate(v(-d, 0, 20)) +
                 prismRing(.2, 22.5, false, points).translate(v(d, f, 20)) +
                 prismRing(.2, 22.5, false, points).translate(v(d, -f, 20))
@@ -226,7 +227,7 @@ fun main() {
 
     fun smallCross(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val r = 20.0
@@ -252,7 +253,7 @@ fun main() {
 
     fun smallFlash(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val r = 13.5
@@ -274,7 +275,7 @@ fun main() {
 
     fun smallLambda(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val r = 13.5
@@ -298,7 +299,7 @@ fun main() {
 
     fun smallPeace(): Csg {
         val r2 = 20.0
-        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg()), r2 * sin(it.deg()), 0) }
+        val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = prismRing(2.1, 2.5, false, p2).translate(v(0, 0, 2.5))
 
         val c = outline(peace()) { isBlack(it) }
@@ -322,7 +323,7 @@ fun main() {
                 12,
                 1
             )
-        ).rotateX(90.deg()).translate(v(-21, 52, 12))
+        ).rotateX(90.deg).translate(v(-21, 52, 12))
     }
 
     model(File("target/small-fist.stl")) {
