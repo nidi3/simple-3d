@@ -16,10 +16,7 @@
 package guru.nidi.simple3d.model
 
 import kotlin.js.JsName
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 data class Vector(val x: Double, val y: Double, val z: Double) {
     companion object {
@@ -40,6 +37,34 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     fun abs() = Vector(abs(x), abs(y), abs(z))
     infix fun scale(a: Vector) = Vector(x * a.x, y * a.y, z * a.z)
     infix fun scaleInv(a: Vector) = Vector(x / a.x, y / a.y, z / a.z)
+
+    fun inSegment(a: Vector, b: Vector): Boolean =
+        min(abs(x - a.x), abs(x - b.x)) +
+                min(abs(y - a.y), abs(y - b.y)) +
+                min(abs(z - a.z), abs(z - b.z)) > EPSILON &&
+                onSegment(a, b)
+
+    fun onSegment(a: Vector, b: Vector): Boolean =
+        x >= min(a.x, b.x) && x <= max(a.x, b.x) &&
+                y >= min(a.y, b.y) && y <= max(a.y, b.y) &&
+                z >= min(a.z, b.z) && z <= max(a.z, b.z) &&
+                onStraight(a, b)
+
+    fun onStraight(a: Vector, b: Vector): Boolean = when {
+        a.x != b.x -> {
+            abs(y - (a.y + (x - a.x) * ((b.y - a.y) / (b.x - a.x)))) < EPSILON &&
+                    abs(z - (a.z + (x - a.x) * ((b.z - a.z) / (b.x - a.x)))) < EPSILON
+        }
+        a.y != b.y -> {
+            abs(x - (a.x + (y - a.y) * ((b.x - a.x) / (b.y - a.y)))) < EPSILON &&
+                    abs(z - (a.z + (y - a.y) * ((b.z - a.z) / (b.y - a.y)))) < EPSILON
+        }
+        a.z != b.z -> {
+            abs(y - (a.y + (z - a.z) * ((b.y - a.y) / (b.z - a.z)))) < EPSILON &&
+                    abs(x - (a.x + (z - a.z) * ((b.x - a.x) / (b.z - a.z)))) < EPSILON
+        }
+        else -> throw IllegalArgumentException("a and b are equal")
+    }
 }
 
 operator fun Int.times(a: Vector) = a * this.toDouble()
@@ -53,6 +78,7 @@ val zUnit = v(0, 0, 1)
 
 @JsName("v")
 fun v(a: Double, b: Double, c: Double) = Vector(a, b, c)
+
 fun v(a: Int, b: Double, c: Double) = Vector(a.toDouble(), b, c)
 fun v(a: Double, b: Int, c: Double) = Vector(a, b.toDouble(), c)
 fun v(a: Double, b: Double, c: Int) = Vector(a, b, c.toDouble())

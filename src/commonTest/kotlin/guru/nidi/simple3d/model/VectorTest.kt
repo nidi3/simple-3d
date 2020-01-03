@@ -18,6 +18,7 @@ package guru.nidi.simple3d.model
 import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class VectorTest {
     @Test
@@ -72,5 +73,13 @@ class VectorTest {
         assertEquals(Vector(2.0, 3.0, 4.0), Vector(2.0, 3.0, 4.0).interpolate(v, 0.0))
         assertEquals(Vector(2.5, 4.0, 5.5), Vector(2.0, 3.0, 4.0).interpolate(v, 0.5))
         assertEquals(Vector(3.0, 5.0, 7.0), Vector(2.0, 3.0, 4.0).interpolate(v, 1.0))
+    }
+
+    @Test
+    fun inSegment() {
+        val pos = Vector(12.5, 1.9015085966428351, -3.338178405040813)
+        val a = Vector(12.5, 1.9615705608064604, -3.1401806440322546)
+        val b = Vector(12.5, 1.9015085966428351, -3.7500000000000004)
+        assertFalse(pos.inSegment(a, b))
     }
 }

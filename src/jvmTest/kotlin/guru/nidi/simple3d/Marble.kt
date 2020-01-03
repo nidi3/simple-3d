@@ -21,7 +21,7 @@ import java.io.File
 
 fun main() {
     val hole = cylinder().scale(v(2, 20, 2))
-    val stud = cube().scale(v(1.5, 1.5, 1.5)).translate(v(0, 0, .5)) +
+    val stud = cube().scale(v(1.5, 1.5, 1)).translate(v(0, 0, 1)) +
             (cube().scale(v(2, 2, 1.25)).translate(v(0, 0, .75)) *
                     hole.translate(v(0, 0, 2)) *
                     hole.rotateZ(90.deg).translate(v(0, 0, 2)))
@@ -37,9 +37,10 @@ fun main() {
     }
 
     model(File("target/m/base.stl")) {
-        add(base(.5))
+        //        add(base(.5))
         add(base(.5).rotateX(270.deg).translate(v(20, 0, 0)))
 //        add(base(2).translate(v(20, 0, 0)))
+        splitPolygons()
     }
 
     model(File("target/m/stud.stl")) {
@@ -47,5 +48,6 @@ fun main() {
             cube().scale(v(7.5, 7.5, 1)).translate(v(0, 0, 1)) +
                     stud.translate(v(0, 0, 2))
         )
+        splitPolygons()
     }
 }

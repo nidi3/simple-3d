@@ -15,10 +15,22 @@
  */
 package guru.nidi.simple3d.io
 
-import guru.nidi.simple3d.model.*
-import java.io.*
+import guru.nidi.simple3d.model.Csg
+import guru.nidi.simple3d.model.Model
+import guru.nidi.simple3d.model.Polygon
+import guru.nidi.simple3d.model.Vector
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 
-class StlWriter(file: File, private val name: String) : AutoCloseable {
+fun Model.writeAsciiStl(f: File, name: String) {
+    StlAsciiWriter(f, name).use { out ->
+        csgs.forEach { out.write(it) }
+    }
+}
+
+class StlAsciiWriter(file: File, private val name: String) : AutoCloseable {
     private val out = PrintWriter(OutputStreamWriter(FileOutputStream(file)))
 
     init {
@@ -48,11 +60,5 @@ class StlWriter(file: File, private val name: String) : AutoCloseable {
     override fun close() {
         out.println("endsolid $name")
         out.close()
-    }
-}
-
-fun Model.writeStl(f: File, name: String) {
-    StlWriter(f, name).use { out ->
-        csgs.forEach { out.write(it) }
     }
 }

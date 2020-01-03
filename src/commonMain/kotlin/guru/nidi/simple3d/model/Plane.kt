@@ -18,8 +18,6 @@ package guru.nidi.simple3d.model
 import guru.nidi.simple3d.model.Plane.Type.*
 import kotlin.math.abs
 
-private const val EPSILON = 1e-5
-
 data class Plane private constructor(val normal: Vector, private val w: Double) {
     private enum class Type(val i: Int) {
         COPLANAR(0), FRONT(1), BACK(2), SPANNING(3);
@@ -77,6 +75,30 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
 
     infix fun and(p: Plane) = this intersect p
     infix fun and(v: Vertex) = this intersect v
+
+    fun segmentsIntersect(a1: Vector, a2: Vector, b1: Vector, b2: Vector): Boolean {
+        val s: Double
+        val t: Double
+        when {
+            normal.z != 0.0 -> {
+                t = ((b1.x - a1.x) * (a2.y - a1.y) - (b1.y - a1.y) * (a2.x - a1.x)) /
+                        ((b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y))
+                s = (b1.x - a1.x + t * (b2.x - b1.x)) / (a2.x - a1.x)
+            }
+            normal.y != 0.0 -> {
+                t = ((b1.x - a1.x) * (a2.z - a1.z) - (b1.z - a1.z) * (a2.x - a1.x)) /
+                        ((b2.z - b1.z) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.z - a1.z))
+                s = (b1.x - a1.x + t * (b2.x - b1.x)) / (a2.x - a1.x)
+            }
+            normal.x != 0.0 -> {
+                t = ((b1.z - a1.z) * (a2.y - a1.y) - (b1.y - a1.y) * (a2.z - a1.z)) /
+                        ((b2.y - b1.y) * (a2.z - a1.z) - (b2.z - b1.z) * (a2.y - a1.y))
+                s = (b1.z - a1.z + t * (b2.z - b1.z)) / (a2.z - a1.z)
+            }
+            else -> throw IllegalArgumentException("Empty normal vector")
+        }
+        return t in 0.0..1.0 && s in 0.0..1.0
+    }
 
     fun splitPolygon(
         polygon: Polygon,

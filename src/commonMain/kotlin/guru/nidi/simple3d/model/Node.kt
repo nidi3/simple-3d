@@ -15,8 +15,10 @@
  */
 package guru.nidi.simple3d.model
 
-class Node private constructor(private val polygons: MutableList<Polygon>, private var plane: Plane?,
-                               private var front: Node?, private var back: Node?) {
+class Node private constructor(
+    private val polygons: MutableList<Polygon>, private var plane: Plane?,
+    private var front: Node?, private var back: Node?
+) {
     constructor() : this(mutableListOf<Polygon>(), null, null, null)
     constructor(polygons: List<Polygon>) : this() {
         build(polygons.toMutableList())
@@ -24,7 +26,8 @@ class Node private constructor(private val polygons: MutableList<Polygon>, priva
 
     fun copy(): Node = Node(polygons.toMutableList(), plane?.copy(), front?.copy(), back?.copy())
 
-    operator fun unaryMinus(): Node = Node(polygons.mapTo(mutableListOf()) { -it }, plane?.let { -it }, back?.let { -it }, front?.let { -it })
+    operator fun unaryMinus(): Node =
+        Node(polygons.mapTo(mutableListOf()) { -it }, plane?.let { -it }, back?.let { -it }, front?.let { -it })
 
     private fun clipPolygons(polygons: List<Polygon>): MutableList<Polygon> {
         if (plane == null) return polygons.toMutableList()
@@ -42,7 +45,7 @@ class Node private constructor(private val polygons: MutableList<Polygon>, priva
     fun clipTo(bsp: Node): Node = Node(bsp.clipPolygons(polygons), plane, front?.clipTo(bsp), back?.clipTo(bsp))
 
     fun allPolygons(): List<Polygon> =
-            polygons + (front?.allPolygons() ?: listOf()) + (back?.allPolygons() ?: listOf())
+        polygons + (front?.allPolygons() ?: listOf()) + (back?.allPolygons() ?: listOf())
 
     fun combine(node: Node) = combine(node.allPolygons())
 

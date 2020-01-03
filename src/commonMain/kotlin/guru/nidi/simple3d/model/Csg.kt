@@ -92,7 +92,7 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
 
     operator fun unaryMinus() = Csg(polygons.map { -it })
 
-    fun boundingBox(): Box {
+    val boundingBox: Box by lazy {
         var minX = Double.MAX_VALUE
         var maxX = Double.MIN_VALUE
         var minY = Double.MAX_VALUE
@@ -100,23 +100,23 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
         var minZ = Double.MAX_VALUE
         var maxZ = Double.MIN_VALUE
         for (p in polygons) {
-            val b = p.boundingBox()
-            if (b.first.x < minX) minX = b.first.x
-            if (b.second.x > maxX) maxX = b.second.x
-            if (b.first.y < minY) minY = b.first.y
-            if (b.second.y > maxY) maxY = b.second.y
-            if (b.first.z < minZ) minZ = b.first.z
-            if (b.second.z > maxZ) maxZ = b.second.z
+            val b = p.boundingBox
+            if (b.from.x < minX) minX = b.from.x
+            if (b.to.x > maxX) maxX = b.to.x
+            if (b.from.y < minY) minY = b.from.y
+            if (b.to.y > maxY) maxY = b.to.y
+            if (b.from.z < minZ) minZ = b.from.z
+            if (b.to.z > maxZ) maxZ = b.to.z
         }
-        return Box(Vector(minX, minY, minZ), Vector(maxX, maxY, maxZ))
+        Box(Vector(minX, minY, minZ), Vector(maxX, maxY, maxZ))
     }
 
-    fun size() = boundingBox().size()
+    fun size() = boundingBox.size()
 
     fun growLinear(value: Double) = growLinear(Vector(value, value, value))
 
     fun growLinear(value: Vector): Csg {
-        val b = boundingBox()
+        val b = boundingBox
         val dist = b.from + b.size() / 2.0
         return AffineTransform().translate(dist).scale(unit + (value scaleInv b.size())).translate(-dist).applyTo(this)
     }
@@ -124,4 +124,10 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
 
 data class Box(val from: Vector, val to: Vector) {
     fun size() = to - from
+
+    fun intersect(b: Box): Boolean =
+        to.x >= b.from.x &&
+                from.x <= b.to.x &&
+                to.y >= b.from.y &&
+                from.y <= b.to.y
 }

@@ -67,7 +67,7 @@ fun main() {
             .simplify(3.0)
             .map { it.toVector() }
         val dino = prism(b, true, c)
-        val dinoBox = dino.boundingBox()
+        val dinoBox = dino.boundingBox
         return Dino(dino.translate(v(-dinoBox.from.x, -dinoBox.from.y, 0)), dinoBox.size().x, dinoBox.size().y)
     }
 
