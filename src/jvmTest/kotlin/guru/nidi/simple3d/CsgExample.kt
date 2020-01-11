@@ -26,27 +26,27 @@ fun main() {
         val s = sphere(center = v(0, 8, 0), radius = 2.0)
         val c = cube(center = unit, radius = v(2, 3, 5))
         val c2 = cube(center = v(3, 4, 2), radius = v(3, 4, 2))
-        add(cy.translate(v(0, 0, 10)))
+        add(cy.translate(0, 0, 10))
         add(r)
         add(s)
         add(c)
         add(c2)
 
-        add((c2 + c + s).translate(v(10, 0, 0)))
+        add((c2 + c + s).translate(10, 0, 0))
 
         fun ops(a: Csg, b: Csg) {
-            add((a * b).translate(v(20, 0, 0)))
-            add((a - b).translate(v(30, 0, 0)))
-            add((b - a).translate(v(40, 0, 0)))
+            add((a * b).translate(20, 0, 0))
+            add((a - b).translate(30, 0, 0))
+            add((b - a).translate(40, 0, 0))
         }
 
         ops(c2, c)
 
-        transform(translate(v(0, 10, 0))) {
+        transform(translate(0, 10, 0)) {
             ops(c2, s)
         }
 
-        transform(translate(v(0, 25, 0))) {
+        transform(translate(0, 25, 0)) {
             ops(c, r)
         }
     }

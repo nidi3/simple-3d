@@ -31,21 +31,21 @@ expect class Image {
 @JsName("outline")
 fun outline(image: Image, optimize: Boolean = true, classifier: (Int) -> Boolean): List<Point> {
     fun isBlack(x: Int, y: Int) =
-            if (x < 0 || x >= image.width || y < 0 || y >= image.height) false
-            else classifier(image[x, y])
+        if (x < 0 || x >= image.width || y < 0 || y >= image.height) false
+        else classifier(image[x, y])
 
     fun isBlack(p: Point) = isBlack(p.x, p.y)
 
     val edges = mutableListOf<Point>()
     fun add(p: Point) {
         if (optimize &&
-                edges.size >= 2 && p.isOneLine(edges[edges.size - 1], edges[edges.size - 2])
+            edges.size >= 2 && p.isOneLine(edges[edges.size - 1], edges[edges.size - 2])
         ) edges[edges.size - 1] = p
         else edges += p
     }
 
     val start = (DirPoint.findStart(image.width, image.height, ::isBlack)
-            ?: throw IllegalArgumentException("No black pixel found.")).findNext(::isBlack)
+        ?: throw IllegalArgumentException("No black pixel found.")).findNext(::isBlack)
     var point = start
     do {
         add(point.pos())
@@ -92,16 +92,16 @@ data class DirPoint(val dx: Int, val dy: Int, val x: Int, val y: Int) {
     }
 
     private fun rot() = DirPoint(
-            if (dx + dy > 0) 1 else if (dx + dy < 0) -1 else 0,
-            if (dx - dy > 0) -1 else if (dx - dy < 0) 1 else 0,
-            x, y
+        if (dx + dy > 0) 1 else if (dx + dy < 0) -1 else 0,
+        if (dx - dy > 0) -1 else if (dx - dy < 0) 1 else 0,
+        x, y
     )
 
     private fun target() = Point(x + dx, y + dy)
 
     fun next() = DirPoint(
-            if (dx != -1 && dy == 1) -1 else if (dx != 1 && dy == -1) 1 else 0,
-            if (dx == -1 && dy != -1) -1 else if (dx == 1 && dy != 1) 1 else 0,
-            x + dx, y + dy
+        if (dx != -1 && dy == 1) -1 else if (dx != 1 && dy == -1) 1 else 0,
+        if (dx == -1 && dy != -1) -1 else if (dx == 1 && dy != 1) 1 else 0,
+        x + dx, y + dy
     )
 }

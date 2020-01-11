@@ -115,22 +115,22 @@ fun sphere(
     center: Vector = origin, radius: Double = 1.0, slices: Int = 32, stacks: Int = 16,
     radiusFunc: ((Double, Double) -> Double)? = null
 ): Csg {
-    fun vertex(phi: Double, theta: Double): Vertex {
+    fun vertex(phi: Double, theta: Double): Vector {
         val dir = Vector.ofSpherical(-1.0, theta * PI, phi * PI * 2)
-        return Vertex(center + dir * (radiusFunc?.invoke(phi, theta) ?: radius), dir)
+        return center + dir * (radiusFunc?.invoke(phi, theta) ?: radius)
     }
 
     return Csg.ofPolygons {
         for (i in 0 until slices) {
             val id = i.toDouble()
             for (j in 0 until stacks) {
-                val vertices = mutableListOf<Vertex>()
+                val vertices = mutableListOf<Vector>()
                 val jd = j.toDouble()
                 vertices.add(vertex(id / slices, jd / stacks))
                 if (j > 0) vertices.add(vertex((id + 1) / slices, jd / stacks))
                 if (j < stacks - 1) vertices.add(vertex((id + 1) / slices, (jd + 1) / stacks))
                 vertices.add(vertex(id / slices, (jd + 1) / stacks))
-                add(Polygon(vertices))
+                add(Polygon(true, vertices)) //TODO really righthand?
             }
         }
     }

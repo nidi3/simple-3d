@@ -49,8 +49,12 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
     @JsName("translate")
     fun translate(v: Vector) = AffineTransform().translate(v).applyTo(this)
 
+    fun translate(x: Number, y: Number, z: Number) = translate(Vector(x.toDouble(), y.toDouble(), z.toDouble()))
+
     @JsName("scale")
     fun scale(v: Vector) = AffineTransform().scale(v).applyTo(this)
+
+    fun scale(x: Number, y: Number, z: Number) = scale(Vector(x.toDouble(), y.toDouble(), z.toDouble()))
 
     fun rotateX(a: Double) = AffineTransform().rotateX(a).applyTo(this)
     fun rotateY(a: Double) = AffineTransform().rotateY(a).applyTo(this)

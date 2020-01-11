@@ -27,16 +27,16 @@ fun main() {
         val base = prism(30.0, true, v(-2, 0, 0), v(-4, 0, 4), v(4, 0, 4), v(2, 0, 0))
 //                val bigConn = conn.scale(1.2 * unit)
         val conn = base.rotateZ(45.deg)
-        val bigConn = base.growLinear(v(1, 1, 0)).translate(v(0, 0, 0)).rotateZ(45.deg)
+        val bigConn = base.growLinear(v(1, 1, 0)).translate(0, 0, 0).rotateZ(45.deg)
 
 //                add(conn)
 //                add(bigConn)
 
         add(cube(v(0, 0, 3), v(10, 10, 3)))
-        add(conn.translate(v(-15, -5, 6)) and cube(radius = v(10, 10, 10)))
-        add(conn.translate(v(-5, -15, 6)) and cube(radius = v(10, 10, 10)))
+        add(conn.translate(-15, -5, 6) and cube(radius = v(10, 10, 10)))
+        add(conn.translate(-5, -15, 6) and cube(radius = v(10, 10, 10)))
 
-        val neg = cube(v(30, 10, 0), v(10, 10, 5)) - bigConn.translate(v(15, 5, -5)) - bigConn.translate(v(25, -5, -5))
-        add(neg.rotateX(180.deg).translate(v(0, 0, 5)))
+        val neg = cube(v(30, 10, 0), v(10, 10, 5)) - bigConn.translate(15, 5, -5) - bigConn.translate(25, -5, -5)
+        add(neg.rotateX(180.deg).translate(0, 0, 5))
     }
 }

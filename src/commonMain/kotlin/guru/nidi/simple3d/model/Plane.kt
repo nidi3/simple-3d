@@ -49,17 +49,17 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
     infix fun intersect(p: Plane): Vertex {
         val n = normal x p.normal
         return when {
-            n.x != 0.0 -> {
+            abs(n.x) > EPSILON -> {
                 val y = (w * p.normal.z - p.w * normal.z) / (normal.y * p.normal.z - normal.z * p.normal.y)
                 val z = (w * p.normal.y - p.w * normal.y) / (normal.z * p.normal.y - normal.y * p.normal.z)
                 Vertex(v(0, y, z), n)
             }
-            n.y != 0.0 -> {
+            abs(n.y) > EPSILON -> {
                 val x = (w * p.normal.z - p.w * normal.z) / (normal.x * p.normal.z - normal.z * p.normal.x)
                 val z = (w * p.normal.x - p.w * normal.x) / (normal.z * p.normal.x - normal.x * p.normal.z)
                 Vertex(v(x, 0, z), n)
             }
-            n.z != 0.0 -> {
+            abs(n.z) > EPSILON -> {
                 val x = (w * p.normal.y - p.w * normal.y) / (normal.x * p.normal.y - normal.y * p.normal.x)
                 val y = (w * p.normal.x - p.w * normal.x) / (normal.y * p.normal.x - normal.x * p.normal.y)
                 Vertex(v(x, y, 0), n)
@@ -80,17 +80,17 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
         val s: Double
         val t: Double
         when {
-            normal.z != 0.0 -> {
+            abs(normal.z) > EPSILON -> {
                 t = ((b1.x - a1.x) * (a2.y - a1.y) - (b1.y - a1.y) * (a2.x - a1.x)) /
                         ((b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y))
                 s = (b1.x - a1.x + t * (b2.x - b1.x)) / (a2.x - a1.x)
             }
-            normal.y != 0.0 -> {
+            abs(normal.y) > EPSILON -> {
                 t = ((b1.x - a1.x) * (a2.z - a1.z) - (b1.z - a1.z) * (a2.x - a1.x)) /
                         ((b2.z - b1.z) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.z - a1.z))
                 s = (b1.x - a1.x + t * (b2.x - b1.x)) / (a2.x - a1.x)
             }
-            normal.x != 0.0 -> {
+            abs(normal.x) > EPSILON -> {
                 t = ((b1.z - a1.z) * (a2.y - a1.y) - (b1.y - a1.y) * (a2.z - a1.z)) /
                         ((b2.y - b1.y) * (a2.z - a1.z) - (b2.z - b1.z) * (a2.y - a1.y))
                 s = (b1.z - a1.z + t * (b2.z - b1.z)) / (a2.z - a1.z)

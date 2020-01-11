@@ -32,10 +32,10 @@ fun main() {
                 cube(center = v(b * 2, b / 2, 0), radius = v(b, b / 2, h))
 
         val e = r - b
-        return base + corner.rotateZ(180.deg).translate(v(e, e, h)) +
-                corner.rotateZ(270.deg).translate(v(e, -e, h)) +
-                corner.rotateZ(90.deg).translate(v(-e, e, h)) +
-                corner.translate(v(-e, -e, h))
+        return base + corner.rotateZ(180.deg).translate(e, e, h) +
+                corner.rotateZ(270.deg).translate(e, -e, h) +
+                corner.rotateZ(90.deg).translate(-e, e, h) +
+                corner.translate(-e, -e, h)
     }
 
     fun top(r: Double, b: Double): Csg {
@@ -47,14 +47,14 @@ fun main() {
         val innerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 4.75 - .5 * z }
         val outerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 5.75 - .5 * z }
         val cone = base + outerC - innerC
-        val innerBorders = inner.translate(v(0, d2, b2)) +
-                inner.translate(v(0, d3, b2)) +
-                inner.translate(v(0, -d2, b2)) +
-                inner.translate(v(0, -d3, b2))
-        val outerBorders = inner.rotateZ(90.deg).translate(v(d2, 0, b2)) +
-                inner.rotateZ(90.deg).translate(v(d3, 0, b2)) +
-                inner.rotateZ(90.deg).translate(v(-d2, 0, b2)) +
-                inner.rotateZ(90.deg).translate(v(-d3, 0, b2))
+        val innerBorders = inner.translate(0, d2, b2) +
+                inner.translate(0, d3, b2) +
+                inner.translate(0, -d2, b2) +
+                inner.translate(0, -d3, b2)
+        val outerBorders = inner.rotateZ(90.deg).translate(d2, 0, b2) +
+                inner.rotateZ(90.deg).translate(d3, 0, b2) +
+                inner.rotateZ(90.deg).translate(-d2, 0, b2) +
+                inner.rotateZ(90.deg).translate(-d3, 0, b2)
         return cone + innerBorders + outerBorders
     }
 
@@ -68,23 +68,23 @@ fun main() {
             .map { it.toVector() }
         val dino = prism(b, true, c)
         val dinoBox = dino.boundingBox
-        return Dino(dino.translate(v(-dinoBox.from.x, -dinoBox.from.y, 0)), dinoBox.size().x, dinoBox.size().y)
+        return Dino(dino.translate(-dinoBox.from.x, -dinoBox.from.y, 0), dinoBox.size().x, dinoBox.size().y)
     }
 
     fun side(r: Double, b: Double, h: Double): Csg {
         val f = r - 4.5 * b
         val dino = dino(b)
         val factor = min(1.7 * f / dino.width, 1.7 * h / dino.height)
-        val scaleDino = dino.csg.scale(v(factor, factor, 1))
+        val scaleDino = dino.csg.scale(factor, factor, 1)
 
         val side = cube(radius = v(r - 2 * b, h - b, b / 2))
-        val inner1 = cube(radius = (v(b / 2, h - b, b)))
-        val inner2 = cube(radius = (v(b / 2, r - 4.5 * b, b)))
-        val base = side - scaleDino.translate(v(-dino.width * factor / 2, -dino.height * factor / 2, b / 2))
-        return base + inner1.translate(v(f, 0, b)) +
-                inner1.translate(v(-f, 0, b)) +
-                inner2.rotateZ(90.deg).translate(v(0, r - 1.5 * b, b)) +
-                inner2.rotateZ(90.deg).translate(v(0, -(r - 1.5 * b), b))
+        val inner1 = cube(radius = v(b / 2, h - b, b))
+        val inner2 = cube(radius = v(b / 2, r - 4.5 * b, b))
+        val base = side - scaleDino.translate(-dino.width * factor / 2, -dino.height * factor / 2, b / 2)
+        return base + inner1.translate(f, 0, b) +
+                inner1.translate(-f, 0, b) +
+                inner2.rotateZ(90.deg).translate(0, r - 1.5 * b, b) +
+                inner2.rotateZ(90.deg).translate(0, -(r - 1.5 * b), b)
     }
 
     model(File("target/cube.stl")) {
@@ -96,33 +96,33 @@ fun main() {
 //        val dino = dino(b)
 //
 //        val factor = Math.min(1.5 * r / dino.width, 1.5 * r / dino.height)
-//        val scaleDino = dino.csg.scale(v(factor, factor, 1))
+//        val scaleDino = dino.csg.scale(factor, factor, 1)
 //
 //        val base = cube(center = origin, radius = v(r, r, b / 2))
-//        val dBase = base - scaleDino.translate(v(-dino.width * factor / 2, -dino.height * factor / 2, b / 2 - .45))
+//        val dBase = base - scaleDino.translate(-dino.width * factor / 2, -dino.height * factor / 2, b / 2 - .45)
 //        add(dBase)
-//        add(dBase.rotateZ(180.deg()).rotateX(90.deg()).translate(v(0, d, d)))
-//        add(dBase.rotateZ(180.deg()).rotateX(90.deg()).translate(v(0, -d, d)))
-//        add(dBase.rotateZ(-90.deg()).rotateY(90.deg()).translate(v(d, 0, d)))
-//        add(dBase.rotateZ(-90.deg()).rotateY(90.deg()).translate(v(-d, 0, d)))
+//        add(dBase.rotateZ(180.deg()).rotateX(90.deg()).translate(0, d, d))
+//        add(dBase.rotateZ(180.deg()).rotateX(90.deg()).translate(0, -d, d))
+//        add(dBase.rotateZ(-90.deg()).rotateY(90.deg()).translate(d, 0, d))
+//        add(dBase.rotateZ(-90.deg()).rotateY(90.deg()).translate(-d, 0, d))
         add(base(r, b, h))
-        add(side(r, b, h).translate(v(0, 2.5 * r, 0)))
-        add(side(r, b, h).translate(v(2.5 * r, 2.5 * r, 0)))
-        add(side(r, b, h).translate(v(0, 5.0 * r, 0)))
-        add(side(r, b, h).translate(v(2.5 * r, 5.0 * r, 0)))
-        add(top(r, b).translate(v(2.5 * r, 0, 0)))
+        add(side(r, b, h).translate(0, 2.5 * r, 0))
+        add(side(r, b, h).translate(2.5 * r, 2.5 * r, 0))
+        add(side(r, b, h).translate(0, 5.0 * r, 0))
+        add(side(r, b, h).translate(2.5 * r, 5.0 * r, 0))
+        add(top(r, b).translate(2.5 * r, 0, 0))
 
 //        val b2 = 1.0
 //        val d2 = r - 3 * b2 / 2
-//        transform(translate(v(2.5 * r, 0, 0))) {
+//        transform(translate(2.5 * r, 0, 0)) {
 //            val inner = cube(center = origin, radius = v(r - b2, b2 / 2, b2))
 //            val innerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 4.75 - .5 * z }
 //            val outerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 5.75 - .5 * z }
 //            add(base + outerC - innerC)
-//            add(inner.translate(v(0, d2, b2)))
-//            add(inner.translate(v(0, -d2, b2)))
-//            add(inner.rotateZ(90.deg()).translate(v(d2, 0, b2)))
-//            add(inner.rotateZ(90.deg()).translate(v(-d2, 0, b2)))
+//            add(inner.translate(0, d2, b2))
+//            add(inner.translate(0, -d2, b2))
+//            add(inner.rotateZ(90.deg()).translate(d2, 0, b2))
+//            add(inner.rotateZ(90.deg()).translate(-d2, 0, b2))
 //        }
     }
 }

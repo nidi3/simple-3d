@@ -74,28 +74,28 @@ fun main() {
                 add(oom)
             } else {
                 transform(scale(unit / 3.0)) {
-                    transform(translate(v(6, 6, 0))) { mosely(level - 1) }
-                    transform(translate(v(-6, -6, 0))) { mosely(level - 1) }
-                    transform(translate(v(6, -6, 0))) { mosely(level - 1) }
-                    transform(translate(v(-6, 6, 0))) { mosely(level - 1) }
+                    transform(translate(6, 6, 0)) { mosely(level - 1) }
+                    transform(translate(-6, -6, 0)) { mosely(level - 1) }
+                    transform(translate(6, -6, 0)) { mosely(level - 1) }
+                    transform(translate(-6, 6, 0)) { mosely(level - 1) }
 
-                    transform(translate(v(6, 0, 6))) { mosely(level - 1) }
-                    transform(translate(v(-6, 0, -6))) { mosely(level - 1) }
-                    transform(translate(v(-6, 0, 6))) { mosely(level - 1) }
-                    transform(translate(v(6, 0, -6))) { mosely(level - 1) }
+                    transform(translate(6, 0, 6)) { mosely(level - 1) }
+                    transform(translate(-6, 0, -6)) { mosely(level - 1) }
+                    transform(translate(-6, 0, 6)) { mosely(level - 1) }
+                    transform(translate(6, 0, -6)) { mosely(level - 1) }
 
-                    transform(translate(v(0, 6, 6))) { mosely(level - 1) }
-                    transform(translate(v(0, -6, -6))) { mosely(level - 1) }
-                    transform(translate(v(0, -6, 6))) { mosely(level - 1) }
-                    transform(translate(v(0, 6, -6))) { mosely(level - 1) }
+                    transform(translate(0, 6, 6)) { mosely(level - 1) }
+                    transform(translate(0, -6, -6)) { mosely(level - 1) }
+                    transform(translate(0, -6, 6)) { mosely(level - 1) }
+                    transform(translate(0, 6, -6)) { mosely(level - 1) }
 
-                    transform(translate(v(6, 0, 0))) { mosely(level - 1) }
-                    transform(translate(v(0, 6, 0))) { mosely(level - 1) }
-                    transform(translate(v(0, 0, 6))) { mosely(level - 1) }
+                    transform(translate(6, 0, 0)) { mosely(level - 1) }
+                    transform(translate(0, 6, 0)) { mosely(level - 1) }
+                    transform(translate(0, 0, 6)) { mosely(level - 1) }
 
-                    transform(translate(v(-6, 0, 0))) { mosely(level - 1) }
-                    transform(translate(v(0, -6, 0))) { mosely(level - 1) }
-                    transform(translate(v(0, 0, -6))) { mosely(level - 1) }
+                    transform(translate(-6, 0, 0)) { mosely(level - 1) }
+                    transform(translate(0, -6, 0)) { mosely(level - 1) }
+                    transform(translate(0, 0, -6)) { mosely(level - 1) }
                 }
             }
         }
@@ -128,31 +128,31 @@ fun main() {
                 add(mmp)
             } else {
                 transform(scale(unit / 3.0)) {
-                    transform(translate(v(6, 6, 0))) { menger(level - 1) }
-                    transform(translate(v(6, -6, 0))) { menger(level - 1) }
-                    transform(translate(v(-6, 6, 0))) { menger(level - 1) }
-                    transform(translate(v(-6, -6, 0))) { menger(level - 1) }
+                    transform(translate(6, 6, 0)) { menger(level - 1) }
+                    transform(translate(6, -6, 0)) { menger(level - 1) }
+                    transform(translate(-6, 6, 0)) { menger(level - 1) }
+                    transform(translate(-6, -6, 0)) { menger(level - 1) }
 
-                    transform(translate(v(6, 0, 6))) { menger(level - 1) }
-                    transform(translate(v(6, 0, -6))) { menger(level - 1) }
-                    transform(translate(v(-6, 0, 6))) { menger(level - 1) }
-                    transform(translate(v(-6, 0, -6))) { menger(level - 1) }
+                    transform(translate(6, 0, 6)) { menger(level - 1) }
+                    transform(translate(6, 0, -6)) { menger(level - 1) }
+                    transform(translate(-6, 0, 6)) { menger(level - 1) }
+                    transform(translate(-6, 0, -6)) { menger(level - 1) }
 
-                    transform(translate(v(0, 6, 6))) { menger(level - 1) }
-                    transform(translate(v(0, 6, -6))) { menger(level - 1) }
-                    transform(translate(v(0, -6, 6))) { menger(level - 1) }
-                    transform(translate(v(0, -6, -6))) { menger(level - 1) }
+                    transform(translate(0, 6, 6)) { menger(level - 1) }
+                    transform(translate(0, 6, -6)) { menger(level - 1) }
+                    transform(translate(0, -6, 6)) { menger(level - 1) }
+                    transform(translate(0, -6, -6)) { menger(level - 1) }
 
-                    transform(translate(v(6, 6, 6))) { menger(level - 1) }
-                    transform(translate(v(-6, -6, -6))) { menger(level - 1) }
+                    transform(translate(6, 6, 6)) { menger(level - 1) }
+                    transform(translate(-6, -6, -6)) { menger(level - 1) }
 
-                    transform(translate(v(-6, 6, 6))) { menger(level - 1) }
-                    transform(translate(v(6, -6, 6))) { menger(level - 1) }
-                    transform(translate(v(6, 6, -6))) { menger(level - 1) }
+                    transform(translate(-6, 6, 6)) { menger(level - 1) }
+                    transform(translate(6, -6, 6)) { menger(level - 1) }
+                    transform(translate(6, 6, -6)) { menger(level - 1) }
 
-                    transform(translate(v(6, -6, -6))) { menger(level - 1) }
-                    transform(translate(v(-6, 6, -6))) { menger(level - 1) }
-                    transform(translate(v(-6, -6, 6))) { menger(level - 1) }
+                    transform(translate(6, -6, -6)) { menger(level - 1) }
+                    transform(translate(-6, 6, -6)) { menger(level - 1) }
+                    transform(translate(-6, -6, 6)) { menger(level - 1) }
                 }
             }
         }

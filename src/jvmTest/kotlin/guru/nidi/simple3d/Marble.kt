@@ -18,36 +18,99 @@ package guru.nidi.simple3d
 import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
+import java.lang.Math.PI
 
 fun main() {
-    val hole = cylinder().scale(v(2, 20, 2))
-    val stud = cube().scale(v(1.5, 1.5, 1)).translate(v(0, 0, 1)) +
-            (cube().scale(v(2, 2, 1.25)).translate(v(0, 0, .75)) *
-                    hole.translate(v(0, 0, 2)) *
-                    hole.rotateZ(90.deg).translate(v(0, 0, 2)))
+    val smallR = 1.95
+    val bigR = 2.1
+    val smallHole = cylinder().scale(smallR, 20, smallR)
+    val bigHole = cylinder().scale(bigR, 20, bigR)
+    val bigAngluarHole = bigHole - cube().scale(bigR, 20, bigR).translate(0, 0, bigR + .5)
+
+    val stud = cube().scale(1.4, 1.4, 1).translate(0, 0, 1) +
+            (cube().scale(2, 2, 1.25).translate(0, 0, 1.3) *
+                    smallHole.translate(0, 0, 2.1) *
+                    smallHole.rotateZ(90.deg).translate(0, 0, 2.1))
 
     fun base(len: Double): Csg {
-        return cube().scale(v(7.5, 7.5 * len, 7.5)).translate(v(0, 0, 0)) -
-                hole.translate(v(0, 0, 6.5)) -
-                hole.translate(v(0, 0, -6.5)) -
-                hole.translate(v(6.5, 0, 0)) -
-                hole.translate(v(-6.5, 0, 0)) -
-                hole.rotateZ(90.deg).translate(v(0, 7.5 * len - 1, 0)) +
-                stud.rotateX(90.deg).translate(v(0, -7.5 * len, 0))
+        return cube().scale(7.5, 7.5 * len, 7.5).translate(0, 0, 0) -
+                bigHole.translate(0, 0, 5.5) -
+                bigHole.translate(0, 0, -5.5) -
+                bigHole.translate(5.5, 0, 0) -
+                bigHole.translate(-5.5, 0, 0) -
+                bigHole.rotateZ(90.deg).translate(0, 7.5 * len - 2, 0) +
+                stud.rotateX(90.deg).translate(0, -7.5 * len, 0)
+    }
+
+    fun axle(len: Double): Csg {
+        return cylinder(slices = 128) { angle, _ -> if ((angle) % (PI / 2) < 3 * PI / 8) 1.0 else .5 }
+            .scale(smallR * 1.05, len / 2, smallR * 1.05)
+    }
+
+    fun profile(len: Int): Csg {
+        val hole = bigHole + cube().scale(1.6, 10, 3.4)
+        var base = cube().scale(7.5, 7.5 * len, 1).translate(0, 0, 1) +
+                cube().scale(7.5, 7.5 * len, 1).rotateY(90.deg).translate(4.5, 0, 7.5) +
+                cube().scale(1, 7.5 * len, 1).rotateY(90.deg).translate(6.5, 0, 14) +
+                cube().scale(5.5, 7.5, 1).rotateX(90.deg).translate(-2, 7.5 * len - 1, 7.5) +
+                cube().scale(5.5, 7.5, 1.6).rotateX(90.deg).translate(-2, -7.5 * len + 1.6, 7.5) +
+                stud.rotateX(270.deg).translate(0, 7.5 * len, 7.5) -
+                bigAngluarHole.rotateX(90.deg).rotateZ(180.deg).translate(0, -7.5 * len + 2, 25)
+        for (i in 0 until len) {
+            val y = i * 15 - 7.5 * (len - 1)
+            base -= hole.rotateX(90.deg).translate(0, y, 0)
+            base -= hole.rotateZ(90.deg).rotateX(90.deg).translate(0, y, 7.5)
+        }
+        return base
+    }
+
+    fun bolt(len: Int): Csg {
+        return cube().scale(4, 3, 1) +
+                cylinder().scale(3.3, .5, 3.3).translate(0, 3.5, 0) +
+                cylinder().scale(2.1, 2.5, 2.1).translate(0, 6.5, 0) +
+                cube().scale(3.2, .8, 1.3).translate(0, 8.8, 0)
     }
 
     model(File("target/m/base.stl")) {
         //        add(base(.5))
-        add(base(.5).rotateX(270.deg).translate(v(20, 0, 0)))
-//        add(base(2).translate(v(20, 0, 0)))
-        splitPolygons()
+        add(base(.5).rotateX(270.deg).translate(20, 0, 0))
+//        add(base(2).translate(20, 0, 0))
+//        splitPolygons()
     }
 
     model(File("target/m/stud.stl")) {
         add(
-            cube().scale(v(7.5, 7.5, 1)).translate(v(0, 0, 1)) +
-                    stud.translate(v(0, 0, 2))
+            cube().scale(7.5, 7.5, 1).translate(0, 0, 1) +
+                    stud.translate(0, 0, 2)
         )
+//        splitPolygons()
+    }
+
+    model(File("target/m/axle.stl")) {
+        add(cube().scale(5, 5, .5) + axle(15.0).rotateX(90.deg).translate(0, 0, 7.5))
+//        splitPolygons()
+    }
+
+    model(File("target/m/profile1.stl")) {
+        add(profile(1))
+//        splitPolygons()
+    }
+    model(File("target/m/profile2.stl")) {
+        add(profile(2))
+//        splitPolygons()
+    }
+    model(File("target/m/profile4.stl")) {
+        add(profile(4))
+//        splitPolygons()
+    }
+
+    model(File("target/m/ball.stl")) {
+        add(sphere(radius = 5.5))
+    }
+
+    model(File("target/m/bolt.stl")) {
+        add(bolt(1).rotateX(45.deg))
+//        add(bolt(1).rotateX(90.deg).translate(15,0,0))
         splitPolygons()
     }
 }

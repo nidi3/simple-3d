@@ -36,31 +36,31 @@ fun main() {
                 if (level > 0) {
                     transform(scale(unit / 3.0)) {
                         val d = 2 * r / 3
-                        transform(translate(v(d, d, 0))) { step(r, level - 1) }
-                        transform(translate(v(-d, -d, 0))) { step(r, level - 1) }
-                        transform(translate(v(d, -d, 0))) { step(r, level - 1) }
-                        transform(translate(v(-d, d, 0))) { step(r, level - 1) }
+                        transform(translate(d, d, 0)) { step(r, level - 1) }
+                        transform(translate(-d, -d, 0)) { step(r, level - 1) }
+                        transform(translate(d, -d, 0)) { step(r, level - 1) }
+                        transform(translate(-d, d, 0)) { step(r, level - 1) }
 
-                        transform(translate(v(d, 0, d))) { step(r, level - 1) }
-                        transform(translate(v(-d, 0, -d))) { step(r, level - 1) }
-                        transform(translate(v(-d, 0, d))) { step(r, level - 1) }
-                        transform(translate(v(d, 0, -d))) { step(r, level - 1) }
+                        transform(translate(d, 0, d)) { step(r, level - 1) }
+                        transform(translate(-d, 0, -d)) { step(r, level - 1) }
+                        transform(translate(-d, 0, d)) { step(r, level - 1) }
+                        transform(translate(d, 0, -d)) { step(r, level - 1) }
 
-                        transform(translate(v(0, d, d))) { step(r, level - 1) }
-                        transform(translate(v(0, -d, -d))) { step(r, level - 1) }
-                        transform(translate(v(0, -d, d))) { step(r, level - 1) }
-                        transform(translate(v(0, d, -d))) { step(r, level - 1) }
+                        transform(translate(0, d, d)) { step(r, level - 1) }
+                        transform(translate(0, -d, -d)) { step(r, level - 1) }
+                        transform(translate(0, -d, d)) { step(r, level - 1) }
+                        transform(translate(0, d, -d)) { step(r, level - 1) }
 
-                        transform(translate(v(d, d, d))) { step(r, level - 1) }
-                        transform(translate(v(-d, -d, -d))) { step(r, level - 1) }
+                        transform(translate(d, d, d)) { step(r, level - 1) }
+                        transform(translate(-d, -d, -d)) { step(r, level - 1) }
 
-                        transform(translate(v(-d, d, d))) { step(r, level - 1) }
-                        transform(translate(v(d, -d, d))) { step(r, level - 1) }
-                        transform(translate(v(d, d, -d))) { step(r, level - 1) }
+                        transform(translate(-d, d, d)) { step(r, level - 1) }
+                        transform(translate(d, -d, d)) { step(r, level - 1) }
+                        transform(translate(d, d, -d)) { step(r, level - 1) }
 
-                        transform(translate(v(-d, -d, d))) { step(r, level - 1) }
-                        transform(translate(v(-d, d, -d))) { step(r, level - 1) }
-                        transform(translate(v(d, -d, -d))) { step(r, level - 1) }
+                        transform(translate(-d, -d, d)) { step(r, level - 1) }
+                        transform(translate(-d, d, -d)) { step(r, level - 1) }
+                        transform(translate(d, -d, -d)) { step(r, level - 1) }
                     }
                 }
             }

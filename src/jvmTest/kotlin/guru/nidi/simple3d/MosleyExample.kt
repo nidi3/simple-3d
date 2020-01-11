@@ -42,30 +42,30 @@ fun main() {
 //                        addToModel(cube(radius = v(1.1 * r, r / 3, r / 3)))
                 if (level > 0) {
                     transform(scale(unit / 3.0)) {
-                        transform(translate(v(d, 0, 0))) { step(r, level - 1) }
-                        transform(translate(v(-d, 0, 0))) { step(r, level - 1) }
-                        transform(translate(v(0, d, 0))) { step(r, level - 1) }
-                        transform(translate(v(0, -d, 0))) { step(r, level - 1) }
-                        transform(translate(v(0, 0, d))) { step(r, level - 1) }
-                        transform(translate(v(0, 0, -d))) { step(r, level - 1) }
+                        transform(translate(d, 0, 0)) { step(r, level - 1) }
+                        transform(translate(-d, 0, 0)) { step(r, level - 1) }
+                        transform(translate(0, d, 0)) { step(r, level - 1) }
+                        transform(translate(0, -d, 0)) { step(r, level - 1) }
+                        transform(translate(0, 0, d)) { step(r, level - 1) }
+                        transform(translate(0, 0, -d)) { step(r, level - 1) }
                         println("1 $level")
 
-                        transform(translate(v(0, d, d))) { step(r, level - 1) }
-                        transform(translate(v(0, -d, d))) { step(r, level - 1) }
-                        transform(translate(v(0, d, -d))) { step(r, level - 1) }
-                        transform(translate(v(0, -d, -d))) { step(r, level - 1) }
+                        transform(translate(0, d, d)) { step(r, level - 1) }
+                        transform(translate(0, -d, d)) { step(r, level - 1) }
+                        transform(translate(0, d, -d)) { step(r, level - 1) }
+                        transform(translate(0, -d, -d)) { step(r, level - 1) }
                         println("2 $level")
 
-                        transform(translate(v(d, 0, d))) { step(r, level - 1) }
-                        transform(translate(v(-d, 0, d))) { step(r, level - 1) }
-                        transform(translate(v(d, 0, -d))) { step(r, level - 1) }
-                        transform(translate(v(-d, 0, -d))) { step(r, level - 1) }
+                        transform(translate(d, 0, d)) { step(r, level - 1) }
+                        transform(translate(-d, 0, d)) { step(r, level - 1) }
+                        transform(translate(d, 0, -d)) { step(r, level - 1) }
+                        transform(translate(-d, 0, -d)) { step(r, level - 1) }
                         println("3 $level")
 
-                        transform(translate(v(d, d, 0))) { step(r, level - 1) }
-                        transform(translate(v(-d, d, 0))) { step(r, level - 1) }
-                        transform(translate(v(d, -d, 0))) { step(r, level - 1) }
-                        transform(translate(v(-d, -d, 0))) { step(r, level - 1) }
+                        transform(translate(d, d, 0)) { step(r, level - 1) }
+                        transform(translate(-d, d, 0)) { step(r, level - 1) }
+                        transform(translate(d, -d, 0)) { step(r, level - 1) }
+                        transform(translate(-d, -d, 0)) { step(r, level - 1) }
                         println("4 $level")
 
                     }

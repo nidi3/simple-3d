@@ -16,7 +16,10 @@
 package guru.nidi.simple3d
 
 import guru.nidi.simple3d.io.model
-import guru.nidi.simple3d.model.*
+import guru.nidi.simple3d.model.Vector
+import guru.nidi.simple3d.model.deg
+import guru.nidi.simple3d.model.heightModel
+import guru.nidi.simple3d.model.prismRing
 import java.io.File
 import kotlin.math.*
 
@@ -25,7 +28,7 @@ fun main() {
         //        val c = cylinder() { angle, _ -> 1 / cos(PI / 4 - angle % (PI / 2)) }
 //        val c2 = cylinder() { angle, _ -> 1 / (.5 + .5 * cos(PI / 4 - angle % (PI / 2))) }
 //            add(c)
-//            add(c2.translate(v(2, 0, 0)))
+//            add(c2.translate(2, 0, 0))
         val points = (0 until 360 step 5).map { a ->
             //            val r = 9.0 / (.5 + .5 * cos((45 - a % 90).deg()))
 //            Vector(r * sin((a + 0).deg()), r * cos((a + 0).deg()), 0.0)
@@ -43,9 +46,9 @@ fun main() {
             }
             xh.add(yh)
         }
-        val h = heightModel(xh).translate(v(-10, -10, -len)).rotateX(180.deg)
-        add((r - h).rotateZ(45.deg).scale(v(1.5, 1.5, 1)))
-//        add((r - h).scale(v(1.2, 1.2, 1)))
+        val h = heightModel(xh).translate(-10, -10, -len).rotateX(180.deg)
+        add((r - h).rotateZ(45.deg).scale(1.5, 1.5, 1))
+//        add((r - h).scale(1.2, 1.2, 1))
 //        add(h)
     }
 }

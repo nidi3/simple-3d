@@ -36,6 +36,7 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     fun interpolate(a: Vector, t: Double) = this + (a - this) * t
     fun abs() = Vector(abs(x), abs(y), abs(z))
     infix fun scale(a: Vector) = Vector(x * a.x, y * a.y, z * a.z)
+    fun scale(x: Number, y: Number, z: Number) = scale(Vector(x.toDouble(), y.toDouble(), z.toDouble()))
     infix fun scaleInv(a: Vector) = Vector(x / a.x, y / a.y, z / a.z)
 
     fun inSegment(a: Vector, b: Vector): Boolean =
@@ -77,12 +78,4 @@ val yUnit = v(0, 1, 0)
 val zUnit = v(0, 0, 1)
 
 @JsName("v")
-fun v(a: Double, b: Double, c: Double) = Vector(a, b, c)
-
-fun v(a: Int, b: Double, c: Double) = Vector(a.toDouble(), b, c)
-fun v(a: Double, b: Int, c: Double) = Vector(a, b.toDouble(), c)
-fun v(a: Double, b: Double, c: Int) = Vector(a, b, c.toDouble())
-fun v(a: Int, b: Int, c: Double) = Vector(a.toDouble(), b.toDouble(), c)
-fun v(a: Int, b: Double, c: Int) = Vector(a.toDouble(), b, c.toDouble())
-fun v(a: Double, b: Int, c: Int) = Vector(a, b.toDouble(), c.toDouble())
-fun v(a: Int, b: Int, c: Int) = Vector(a.toDouble(), b.toDouble(), c.toDouble())
+fun v(a: Number, b: Number, c: Number) = Vector(a.toDouble(), b.toDouble(), c.toDouble())

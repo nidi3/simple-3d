@@ -34,7 +34,7 @@ actual class Image(private val canvas: HTMLCanvasElement) {
 
     actual fun line(x0: Int, y0: Int, x1: Int, y1: Int, rgb: Int) {
         ctx.strokeStyle =
-                "rgba(${(rgb shr 16) and 0xff},${(rgb shr 8) and 0xff},${(rgb shr 0) and 0xff},${((rgb shr 24) and 0xff) / 255.0})"
+            "rgba(${(rgb shr 16) and 0xff},${(rgb shr 8) and 0xff},${(rgb shr 0) and 0xff},${((rgb shr 24) and 0xff) / 255.0})"
         ctx.moveTo(x0.toDouble(), y0.toDouble())
         ctx.lineTo(x1.toDouble(), y1.toDouble())
         ctx.stroke()

@@ -33,7 +33,8 @@ data class Polygon(val vertices: List<Vertex>) {
 
     init {
         val nonPlanar = vertices.filter { it.pos !in plane }
-        if (nonPlanar.isNotEmpty()) throw IllegalArgumentException("not all points in a plane: $nonPlanar")
+        if (nonPlanar.isNotEmpty())
+            throw IllegalArgumentException("not all points in a plane: $nonPlanar")
     }
 
     operator fun unaryMinus() = Polygon(vertices.reversed().map { -it })
