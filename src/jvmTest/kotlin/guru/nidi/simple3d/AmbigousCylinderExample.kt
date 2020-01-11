@@ -37,7 +37,7 @@ fun main() {
             Vector(9.0 * sqrt(abs(c)) * sign(c), 9.0 * sqrt(abs(s)) * sign(s), 0.0)
         }
         val len = 25.0
-        val r = prismRing(1.0, len, true, points)
+        val r = prismRing(1.0, len, points)
         val xh = mutableListOf<List<Double>>()
         for (x in 0..20) {
             val yh = mutableListOf<Double>()

@@ -38,10 +38,10 @@ fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
             })
         })
 
-fun prism(length: Double, rightHand: Boolean, vararg points: Vector) = prism(length, rightHand, points.toList())
+fun prism(length: Double, vararg points: Vector) = prism(length, points.toList())
 
-fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
-    val n = Plane.fromPoints(points, rightHand).normal
+fun prism(length: Double, points: List<Vector>): Csg {
+    val n = Plane.fromPoints(points).normal
     val dn = n * length
 
     fun side(p1: Vector, p2: Vector): Polygon {
@@ -58,36 +58,36 @@ fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
     }
 }
 
-fun prismRing(width: Double, length: Double, rightHand: Boolean, vararg points: Vector) =
-    prismRing(width, length, rightHand, points.toList())
+fun prismRing(width: Double, length: Double, vararg points: Vector) =
+    prismRing(width, length, points.toList())
 
 @JsName("prismRing")
-fun prismRing(width: Double, length: Double, rightHand: Boolean, points: List<Vector>) =
-    prismRing(width, width, length, rightHand, points)
+fun prismRing(width: Double, length: Double, points: List<Vector>) =
+    prismRing(width, width, length, points)
 
-fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points: List<Vector>): Csg {
-    val n = Plane.fromPoints(points, rightHand).normal
+fun prismRing(width1: Double, width2: Double, length: Double, points: List<Vector>): Csg {
+    val n = Plane.fromPoints(points).normal
     val dn = n * length
 
     fun side(p0: Vector, p1: Vector, p2: Vector, p3: Vector): List<Polygon> {
         val r0 = n x (p1 - p0).unit()
         val r1 = n x (p2 - p1).unit()
         val r2 = n x (p3 - p2).unit()
-        val e1 = Plane.fromVertex(Vertex(p1 + r1 * w1, r1))
-        val f1 = Plane.fromVertex(Vertex(p1 - r1 * w2, -r1))
-        val (p11, p12) = if (r0 == r1) Pair(p1 + r1 * w1, p1 - r1 * w2)
+        val e1 = Plane.fromVertex(Vertex(p1 + r1 * width1, r1))
+        val f1 = Plane.fromVertex(Vertex(p1 - r1 * width2, -r1))
+        val (p11, p12) = if (r0 == r1) Pair(p1 + r1 * width1, p1 - r1 * width2)
         else {
-            val e0 = Plane.fromVertex(Vertex(p0 + r0 * w1, r0))
-            val f0 = Plane.fromVertex(Vertex(p0 - r0 * w2, -r0))
+            val e0 = Plane.fromVertex(Vertex(p0 + r0 * width1, r0))
+            val f0 = Plane.fromVertex(Vertex(p0 - r0 * width2, -r0))
             Pair(
                 (Plane.fromVertex(Vertex(p1, n)) and (e0 and e1)).pos,
                 (Plane.fromVertex(Vertex(p1, n)) and (f0 and f1)).pos
             )
         }
-        val (p21, p22) = if (r1 == r2) Pair(p2 + r1 * w1, p2 - r1 * w2)
+        val (p21, p22) = if (r1 == r2) Pair(p2 + r1 * width1, p2 - r1 * width2)
         else {
-            val e2 = Plane.fromVertex(Vertex(p2 + r2 * w1, r2))
-            val f2 = Plane.fromVertex(Vertex(p2 - r2 * w2, -r2))
+            val e2 = Plane.fromVertex(Vertex(p2 + r2 * width1, r2))
+            val f2 = Plane.fromVertex(Vertex(p2 - r2 * width2, -r2))
             Pair(
                 (Plane.fromVertex(Vertex(p2, n)) and (e1 and e2)).pos,
                 (Plane.fromVertex(Vertex(p2, n)) and (f1 and f2)).pos
@@ -121,13 +121,13 @@ fun sphere(
         for (i in 0 until slices) {
             val id = i.toDouble()
             for (j in 0 until stacks) {
-                val vertices = mutableListOf<Vector>()
+                val vectors = mutableListOf<Vector>()
                 val jd = j.toDouble()
-                vertices.add(vertex(id / slices, jd / stacks))
-                if (j > 0) vertices.add(vertex((id + 1) / slices, jd / stacks))
-                if (j < stacks - 1) vertices.add(vertex((id + 1) / slices, (jd + 1) / stacks))
-                vertices.add(vertex(id / slices, (jd + 1) / stacks))
-                add(Polygon(true, vertices)) //TODO really righthand?
+                vectors.add(vertex(id / slices, jd / stacks))
+                if (j > 0) vectors.add(vertex((id + 1) / slices, jd / stacks))
+                if (j < stacks - 1) vectors.add(vertex((id + 1) / slices, (jd + 1) / stacks))
+                vectors.add(vertex(id / slices, (jd + 1) / stacks))
+                add(Polygon.ofVectors(vectors))
             }
         }
     }
@@ -162,14 +162,14 @@ fun cylinder(
             val id = i.toDouble()
             val t0 = id / slices
             val t1 = (id + 1) / slices
-            add(Polygon(true, start, point(0.0, t0), point(0.0, t1)))
+            add(Polygon.ofVectors(start, point(0.0, t0), point(0.0, t1)))
             for (j in 0 until stacks) {
                 val jd = j.toDouble()
                 val j0 = jd / stacks
                 val j1 = (jd + 1) / stacks
-                add(Polygon(true, point(j0, t1), point(j0, t0), point(j1, t0), point(j1, t1)))
+                add(Polygon.ofVectors(point(j0, t1), point(j0, t0), point(j1, t0), point(j1, t1)))
             }
-            add(Polygon(true, end, point(1.0, t1), point(1.0, t0)))
+            add(Polygon.ofVectors(end, point(1.0, t1), point(1.0, t0)))
         }
     }
 }
@@ -280,16 +280,14 @@ fun heightModel(height: List<List<Double>>): Csg {
         for (x in 0 until xd) {
             for (y in 0 until yd) {
                 add(
-                    Polygon(
-                        true,
+                    Polygon.ofVectors(
                         v(x, y, height[x][y]),
                         v(x + 1, y, height[x + 1][y]),
                         v(x + 1, y + 1, height[x + 1][y + 1])
                     )
                 )
                 add(
-                    Polygon(
-                        true,
+                    Polygon.ofVectors(
                         v(x + 1, y + 1, height[x + 1][y + 1]),
                         v(x, y + 1, height[x][y + 1]),
                         v(x, y, height[x][y])

@@ -66,7 +66,7 @@ fun main() {
         val c = outline(img) { rgb -> rgb < 0xffffff }
             .simplify(3.0)
             .map { it.toVector() }
-        val dino = prism(b, true, c)
+        val dino = prism(b, c)
         val dinoBox = dino.boundingBox
         return Dino(dino.translate(-dinoBox.from.x, -dinoBox.from.y, 0), dinoBox.size().x, dinoBox.size().y)
     }

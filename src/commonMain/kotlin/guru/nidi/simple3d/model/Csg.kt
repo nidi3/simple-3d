@@ -60,6 +60,7 @@ class Csg internal constructor(val polygons: List<Polygon>, n: Node?) {
     }
 
     operator fun plus(csg: Csg) = this union csg
+
     @JsName("or")
     infix fun or(csg: Csg) = this union csg
 

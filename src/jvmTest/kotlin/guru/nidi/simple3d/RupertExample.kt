@@ -23,7 +23,7 @@ import kotlin.math.sqrt
 fun main() {
     model(File("target/rupert.stl")) {
         val diff = .00
-        transform(scale(10, 10, 10)) {
+        transformed(scale(10, 10, 10)) {
             val s = 1.5 * sqrt(2.0) - 2 - diff
             val q = cube(2.0 * unit, 2.0 * unit)
             val a = v(1 + s, 4 - s, 4)
@@ -31,8 +31,8 @@ fun main() {
             val c = v(3 - s, 0 + s, 0)
             val d = v(0 + s, 3 - s, 0)
             val n = -4.0 * Plane.fromPoints(a, b, c).normal
-            add((q - prism(8.0, true, a + n, b + n, c + n, d + n)).rotateX(0.deg))
-            add((q and prism(8.0, true, a + n, b + n, c + n, d + n)).translate(10, 0, 0))
+            add((q - prism(8.0, a + n, b + n, c + n, d + n)).rotateX(0.deg))
+            add((q and prism(8.0, a + n, b + n, c + n, d + n)).translate(10, 0, 0))
             add(q.translate(5, 0, 0))
         }
     }

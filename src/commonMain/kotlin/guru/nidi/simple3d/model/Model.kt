@@ -18,13 +18,24 @@ package guru.nidi.simple3d.model
 import kotlin.js.JsName
 import kotlin.math.PI
 
+val Int.deg get() = this * PI / 180
+val Double.deg get() = this * PI / 180
+val Double.rad get() = this
+
+operator fun <T> List<T>.invoke(i: Int) = get(((i % size) + size) % size)
+fun <T> List<T>.pred(i: Int) = if (i == 0) lastIndex else i - 1
+fun <T> List<T>.succ(i: Int) = if (i == lastIndex) 0 else i + 1
+
 internal const val EPSILON = 1e-5
+
+@JsName("model")
+fun model(actions: Model.() -> Unit) = Model().apply(actions)
 
 class Model {
     internal val csgs = mutableListOf<Csg>()
     private var transform = AffineTransform()
 
-    fun <T> transform(a: AffineTransform, block: Model.() -> T): T {
+    fun <T> transformed(a: AffineTransform, block: Model.() -> T): T {
         val orig = transform
         try {
             transform = transform.applyTo(a)
@@ -87,14 +98,3 @@ class Model {
         }
     }
 }
-
-@JsName("model")
-fun model(actions: Model.() -> Unit) = Model().apply(actions)
-
-val Int.deg get() = this * PI / 180
-val Double.deg get() = this * PI / 180
-val Double.rad get() = this
-
-operator fun <T> List<T>.invoke(i: Int) = get(((i % size) + size) % size)
-fun <T> List<T>.pred(i: Int) = if (i == 0) lastIndex else i - 1
-fun <T> List<T>.succ(i: Int) = if (i == lastIndex) 0 else i + 1

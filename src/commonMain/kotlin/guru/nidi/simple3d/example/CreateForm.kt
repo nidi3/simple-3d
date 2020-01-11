@@ -31,5 +31,5 @@ fun createForm(
                 }
         }
         .map { it.toVector().scale(scale, scale, 1) }
-    return prismRing(width, height, true, c).translate(0, 0, height)
+    return prismRing(width, height, c).translate(0, 0, height)
 }

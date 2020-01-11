@@ -22,12 +22,12 @@ import java.io.File
 fun main() {
     model(File("target/csg.stl")) {
         val cy = cylinder()
-        val r = ring(center = v(2, 2, 0), radius = 2.0)
+//        val r = ring(center = v(2, 2, 0), radius = 2.0)
         val s = sphere(center = v(0, 8, 0), radius = 2.0)
         val c = cube(center = unit, radius = v(2, 3, 5))
         val c2 = cube(center = v(3, 4, 2), radius = v(3, 4, 2))
         add(cy.translate(0, 0, 10))
-        add(r)
+//        add(r)
         add(s)
         add(c)
         add(c2)
@@ -42,12 +42,12 @@ fun main() {
 
         ops(c2, c)
 
-        transform(translate(0, 10, 0)) {
+        transformed(translate(0, 10, 0)) {
             ops(c2, s)
         }
 
-        transform(translate(0, 25, 0)) {
-            ops(c, r)
+        transformed(translate(0, 25, 0)) {
+//            ops(c, r)
         }
     }
 }

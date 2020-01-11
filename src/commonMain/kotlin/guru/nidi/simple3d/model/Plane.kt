@@ -26,13 +26,13 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
     }
 
     companion object {
-        fun fromPoints(a: Vector, b: Vector, c: Vector, rightHand: Boolean = true): Plane {
-            val n = (if (rightHand) 1 else -1) * ((b - a) x (c - a)).unit()
+        fun fromPoints(a: Vector, b: Vector, c: Vector): Plane {
+            val n = ((b - a) x (c - a)).unit()
             return Plane(n, n * a)
         }
 
-        fun fromPoints(points: List<Vector>, rightHand: Boolean = true): Plane {
-            return fromPoints(points[0], points[1], points[2], rightHand).also { p ->
+        fun fromPoints(points: List<Vector>): Plane {
+            return fromPoints(points[0], points[1], points[2]).also { p ->
                 if (points.any { it !in p }) throw IllegalArgumentException("not all points in a plane")
             }
         }

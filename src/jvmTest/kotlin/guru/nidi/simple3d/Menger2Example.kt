@@ -73,29 +73,29 @@ fun main() {
                 add(omo)
                 add(oom)
             } else {
-                transform(scale(unit / 3.0)) {
-                    transform(translate(6, 6, 0)) { mosely(level - 1) }
-                    transform(translate(-6, -6, 0)) { mosely(level - 1) }
-                    transform(translate(6, -6, 0)) { mosely(level - 1) }
-                    transform(translate(-6, 6, 0)) { mosely(level - 1) }
+                transformed(scale(unit / 3.0)) {
+                    transformed(translate(6, 6, 0)) { mosely(level - 1) }
+                    transformed(translate(-6, -6, 0)) { mosely(level - 1) }
+                    transformed(translate(6, -6, 0)) { mosely(level - 1) }
+                    transformed(translate(-6, 6, 0)) { mosely(level - 1) }
 
-                    transform(translate(6, 0, 6)) { mosely(level - 1) }
-                    transform(translate(-6, 0, -6)) { mosely(level - 1) }
-                    transform(translate(-6, 0, 6)) { mosely(level - 1) }
-                    transform(translate(6, 0, -6)) { mosely(level - 1) }
+                    transformed(translate(6, 0, 6)) { mosely(level - 1) }
+                    transformed(translate(-6, 0, -6)) { mosely(level - 1) }
+                    transformed(translate(-6, 0, 6)) { mosely(level - 1) }
+                    transformed(translate(6, 0, -6)) { mosely(level - 1) }
 
-                    transform(translate(0, 6, 6)) { mosely(level - 1) }
-                    transform(translate(0, -6, -6)) { mosely(level - 1) }
-                    transform(translate(0, -6, 6)) { mosely(level - 1) }
-                    transform(translate(0, 6, -6)) { mosely(level - 1) }
+                    transformed(translate(0, 6, 6)) { mosely(level - 1) }
+                    transformed(translate(0, -6, -6)) { mosely(level - 1) }
+                    transformed(translate(0, -6, 6)) { mosely(level - 1) }
+                    transformed(translate(0, 6, -6)) { mosely(level - 1) }
 
-                    transform(translate(6, 0, 0)) { mosely(level - 1) }
-                    transform(translate(0, 6, 0)) { mosely(level - 1) }
-                    transform(translate(0, 0, 6)) { mosely(level - 1) }
+                    transformed(translate(6, 0, 0)) { mosely(level - 1) }
+                    transformed(translate(0, 6, 0)) { mosely(level - 1) }
+                    transformed(translate(0, 0, 6)) { mosely(level - 1) }
 
-                    transform(translate(-6, 0, 0)) { mosely(level - 1) }
-                    transform(translate(0, -6, 0)) { mosely(level - 1) }
-                    transform(translate(0, 0, -6)) { mosely(level - 1) }
+                    transformed(translate(-6, 0, 0)) { mosely(level - 1) }
+                    transformed(translate(0, -6, 0)) { mosely(level - 1) }
+                    transformed(translate(0, 0, -6)) { mosely(level - 1) }
                 }
             }
         }
@@ -127,39 +127,39 @@ fun main() {
                 add(mpm)
                 add(mmp)
             } else {
-                transform(scale(unit / 3.0)) {
-                    transform(translate(6, 6, 0)) { menger(level - 1) }
-                    transform(translate(6, -6, 0)) { menger(level - 1) }
-                    transform(translate(-6, 6, 0)) { menger(level - 1) }
-                    transform(translate(-6, -6, 0)) { menger(level - 1) }
+                transformed(scale(unit / 3.0)) {
+                    transformed(translate(6, 6, 0)) { menger(level - 1) }
+                    transformed(translate(6, -6, 0)) { menger(level - 1) }
+                    transformed(translate(-6, 6, 0)) { menger(level - 1) }
+                    transformed(translate(-6, -6, 0)) { menger(level - 1) }
 
-                    transform(translate(6, 0, 6)) { menger(level - 1) }
-                    transform(translate(6, 0, -6)) { menger(level - 1) }
-                    transform(translate(-6, 0, 6)) { menger(level - 1) }
-                    transform(translate(-6, 0, -6)) { menger(level - 1) }
+                    transformed(translate(6, 0, 6)) { menger(level - 1) }
+                    transformed(translate(6, 0, -6)) { menger(level - 1) }
+                    transformed(translate(-6, 0, 6)) { menger(level - 1) }
+                    transformed(translate(-6, 0, -6)) { menger(level - 1) }
 
-                    transform(translate(0, 6, 6)) { menger(level - 1) }
-                    transform(translate(0, 6, -6)) { menger(level - 1) }
-                    transform(translate(0, -6, 6)) { menger(level - 1) }
-                    transform(translate(0, -6, -6)) { menger(level - 1) }
+                    transformed(translate(0, 6, 6)) { menger(level - 1) }
+                    transformed(translate(0, 6, -6)) { menger(level - 1) }
+                    transformed(translate(0, -6, 6)) { menger(level - 1) }
+                    transformed(translate(0, -6, -6)) { menger(level - 1) }
 
-                    transform(translate(6, 6, 6)) { menger(level - 1) }
-                    transform(translate(-6, -6, -6)) { menger(level - 1) }
+                    transformed(translate(6, 6, 6)) { menger(level - 1) }
+                    transformed(translate(-6, -6, -6)) { menger(level - 1) }
 
-                    transform(translate(-6, 6, 6)) { menger(level - 1) }
-                    transform(translate(6, -6, 6)) { menger(level - 1) }
-                    transform(translate(6, 6, -6)) { menger(level - 1) }
+                    transformed(translate(-6, 6, 6)) { menger(level - 1) }
+                    transformed(translate(6, -6, 6)) { menger(level - 1) }
+                    transformed(translate(6, 6, -6)) { menger(level - 1) }
 
-                    transform(translate(6, -6, -6)) { menger(level - 1) }
-                    transform(translate(-6, 6, -6)) { menger(level - 1) }
-                    transform(translate(-6, -6, 6)) { menger(level - 1) }
+                    transformed(translate(6, -6, -6)) { menger(level - 1) }
+                    transformed(translate(-6, 6, -6)) { menger(level - 1) }
+                    transformed(translate(-6, -6, 6)) { menger(level - 1) }
                 }
             }
         }
 
         val size = 10
         val level = 1
-        transform(scale(unit * size.toDouble())) {
+        transformed(scale(unit * size.toDouble())) {
             menger(level)
             writeBinaryStl(File("target/menger-$level-$size.stl"))
 

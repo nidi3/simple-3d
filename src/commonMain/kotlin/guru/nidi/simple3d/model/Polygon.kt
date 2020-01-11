@@ -19,16 +19,16 @@ import guru.nidi.simple3d.model.VertexType.*
 
 data class Polygon(val vertices: List<Vertex>) {
     constructor(vararg vs: Vertex) : this(vs.asList())
-    constructor(rightHand: Boolean, points: List<Vector>) : this(toVertices(rightHand, points))
-    constructor(rightHand: Boolean, vararg points: Vector) : this(rightHand, points.asList())
 
     val plane = Plane.fromVertex(vertices[0])
 
     companion object {
-        fun toVertices(rightHand: Boolean, points: List<Vector>): List<Vertex> {
-            val n = (if (rightHand) 1 else -1) * Plane.fromPoints(points[0], points[1], points[2]).normal
-            return points.map { Vertex(it, n) }
+        fun ofVectors(points: List<Vector>): Polygon {
+            val n = Plane.fromPoints(points[0], points[1], points[2]).normal
+            return Polygon(points.map { Vertex(it, n) })
         }
+
+        fun ofVectors(vararg points: Vector) = ofVectors(points.asList())
     }
 
     init {
