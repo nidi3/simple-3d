@@ -52,15 +52,15 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
                 onStraight(a, b)
 
     fun onStraight(a: Vector, b: Vector): Boolean = when {
-        a.x != b.x -> {
+        abs(a.x - b.x) > EPSILON -> {
             abs(y - (a.y + (x - a.x) * ((b.y - a.y) / (b.x - a.x)))) < EPSILON &&
                     abs(z - (a.z + (x - a.x) * ((b.z - a.z) / (b.x - a.x)))) < EPSILON
         }
-        a.y != b.y -> {
+        abs(a.y - b.y) > EPSILON -> {
             abs(x - (a.x + (y - a.y) * ((b.x - a.x) / (b.y - a.y)))) < EPSILON &&
                     abs(z - (a.z + (y - a.y) * ((b.z - a.z) / (b.y - a.y)))) < EPSILON
         }
-        a.z != b.z -> {
+        abs(a.z - b.z) > EPSILON -> {
             abs(y - (a.y + (z - a.z) * ((b.y - a.y) / (b.z - a.z)))) < EPSILON &&
                     abs(x - (a.x + (z - a.z) * ((b.x - a.x) / (b.z - a.z)))) < EPSILON
         }
