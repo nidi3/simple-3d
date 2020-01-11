@@ -49,7 +49,7 @@ fun prism(length: Double, rightHand: Boolean, points: List<Vector>): Csg {
         return Polygon(Vertex(p1, r), Vertex(p2, r), Vertex(p2 + dn, r), Vertex(p1 + dn, r))
     }
 
-    return Csg.ofPolygons {
+    return Csg {
         add(Polygon(points.reversed().map { Vertex(it, -n) }))
         add(Polygon(points.map { Vertex(it + dn, n) }))
         for (i in points.indices) {
@@ -101,7 +101,7 @@ fun prismRing(w1: Double, w2: Double, length: Double, rightHand: Boolean, points
         )
     }
 
-    return Csg.ofPolygons {
+    return Csg {
         for (i in points.indices) {
             addAll(side(points(i), points(i + 1), points(i + 2), points(i + 3)))
         }
@@ -117,7 +117,7 @@ fun sphere(
         return center + dir * (radiusFunc?.invoke(phi, theta) ?: radius)
     }
 
-    return Csg.ofPolygons {
+    return Csg {
         for (i in 0 until slices) {
             val id = i.toDouble()
             for (j in 0 until stacks) {
@@ -157,7 +157,7 @@ fun cylinder(
         return start + ray * stack + out * (radiusFunc?.invoke(angle, stack) ?: radius)
     }
 
-    return Csg.ofPolygons {
+    return Csg {
         for (i in 0 until slices) {
             val id = i.toDouble()
             val t0 = id / slices
@@ -185,7 +185,7 @@ fun ring(center: Vector = origin, radius: Double = 1.0, r: Double = 1.0, h: Doub
 
     val da = 2 * PI / slices
     var a = 0.0
-    return Csg.ofPolygons {
+    return Csg {
         while (a < 2 * PI + da / 2) {
             var b = (PI - h / radius) / 2
             add(
@@ -232,7 +232,7 @@ fun ring(center: Vector = origin, radius: Double = 1.0, r: Double = 1.0, h: Doub
 fun heightModel(height: List<List<Double>>): Csg {
     val xd = height.size - 1
     val yd = height[0].size - 1
-    return Csg.ofPolygons {
+    return Csg {
         add(
             Polygon(
                 Vertex(v(0, 0, 0), v(0, 0, -1)),

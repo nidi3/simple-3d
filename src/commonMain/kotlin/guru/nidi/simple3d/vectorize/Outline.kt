@@ -27,6 +27,13 @@ expect class Image {
     fun line(x0: Int, y0: Int, x1: Int, y1: Int, rgb: Int)
 }
 
+data class Point(val x: Int, val y: Int) {
+    fun isOneLine(p1: Point, p2: Point) = (p1.x - this.x).sign == (p2.x - p1.x).sign
+            && (p1.y - this.y).sign == (p2.y - p1.y).sign
+
+    fun toVector() = Vector(x.toDouble(), y.toDouble(), 0.0)
+}
+
 //TODO only one outline supported, endless loop is first point has no neighbors
 @JsName("outline")
 fun outline(image: Image, optimize: Boolean = true, classifier: (Int) -> Boolean): List<Point> {
@@ -44,7 +51,7 @@ fun outline(image: Image, optimize: Boolean = true, classifier: (Int) -> Boolean
         else edges += p
     }
 
-    val start = (DirPoint.findStart(image.width, image.height, ::isBlack)
+    val start = (findStart(image.width, image.height, ::isBlack)
         ?: throw IllegalArgumentException("No black pixel found.")).findNext(::isBlack)
     var point = start
     do {
@@ -54,35 +61,26 @@ fun outline(image: Image, optimize: Boolean = true, classifier: (Int) -> Boolean
     return edges
 }
 
-data class Point(val x: Int, val y: Int) {
-    fun isOneLine(p1: Point, p2: Point) = (p1.x - this.x).sign == (p2.x - p1.x).sign
-            && (p1.y - this.y).sign == (p2.y - p1.y).sign
-
-    fun toVector() = Vector(x.toDouble(), y.toDouble(), 0.0)
-}
-
-data class DirPoint(val dx: Int, val dy: Int, val x: Int, val y: Int) {
-    companion object {
-        fun findStart(width: Int, height: Int, isBlack: (Int, Int) -> Boolean): DirPoint? {
-            fun hasBlackNeighbour(x: Int, y: Int): Boolean {
-                for (i in x - 1..x + 1) {
-                    for (j in y - 1..y + 1) {
-                        if ((i != x || j != y) && isBlack(i, j)) return true
-                    }
-                }
-                return false
+private fun findStart(width: Int, height: Int, isBlack: (Int, Int) -> Boolean): DirPoint? {
+    fun hasBlackNeighbour(x: Int, y: Int): Boolean {
+        for (i in x - 1..x + 1) {
+            for (j in y - 1..y + 1) {
+                if ((i != x || j != y) && isBlack(i, j)) return true
             }
-            for (x in 0 until width) {
-                for (y in 0 until height) {
-                    if (isBlack(x, y) && hasBlackNeighbour(x, y)) {
-                        return DirPoint(-1, 0, x, y)
-                    }
-                }
+        }
+        return false
+    }
+    for (x in 0 until width) {
+        for (y in 0 until height) {
+            if (isBlack(x, y) && hasBlackNeighbour(x, y)) {
+                return DirPoint(-1, 0, x, y)
             }
-            return null
         }
     }
+    return null
+}
 
+private data class DirPoint(val dx: Int, val dy: Int, val x: Int, val y: Int) {
     fun pos() = Point(x, y)
 
     fun findNext(isBlack: (Point) -> Boolean): DirPoint {

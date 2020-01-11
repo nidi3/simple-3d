@@ -15,7 +15,7 @@
  */
 package guru.nidi.simple3d.model
 
-class Node private constructor(
+internal class Node private constructor(
     private val polygons: MutableList<Polygon>, private var plane: Plane?,
     private var front: Node?, private var back: Node?
 ) {

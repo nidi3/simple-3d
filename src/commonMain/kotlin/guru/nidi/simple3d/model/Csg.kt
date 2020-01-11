@@ -32,19 +32,12 @@ private class PolygonList(val list: MutableList<Polygon>) : PolygonSink {
     }
 }
 
-class Csg(val polygons: List<Polygon>, n: Node?) {
-    private val node: Node by lazy { n ?: Node(polygons) }
-
+class Csg internal constructor(val polygons: List<Polygon>, n: Node?) {
+    private constructor(node: Node) : this(node.allPolygons(), node)
     constructor(polygons: List<Polygon>) : this(polygons, null)
-    constructor(node: Node) : this(node.allPolygons(), node)
+    constructor(steps: PolygonSink.() -> Unit) : this(PolygonList(mutableListOf()).also { steps(it) }.list, null)
 
-    companion object {
-        fun ofPolygons(steps: PolygonSink.() -> Unit): Csg {
-            val polys = PolygonList(mutableListOf())
-            steps(polys)
-            return Csg(polys.list)
-        }
-    }
+    private val node: Node by lazy { n ?: Node(polygons) }
 
     @JsName("translate")
     fun translate(v: Vector) = AffineTransform().translate(v).applyTo(this)
@@ -94,7 +87,7 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
     @JsName("xor")
     infix fun xor(csg: Csg) = (this or csg) - (this and csg)
 
-    operator fun unaryMinus() = Csg(polygons.map { -it })
+    operator fun unaryMinus() = Csg(polygons.map { -it }, null)
 
     val boundingBox: Box by lazy {
         var minX = Double.MAX_VALUE

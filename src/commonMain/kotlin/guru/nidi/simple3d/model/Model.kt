@@ -70,7 +70,7 @@ class Model {
                                 while (v2 < poly.vertices.size) {
                                     val a = poly.vertices(v2).pos
                                     val b = poly.vertices(v2 + 1).pos
-                                    if (v1.pos.inSegment(a, b)) {
+                                    if (v1.pos in OpenSegment(a, b)) {
                                         val parts = poly.split(v1.pos)
                                         poly = parts.first
                                         (csg2.polygons as MutableList)[p2] = parts.first

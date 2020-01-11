@@ -47,12 +47,13 @@ data class Polygon(val vertices: List<Vertex>) {
         var minZ = Double.MAX_VALUE
         var maxZ = Double.MIN_VALUE
         for (v in vertices) {
-            if (v.pos.x < minX) minX = v.pos.x
-            if (v.pos.x > maxX) maxX = v.pos.x
-            if (v.pos.y < minY) minY = v.pos.y
-            if (v.pos.y > maxY) maxY = v.pos.y
-            if (v.pos.z < minZ) minZ = v.pos.z
-            if (v.pos.z > maxZ) maxZ = v.pos.z
+            val p = v.pos
+            if (p.x < minX) minX = p.x
+            if (p.x > maxX) maxX = p.x
+            if (p.y < minY) minY = p.y
+            if (p.y > maxY) maxY = p.y
+            if (p.z < minZ) minZ = p.z
+            if (p.z > maxZ) maxZ = p.z
         }
         Box(Vector(minX, minY, minZ), Vector(maxX, maxY, maxZ))
     }
@@ -63,7 +64,7 @@ data class Polygon(val vertices: List<Vertex>) {
 
     //pos must be on a line of the polygon
     fun split(pos: Vector): Pair<Polygon, Polygon> {
-        val intersect = vertices.indices.first { i -> pos.onSegment(vertices[i].pos, vertices(i + 1).pos) }
+        val intersect = vertices.indices.first { i -> pos in Segment(vertices[i].pos, vertices(i + 1).pos) }
         for (i in vertices.indices) {
             val ok = (i != intersect && i != vertices.succ(intersect)) && vertices.indices.all { j ->
                 j == vertices.pred(i) || j == i || j == intersect ||
