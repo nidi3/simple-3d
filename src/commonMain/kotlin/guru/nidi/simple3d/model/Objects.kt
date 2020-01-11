@@ -26,17 +26,16 @@ fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
         listOf(listOf(2, 6, 7, 3), listOf(0, +1, 0)),
         listOf(listOf(0, 2, 3, 1), listOf(0, 0, -1)),
         listOf(listOf(4, 5, 7, 6), listOf(0, 0, +1))
-    )
-        .map { info ->
-            Polygon(info[0].map { i ->
-                val pos = Vector(
-                    center.x + radius.x * (2 * (i and 1) - 1),
-                    center.y + radius.y * (2 * ((i shr 1) and 1) - 1),
-                    center.z + radius.z * (2 * ((i shr 2) and 1) - 1)
-                )
-                Vertex(pos, Vector(info[1][0].toDouble(), info[1][1].toDouble(), info[1][2].toDouble()))
-            })
+    ).map { info ->
+        Polygon(info[0].map { i ->
+            val pos = Vector(
+                center.x + radius.x * (2 * (i and 1) - 1),
+                center.y + radius.y * (2 * ((i shr 1) and 1) - 1),
+                center.z + radius.z * (2 * ((i shr 2) and 1) - 1)
+            )
+            Vertex(pos, Vector(info[1][0].toDouble(), info[1][1].toDouble(), info[1][2].toDouble()))
         })
+    })
 
 fun prism(length: Double, vararg points: Vector) = prism(length, points.toList())
 
@@ -170,61 +169,6 @@ fun cylinder(
                 add(Polygon.ofVectors(point(j0, t1), point(j0, t0), point(j1, t0), point(j1, t1)))
             }
             add(Polygon.ofVectors(end, point(1.0, t1), point(1.0, t0)))
-        }
-    }
-}
-
-fun ring(center: Vector = origin, radius: Double = 1.0, r: Double = 1.0, h: Double = 1.0, slices: Int = 32): Csg {
-    fun vertex(r: Double, a: Double, b: Double, norm: Vector) =
-        Vertex(center + Vector.ofSpherical(r, b, a), norm)
-
-    fun vertex(r: Double, a: Double, b: Double, dir: Int): Vertex {
-        val v = Vector.ofSpherical(r, b, a)
-        return Vertex(v + center, v * dir.toDouble())
-    }
-
-    val da = 2 * PI / slices
-    var a = 0.0
-    return Csg {
-        while (a < 2 * PI + da / 2) {
-            var b = (PI - h / radius) / 2
-            add(
-                Polygon(
-                    vertex(radius, a, b, zUnit),
-                    vertex(radius + r, a, b, zUnit),
-                    vertex(radius + r, a + da, b, zUnit),
-                    vertex(radius, a + da, b, zUnit)
-                )
-            )
-            val db = h / radius
-            while (b < (PI + h / radius) / 2) {
-                add(
-                    Polygon(
-                        vertex(radius, a, b, -1),
-                        vertex(radius, a + da, b, -1),
-                        vertex(radius, a + da, b + db, -1),
-                        vertex(radius, a, b + db, -1)
-                    )
-                )
-                add(
-                    Polygon(
-                        vertex(radius + r, a, b, 1),
-                        vertex(radius + r, a, b + db, 1),
-                        vertex(radius + r, a + da, b + db, 1),
-                        vertex(radius + r, a + da, b, 1)
-                    )
-                )
-                b += db
-            }
-            add(
-                Polygon(
-                    vertex(radius, a, b, -zUnit),
-                    vertex(radius, a + da, b, -zUnit),
-                    vertex(radius + r, a + da, b, -zUnit),
-                    vertex(radius + r, a, b, -zUnit)
-                )
-            )
-            a += da
         }
     }
 }
