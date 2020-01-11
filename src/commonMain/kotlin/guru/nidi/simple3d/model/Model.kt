@@ -65,7 +65,7 @@ class Model {
                         var p2 = 0
                         while (p2 < csg2.polygons.size) {
                             var poly = csg2.polygons[p2]
-                            if (b1.intersect(poly.boundingBox)) {
+                            if (b1 intersect poly.boundingBox) {
                                 var v2 = 0
                                 while (v2 < poly.vertices.size) {
                                     val a = poly.vertices(v2).pos

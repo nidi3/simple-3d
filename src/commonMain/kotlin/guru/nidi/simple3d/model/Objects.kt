@@ -16,10 +16,7 @@
 package guru.nidi.simple3d.model
 
 import kotlin.js.JsName
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
     listOf(
@@ -133,6 +130,14 @@ fun sphere(
                 add(Polygon(true, vertices)) //TODO really righthand?
             }
         }
+    }
+}
+
+fun ellipseFunc(min: Double, max: Double): (Double) -> Double {
+    return { angle ->
+        val a = min * sin(angle)
+        val b = max * cos(angle)
+        min * max / (sqrt(a * a + b * b))
     }
 }
 

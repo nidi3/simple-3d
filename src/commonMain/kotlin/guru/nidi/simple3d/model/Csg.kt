@@ -129,7 +129,7 @@ class Csg(val polygons: List<Polygon>, n: Node?) {
 data class Box(val from: Vector, val to: Vector) {
     fun size() = to - from
 
-    fun intersect(b: Box): Boolean =
+    infix fun intersect(b: Box): Boolean =
         to.x >= b.from.x &&
                 from.x <= b.to.x &&
                 to.y >= b.from.y &&

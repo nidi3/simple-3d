@@ -18,9 +18,6 @@ package guru.nidi.simple3d
 import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 fun main() {
     val h = 3.0
@@ -32,17 +29,9 @@ fun main() {
     val rt2 = .1 * len
     val holeScale = v(1.03, 1.03, 1.03)
 
-    fun ellipseFunc(min: Double, max: Double): (Double, Double) -> Double {
-        return { angle, _ ->
-            val a = min * sin(angle)
-            val b = max * cos(angle)
-            min * max / (sqrt(a * a + b * b))
-        }
-    }
-
-    val cs = cylinder(slices = 64, radiusFunc = ellipseFunc(rs1, rs2)).rotateX(90.deg)
+    val cs = cylinder(slices = 64, radiusFunc = { angle, _ -> ellipseFunc(rs1, rs2)(angle) }).rotateX(90.deg)
         .scale(1, 1, h / 2)
-    val ct = cylinder(slices = 64, radiusFunc = ellipseFunc(rt1, rt2)).rotateX(90.deg)
+    val ct = cylinder(slices = 64, radiusFunc = { angle, _ -> ellipseFunc(rt1, rt2)(angle) }).rotateX(90.deg)
         .scale(1, 1, h / 2)
 
 
