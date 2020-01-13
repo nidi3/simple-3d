@@ -19,25 +19,24 @@ import guru.nidi.simple3d.model.Csg
 import guru.nidi.simple3d.model.Model
 import guru.nidi.simple3d.model.Polygon
 import guru.nidi.simple3d.model.Vector
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 
-fun Model.writeBinaryStl(f: File) {
-    StlBinaryWriter(f).use { out ->
+fun Model.writeObj(f: File) {
+    ObjWriter(f).use { out ->
         csgs.forEach { out.write(it) }
     }
 }
 
-class StlBinaryWriter(val file: File) : AutoCloseable {
+class ObjWriter(file: File) : AutoCloseable {
     private val out = file.let {
         it.parentFile.mkdirs()
-        DataOutputStream(BufferedOutputStream(FileOutputStream(it)))
+        PrintWriter(OutputStreamWriter(FileOutputStream(file)))
     }
-    private var count = 0
-
-    init {
-        out.write(ByteArray(80))
-        out.writeInt(0)
-    }
+    private var vertices = 0
+    private val facets = mutableListOf<List<Int>>()
 
     fun write(csg: Csg) = csg.polygons.forEach { p ->
         p.toTriangles().forEach { t ->
@@ -46,32 +45,25 @@ class StlBinaryWriter(val file: File) : AutoCloseable {
     }
 
     fun write(p: Polygon) {
-        write(0.0)
-        write(0.0)
-        write(0.0)
         for (v in p.vertices) {
             write(v.pos)
         }
-        out.writeShort(0)
-        count++
+        facets += List(p.vertices.size) { vertices + it + 1 }
+        vertices += p.vertices.size
     }
 
-    private fun write(a: Vector) {
-        write(a.x)
-        write(a.y)
-        write(a.z)
-    }
-
-    private fun write(v: Double) {
-        val i = java.lang.Float.floatToIntBits(v.toFloat())
-        out.writeInt(Integer.reverseBytes(i))
+    fun write(v: Vector) {
+        out.println("v %.8f %.8f %.8f".format(v.x, v.y, v.z))
     }
 
     override fun close() {
-        out.close()
-        RandomAccessFile(file, "rw").use {
-            it.seek(80)
-            it.writeInt(Integer.reverseBytes(count))
+        for (f in facets) {
+            out.print("f ")
+            for (v in f) {
+                out.print("$v ")
+            }
+            out.println()
         }
+        out.close()
     }
 }

@@ -15,22 +15,44 @@
  */
 package guru.nidi.simple3d.io
 
+import guru.nidi.simple3d.model.Csg
+import guru.nidi.simple3d.model.Model
+import guru.nidi.simple3d.model.Polygon
 import guru.nidi.simple3d.model.Vector
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
+fun Model.writePly(f: File) {
+    PlyWriter(f).use { out ->
+        csgs.forEach { out.write(it) }
+    }
+}
+
 //TODO not finished
-object PlyWriter {
-    fun write(file: File, points: List<Vector>) {
-        PrintWriter(OutputStreamWriter(FileOutputStream(file))).use { out ->
-            out.println(
-                "ply\nformat ascii 1.0\nelement vertex ${points.size}\n" +
-                        "property float x\nproperty float y\nproperty float z\nend_header\n"
-            )
-            points.forEach { out.println("${it.x} ${it.y} ${it.z}") }
+class PlyWriter(file: File) : AutoCloseable {
+    private val out = file.let {
+        it.parentFile.mkdirs()
+        PrintWriter(OutputStreamWriter(FileOutputStream(file)))
+    }
+
+    fun write(csg: Csg) = csg.polygons.forEach { p ->
+        p.toTriangles().forEach { t ->
+            write(t)
         }
+    }
+
+    fun write(p: Polygon) {
+//        out.println(
+//            "ply\nformat ascii 1.0\nelement vertex ${points.size}\n" +
+//                    "property float x\nproperty float y\nproperty float z\nend_header\n"
+//        )
+//        points.forEach { out.println("${it.x} ${it.y} ${it.z}") }
+    }
+
+    override fun close() {
+        out.close()
     }
 }
 

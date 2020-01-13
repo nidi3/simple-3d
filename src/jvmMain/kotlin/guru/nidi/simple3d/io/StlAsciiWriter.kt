@@ -31,30 +31,33 @@ fun Model.writeAsciiStl(f: File, name: String) {
 }
 
 class StlAsciiWriter(file: File, private val name: String) : AutoCloseable {
-    private val out = PrintWriter(OutputStreamWriter(FileOutputStream(file)))
+    private val out = file.let {
+        it.parentFile.mkdirs()
+        PrintWriter(OutputStreamWriter(FileOutputStream(file)))
+    }
 
     init {
         out.println("solid $name")
     }
 
-    fun write(csg: Csg) = write(csg.polygons)
-
-    fun write(ps: List<Polygon>) = ps.forEach { write(it) }
-
-    fun write(p: Polygon) {
-        if (p.vertices.size > 3) write(p.toTriangles()) else {
-            write(p.vertices[0].pos, p.vertices[1].pos, p.vertices[2].pos)
+    fun write(csg: Csg) = csg.polygons.forEach { p ->
+        p.toTriangles().forEach { t ->
+            write(t)
         }
     }
 
-    fun write(a: Vector, b: Vector, c: Vector) {
+    fun write(p: Polygon) {
         out.println("facet normal 0 0 0")
         out.println("outer loop")
-        out.println("vertex ${a.x} ${a.y} ${a.z}")
-        out.println("vertex ${b.x} ${b.y} ${b.z}")
-        out.println("vertex ${c.x} ${c.y} ${c.z}")
+        for (v in p.vertices) {
+            write(v.pos)
+        }
         out.println("endloop")
         out.println("endfacet")
+    }
+
+    fun write(v: Vector) {
+        out.println("vertex %.8f %.8f %.8f".format(v.x, v.y, v.z))
     }
 
     override fun close() {

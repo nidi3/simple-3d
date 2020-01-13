@@ -60,7 +60,7 @@ data class Polygon(val vertices: List<Vertex>) {
 
     fun size() = boundingBox.size()
 
-    fun toTriangles() = triangulate(vertices)
+    fun toTriangles() = if (vertices.size <= 3) listOf(this) else triangulate(vertices)
 
     //pos must be on a line of the polygon
     fun split(pos: Vector): Pair<Polygon, Polygon> {

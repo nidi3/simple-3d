@@ -20,7 +20,7 @@ import guru.nidi.simple3d.model.*
 import java.io.File
 
 fun main() {
-    model(File("target/csg.stl")) {
+    model(File("target/csg.obj")) {
         val cy = cylinder(height = 2)
         val r = (cylinder().scale(3, 2, 3) - cylinder().scale(2, 2, 2)).rotateX(90.deg).translate(2, 2, 0)
         val s = sphere(center = v(0, 8, 0), radius = 2)
