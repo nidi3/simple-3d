@@ -65,7 +65,7 @@ fun prismRing(width: Number, height: Number, vararg points: Vector) =
 
 @JsName("prismRing")
 fun prismRing(width: Number, height: Number, points: List<Vector>) =
-    prismRing(width, width, height, points)
+    prismRing(width.toDouble() / 2, width.toDouble() / 2, height, points)
 
 fun prismRing(width1: Number, width2: Number, height: Number, points: List<Vector>): Csg {
     val n = Plane.fromPoints(points).normal
