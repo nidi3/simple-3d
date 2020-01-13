@@ -53,6 +53,8 @@ class Csg internal constructor(val polygons: List<Polygon>, n: Node?) {
     fun rotateY(a: Double) = AffineTransform().rotateY(a).applyTo(this)
     fun rotateZ(a: Double) = AffineTransform().rotateZ(a).applyTo(this)
 
+    fun material(material: Material) = Csg(polygons.map { Polygon(material, it.vertices) })
+
     infix fun union(csg: Csg): Csg {
         val a = node.clipTo(csg.node)
         val b2 = -(-csg.node.clipTo(a)).clipTo(a)

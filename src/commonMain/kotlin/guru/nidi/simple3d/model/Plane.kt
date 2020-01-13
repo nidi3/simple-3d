@@ -142,8 +142,8 @@ data class Plane private constructor(val normal: Vector, private val w: Double) 
                         b.add(v)
                     }
                 }
-                if (f.size >= 3) front.add(Polygon(f))
-                if (b.size >= 3) back.add(Polygon(b))
+                if (f.size >= 3) front.add(Polygon(polygon.material, f))
+                if (b.size >= 3) back.add(Polygon(polygon.material, b))
             }
         }
     }

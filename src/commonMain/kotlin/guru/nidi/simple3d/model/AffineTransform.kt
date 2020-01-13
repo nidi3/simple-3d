@@ -109,7 +109,7 @@ data class AffineTransform constructor(
 
     fun applyTo(t: Vertex) = Vertex(applyTo(t.pos), inverse().transpose().applyTo(t.normal))
 
-    fun applyTo(t: Polygon) = Polygon(t.vertices.map { applyTo(it) })
+    fun applyTo(t: Polygon) = Polygon(t.material, t.vertices.map { applyTo(it) })
 
     fun applyTo(t: Csg) = Csg(t.polygons.map { applyTo(it) })
 

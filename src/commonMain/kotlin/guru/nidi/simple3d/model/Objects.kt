@@ -21,7 +21,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-fun cube(center: Vector = origin, length: Vector = unit) = Csg(
+fun cube(center: Vector = origin, length: Vector = unit, material: Material? = null) = Csg(
     listOf(
         listOf(listOf(0, 4, 6, 2), listOf(-1, 0, 0)),
         listOf(listOf(1, 3, 7, 5), listOf(+1, 0, 0)),
@@ -30,7 +30,7 @@ fun cube(center: Vector = origin, length: Vector = unit) = Csg(
         listOf(listOf(0, 2, 3, 1), listOf(0, 0, -1)),
         listOf(listOf(4, 5, 7, 6), listOf(0, 0, +1))
     ).map { info ->
-        Polygon(info[0].map { i ->
+        Polygon(material, info[0].map { i ->
             val pos = Vector(
                 center.x + length.x * ((i and 1) - .5),
                 center.y + length.y * (((i shr 1) and 1) - .5),
@@ -40,34 +40,29 @@ fun cube(center: Vector = origin, length: Vector = unit) = Csg(
         })
     })
 
-fun prism(height: Number, vararg points: Vector) = prism(height, points.toList())
-
-fun prism(height: Number, points: List<Vector>): Csg {
+fun prism(height: Number, points: List<Vector>, material: Material? = null): Csg {
     val n = Plane.fromPoints(points).normal
     val dn = n * height.toDouble()
 
     fun side(p1: Vector, p2: Vector): Polygon {
         val r = n x (p1 - p2).unit()
-        return Polygon(Vertex(p1, r), Vertex(p2, r), Vertex(p2 + dn, r), Vertex(p1 + dn, r))
+        return Polygon(material, Vertex(p1, r), Vertex(p2, r), Vertex(p2 + dn, r), Vertex(p1 + dn, r))
     }
 
     return Csg {
-        add(Polygon(points.reversed().map { Vertex(it, -n) }))
-        add(Polygon(points.map { Vertex(it + dn, n) }))
+        add(Polygon(material, points.reversed().map { Vertex(it, -n) }))
+        add(Polygon(material, points.map { Vertex(it + dn, n) }))
         for (i in points.indices) {
             add(side(points(i), points(i + 1)))
         }
     }
 }
 
-fun prismRing(width: Number, height: Number, vararg points: Vector) =
-    prismRing(width, height, points.toList())
-
 @JsName("prismRing")
-fun prismRing(width: Number, height: Number, points: List<Vector>) =
-    prismRing(width.toDouble() / 2, width.toDouble() / 2, height, points)
+fun prismRing(width: Number, height: Number, points: List<Vector>, material: Material? = null) =
+    prismRing(width.toDouble() / 2, width.toDouble() / 2, height, points, material)
 
-fun prismRing(width1: Number, width2: Number, height: Number, points: List<Vector>): Csg {
+fun prismRing(width1: Number, width2: Number, height: Number, points: List<Vector>, material: Material? = null): Csg {
     val n = Plane.fromPoints(points).normal
     val dn = n * height.toDouble()
     val w1 = width1.toDouble()
@@ -98,10 +93,10 @@ fun prismRing(width1: Number, width2: Number, height: Number, points: List<Vecto
             )
         }
         return listOf(
-            Polygon(Vertex(p11, r1), Vertex(p11 + dn, r1), Vertex(p21 + dn, r1), Vertex(p21, r1)),
-            Polygon(Vertex(p12, -r1), Vertex(p22, -r1), Vertex(p22 + dn, -r1), Vertex(p12 + dn, -r1)),
-            Polygon(Vertex(p11, -n), Vertex(p21, -n), Vertex(p22, -n), Vertex(p12, -n)),
-            Polygon(Vertex(p11 + dn, n), Vertex(p12 + dn, n), Vertex(p22 + dn, n), Vertex(p21 + dn, n))
+            Polygon(material, Vertex(p11, r1), Vertex(p11 + dn, r1), Vertex(p21 + dn, r1), Vertex(p21, r1)),
+            Polygon(material, Vertex(p12, -r1), Vertex(p22, -r1), Vertex(p22 + dn, -r1), Vertex(p12 + dn, -r1)),
+            Polygon(material, Vertex(p11, -n), Vertex(p21, -n), Vertex(p22, -n), Vertex(p12, -n)),
+            Polygon(material, Vertex(p11 + dn, n), Vertex(p12 + dn, n), Vertex(p22 + dn, n), Vertex(p21 + dn, n))
         )
     }
 
@@ -113,7 +108,7 @@ fun prismRing(width1: Number, width2: Number, height: Number, points: List<Vecto
 }
 
 fun sphere(
-    center: Vector = origin, radius: Number = 1.0, slices: Int = 32, stacks: Int = 16,
+    center: Vector = origin, radius: Number = 1.0, slices: Int = 32, stacks: Int = 16, material: Material? = null,
     radiusFunc: ((phi: Double, theta: Double) -> Double)? = null
 ): Csg {
     fun vertex(phi: Double, theta: Double): Vector {
@@ -131,7 +126,7 @@ fun sphere(
                 if (j > 0) vectors.add(vertex((id + 1) / slices, jd / stacks))
                 if (j < stacks - 1) vectors.add(vertex((id + 1) / slices, (jd + 1) / stacks))
                 vectors.add(vertex(id / slices, (jd + 1) / stacks))
-                add(Polygon.ofVectors(vectors))
+                add(Polygon.ofVectors(material, vectors))
             }
         }
     }
@@ -149,7 +144,8 @@ fun ellipseFunc(a: Number, b: Number): (Double) -> Double {
 
 fun cylinder(
     center: Vector = origin, radius: Number = 1.0, height: Number = 1.0,
-    slices: Int = 32, stacks: Int = 16, radiusFunc: ((angle: Double, stack: Double) -> Double)? = null
+    slices: Int = 32, stacks: Int = 16, material: Material? = null,
+    radiusFunc: ((angle: Double, stack: Double) -> Double)? = null
 ): Csg {
     val ray = height.toDouble() * yUnit
     val start = center - .5 * ray
@@ -166,24 +162,25 @@ fun cylinder(
             val id = i.toDouble()
             val t0 = id / slices
             val t1 = (id + 1) / slices
-            add(Polygon.ofVectors(start, point(0.0, t0), point(0.0, t1)))
+            add(Polygon.ofVectors(material, start, point(0.0, t0), point(0.0, t1)))
             for (j in 0 until stacks) {
                 val jd = j.toDouble()
                 val j0 = jd / stacks
                 val j1 = (jd + 1) / stacks
-                add(Polygon.ofVectors(point(j0, t1), point(j0, t0), point(j1, t0), point(j1, t1)))
+                add(Polygon.ofVectors(material, point(j0, t1), point(j0, t0), point(j1, t0), point(j1, t1)))
             }
-            add(Polygon.ofVectors(end, point(1.0, t1), point(1.0, t0)))
+            add(Polygon.ofVectors(material, end, point(1.0, t1), point(1.0, t0)))
         }
     }
 }
 
-fun heightModel(height: List<List<Double>>): Csg {
+fun heightModel(height: List<List<Double>>, material: Material? = null): Csg {
     val xd = height.size - 1
     val yd = height[0].size - 1
     return Csg {
         add(
             Polygon(
+                material,
                 Vertex(v(0, 0, 0), v(0, 0, -1)),
                 Vertex(v(0, yd, 0), v(0, 0, -1)),
                 Vertex(v(xd, yd, 0), v(0, 0, -1)),
@@ -193,6 +190,7 @@ fun heightModel(height: List<List<Double>>): Csg {
         for (x in 0 until xd) {
             add(
                 Polygon(
+                    material,
                     Vertex(v(x, 0, 0), v(0, -1, 0)),
                     Vertex(v(x + 1, 0, 0), v(0, -1, 0)),
                     Vertex(v(x + 1, 0, height[x + 1][0]), v(0, -1, 0)),
@@ -201,6 +199,7 @@ fun heightModel(height: List<List<Double>>): Csg {
             )
             add(
                 Polygon(
+                    material,
                     Vertex(v(x, yd, 0), v(0, 1, 0)),
                     Vertex(v(x, yd, height[x][yd]), v(0, 1, 0)),
                     Vertex(v(x + 1, yd, height[x + 1][yd]), v(0, 1, 0)),
@@ -211,6 +210,7 @@ fun heightModel(height: List<List<Double>>): Csg {
         for (y in 0 until yd) {
             add(
                 Polygon(
+                    material,
                     Vertex(v(0, y, 0), v(-1, 0, 0)),
                     Vertex(v(0, y, height[0][y]), v(-1, 0, 0)),
                     Vertex(v(0, y + 1, height[0][y + 1]), v(-1, 0, 0)),
@@ -219,6 +219,7 @@ fun heightModel(height: List<List<Double>>): Csg {
             )
             add(
                 Polygon(
+                    material,
                     Vertex(v(xd, y, 0), v(1, 0, 0)),
                     Vertex(v(xd, y + 1, 0), v(1, 0, 0)),
                     Vertex(v(xd, y + 1, height[xd][y + 1]), v(1, 0, 0)),
@@ -230,6 +231,7 @@ fun heightModel(height: List<List<Double>>): Csg {
             for (y in 0 until yd) {
                 add(
                     Polygon.ofVectors(
+                        material,
                         v(x, y, height[x][y]),
                         v(x + 1, y, height[x + 1][y]),
                         v(x + 1, y + 1, height[x + 1][y + 1])
@@ -237,6 +239,7 @@ fun heightModel(height: List<List<Double>>): Csg {
                 )
                 add(
                     Polygon.ofVectors(
+                        material,
                         v(x + 1, y + 1, height[x + 1][y + 1]),
                         v(x, y + 1, height[x][y + 1]),
                         v(x, y, height[x][y])

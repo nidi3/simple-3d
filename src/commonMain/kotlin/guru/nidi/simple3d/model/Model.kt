@@ -33,6 +33,7 @@ fun model(actions: Model.() -> Unit) = Model().apply(actions)
 
 class Model {
     internal val csgs = mutableListOf<Csg>()
+    internal val materials = mutableListOf<Material>()
     private var transform = AffineTransform()
 
     fun <T> transformed(a: AffineTransform, block: Model.() -> T): T {
@@ -47,6 +48,9 @@ class Model {
 
     @JsName("add")
     fun add(csg: Csg) = csgs.add(transform.applyTo(csg))
+
+    fun material(name: String, diffuseColor: Color, ambientColor: Color? = null, transparency: Double? = null) =
+        Material(name, diffuseColor, ambientColor, transparency).also { materials.add(it) }
 
     fun mergeVertices() {
         for (csg1 in csgs) {
