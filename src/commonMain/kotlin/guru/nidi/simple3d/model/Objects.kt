@@ -21,7 +21,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
+fun cube(center: Vector = origin, length: Vector = unit) = Csg(
     listOf(
         listOf(listOf(0, 4, 6, 2), listOf(-1, 0, 0)),
         listOf(listOf(1, 3, 7, 5), listOf(+1, 0, 0)),
@@ -32,9 +32,9 @@ fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
     ).map { info ->
         Polygon(info[0].map { i ->
             val pos = Vector(
-                center.x + radius.x * (2 * (i and 1) - 1),
-                center.y + radius.y * (2 * ((i shr 1) and 1) - 1),
-                center.z + radius.z * (2 * ((i shr 2) and 1) - 1)
+                center.x + length.x * ((i and 1) - .5),
+                center.y + length.y * (((i shr 1) and 1) - .5),
+                center.z + length.z * (((i shr 2) and 1) - .5)
             )
             Vertex(pos, Vector(info[1][0].toDouble(), info[1][1].toDouble(), info[1][2].toDouble()))
         })

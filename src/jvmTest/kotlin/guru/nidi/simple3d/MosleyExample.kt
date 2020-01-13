@@ -23,20 +23,20 @@ fun main() {
     model(File("target/mosley.stl")) {
 
         fun menger(r: Double, level: Int): Csg {
-            var c = cube(radius = unit * r)
+            var c = cube(length = 2 * unit * r)
 
             fun step(r: Double, level: Int) {
-                val e = r / 3
+                val e = 2 * r / 3
                 val d = 2 * r / 3
-                c -= cube(center = v(0, 0, 0), radius = unit * e)
-                c -= cube(center = v(d, d, d), radius = unit * e)
-                c -= cube(center = v(-d, d, d), radius = unit * e)
-                c -= cube(center = v(d, -d, d), radius = unit * e)
-                c -= cube(center = v(d, d, -d), radius = unit * e)
-                c -= cube(center = v(-d, -d, d), radius = unit * e)
-                c -= cube(center = v(d, -d, -d), radius = unit * e)
-                c -= cube(center = v(-d, d, -d), radius = unit * e)
-                c -= cube(center = v(-d, -d, -d), radius = unit * e)
+                c -= cube(center = v(0, 0, 0), length = unit * e)
+                c -= cube(center = v(d, d, d), length = unit * e)
+                c -= cube(center = v(-d, d, d), length = unit * e)
+                c -= cube(center = v(d, -d, d), length = unit * e)
+                c -= cube(center = v(d, d, -d), length = unit * e)
+                c -= cube(center = v(-d, -d, d), length = unit * e)
+                c -= cube(center = v(d, -d, -d), length = unit * e)
+                c -= cube(center = v(-d, d, -d), length = unit * e)
+                c -= cube(center = v(-d, -d, -d), length = unit * e)
 //                        addToModel(cube(radius = v(r / 3, r / 3, 1.1 * r)))
 //                        addToModel(cube(radius = v(r / 3, 1.1 * r, r / 3)))
 //                        addToModel(cube(radius = v(1.1 * r, r / 3, r / 3)))

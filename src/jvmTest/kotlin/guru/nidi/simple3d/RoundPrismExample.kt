@@ -78,7 +78,7 @@ fun main() {
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = -prismRing(.4, 22.5, points).translate(0, 0, 20)
         val longFull = prism(25, points).translate(0, 0, -5)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 

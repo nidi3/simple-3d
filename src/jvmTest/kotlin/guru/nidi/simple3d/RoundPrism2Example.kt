@@ -133,10 +133,8 @@ fun main() {
     fun fingerForm(): Csg {
         val base = fingerOpen(3.6, 2.5) //- cube(center = v(25, 4, 1.25), radius = v(10, 8, 1.25))
         val rest = fingerOpen(.4, 17.5).translate(0, 0, 2.5)
-        val top = cube(center = v(25, 4, 1.25), radius = v(4, 8, 1.25)) + cube(
-            center = v(35, 4, 1.25),
-            radius = v(4, 8, 1.25)
-        )
+        val top = cube(center = v(25, 4, 1.25), length = v(8, 16, 2.5)) +
+                cube(center = v(35, 4, 1.25), length = v(8, 16, 2.5))
 //        val nail = nail(.4, 20.0)
 //        val holder = cube(center = origin, radius = v(6, 6, 1.25)).translate(26, 8, 1.25)
         return base + rest// +top// +holder - nailFull(2.5) + nail + base
@@ -187,7 +185,7 @@ fun main() {
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = -prismRing(.4, 22.5, points).translate(0, 0, 20)
         val longFull = prism(25, points).translate(0, 0, -5)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
@@ -201,7 +199,7 @@ fun main() {
         val points = ps.map { .25 * v(it.x - min.x, it.y - min.y, it.z - min.z) }
         val long = prismRing(.4, 22.5, points).translate(-10.5, -13.5, 20)
         val longFull = prism(25, points).translate(-10.5, -13.5, 20)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
@@ -222,7 +220,7 @@ fun main() {
         val longFull = prism(35, points2).translate(d, -f, -5) +
                 prism(35, points2).translate(d, f, -5) +
                 prism(35, points2).translate(-d, 0, -5)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base + long - longFull - m).translate(0, 0, 2.5)
     }
 
@@ -248,7 +246,7 @@ fun main() {
         )
         val long = -prismRing(.4, 22.5, points).translate(-r / 2, -r / 2, 20)
         val longFull = prism(25, points).translate(-r / 2, -r / 2, -5)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
@@ -270,7 +268,7 @@ fun main() {
         ).map { v(it.x * xs, it.y, it.z) }
         val long = -prismRing(.4, 22.5, points).translate(-r * xs / 2, -r, 20)
         val longFull = prism(25, points).translate(-r * xs / 2, -r, -5)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
@@ -293,7 +291,7 @@ fun main() {
         ).map { v(it.x * xs, it.y, it.z) }
         val long = -prismRing(.4, 22.5, points).translate(-r * xs / 2, -r, 20)
         val longFull = prism(25, points).translate(-r * xs / 2, -r, -5)
-        val base = cube(radius = v(12, 25, 2.5))
+        val base = cube(length = v(24, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
@@ -313,7 +311,7 @@ fun main() {
 //        val long = prismRing(.2, 22.5, false, points).translate(0, 0, 20)
 //        val longFull = prism(25.0, true, points).translate(0, 0, -5)
 
-        val base = cube(radius = v(15, 25, 2.5))
+        val base = cube(length = v(30, 50, 5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 

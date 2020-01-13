@@ -26,10 +26,10 @@ import kotlin.math.min
 
 fun main() {
     fun base(r: Double, b: Double, h: Double): Csg {
-        val base = cube(radius = v(r, r, b / 2))
-        val corner = cube(radius = v(b, b, h)) +
-                cube(center = v(b / 2, b * 2, 0), radius = v(b / 2, b, h)) +
-                cube(center = v(b * 2, b / 2, 0), radius = v(b, b / 2, h))
+        val base = cube(length = v(2 * r, 2 * r, b))
+        val corner = cube(length = v(2 * b, 2 * b, 2 * h)) +
+                cube(center = v(b / 2, b * 2, 0), length = v(b, 2 * b, 2 * h)) +
+                cube(center = v(b * 2, b / 2, 0), length = v(2 * b, b, 2 * h))
 
         val e = r - b
         return base + corner.rotateZ(180.deg).translate(e, e, h) +
@@ -42,8 +42,8 @@ fun main() {
         val b2 = 1.0
         val d2 = r - 2.5 * b2
         val d3 = r - .5 * b2
-        val base = cube(radius = v(r, r, b / 2))
-        val inner = cube(radius = v(r - 2 * b2, b2 / 2, b2))
+        val base = cube(length = v(2 * r, 2 * r, b))
+        val inner = cube(length = v(2 * r - 4 * b2, b2, 2 * b2))
         val innerC = cylinder(height = 10 + b / 2, slices = 24) { _, z -> 4.75 - .5 * z }
             .translate(0, 5 - b / 4, 0).rotateX(90.deg)
         val outerC = cylinder(height = 10 + b / 2, slices = 24) { _, z -> 5.75 - .5 * z }
@@ -79,9 +79,9 @@ fun main() {
         val factor = min(1.7 * f / dino.width, 1.7 * h / dino.height)
         val scaleDino = dino.csg.scale(factor, factor, 1)
 
-        val side = cube(radius = v(r - 2 * b, h - b, b / 2))
-        val inner1 = cube(radius = v(b / 2, h - b, b))
-        val inner2 = cube(radius = v(b / 2, r - 4.5 * b, b))
+        val side = cube(length = v(2 * r - 4 * b, 2 * (h - b), b))
+        val inner1 = cube(length = v(b, 2 * (h - b), 2 * b))
+        val inner2 = cube(length = v(b, 2 * (r - 4.5 * b), 2 * b))
         val base = side - scaleDino.translate(-dino.width * factor / 2, -dino.height * factor / 2, b / 2)
         return base + inner1.translate(f, 0, b) +
                 inner1.translate(-f, 0, b) +
