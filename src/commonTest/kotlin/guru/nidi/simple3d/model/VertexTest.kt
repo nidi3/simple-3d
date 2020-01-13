@@ -21,17 +21,17 @@ import kotlin.test.assertEquals
 class VertexTest {
     @Test
     fun init() {
-        val pos = Vector(1.0, 2.0, 3.0)
-        val normal = Vector(4.0, 5.0, 6.0)
+        val pos = v(1, 2, 3)
+        val normal = v(4, 5, 6)
         assertEquals(Vertex(pos, -normal), -Vertex(pos, normal))
     }
 
     @Test
     fun interpolate() {
-        val a = Vertex(Vector(1.0, 2.0, 3.0), Vector(4.0, 5.0, 6.0))
-        val b = Vertex(Vector(3.0, 5.0, 7.0), Vector(6.0, 4.0, 5.0))
+        val a = Vertex(v(1, 2, 3), v(4, 5, 6))
+        val b = Vertex(v(3, 5, 7), v(6, 4, 5))
         assertEquals(a, a.interpolate(b, 0.0))
-        assertEquals(Vertex(Vector(2.0, 3.5, 5.0), Vector(5.0, 4.5, 5.5)), a.interpolate(b, 0.5))
+        assertEquals(Vertex(v(2, 3.5, 5), v(5, 4.5, 5.5)), a.interpolate(b, 0.5))
         assertEquals(b, a.interpolate(b, 1.0))
     }
 }

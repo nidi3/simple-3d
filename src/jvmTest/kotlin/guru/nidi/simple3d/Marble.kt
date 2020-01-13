@@ -23,8 +23,8 @@ import java.lang.Math.PI
 fun main() {
     val smallR = 1.95
     val bigR = 2.1
-    val smallHole = cylinder().scale(smallR, 20, smallR)
-    val bigHole = cylinder().scale(bigR, 20, bigR)
+    val smallHole = cylinder().scale(smallR, 40, smallR)
+    val bigHole = cylinder().scale(bigR, 40, bigR)
     val bigAngluarHole = bigHole - cube().scale(bigR, 20, bigR).translate(0, 0, bigR + .5)
 
     val stud = cube().scale(1.4, 1.4, 1).translate(0, 0, 1) +
@@ -44,7 +44,7 @@ fun main() {
 
     fun axle(len: Double): Csg {
         return cylinder(slices = 128) { angle, _ -> if ((angle) % (PI / 2) < 3 * PI / 8) 1.0 else .5 }
-            .scale(smallR * 1.05, len / 2, smallR * 1.05)
+            .scale(smallR * 1.05, len, smallR * 1.05)
     }
 
     fun profile(len: Int): Csg {
@@ -66,8 +66,8 @@ fun main() {
 
     fun bolt(len: Int): Csg {
         return cube().scale(4, 3, 1) +
-                cylinder().scale(3.3, .5, 3.3).translate(0, 3.5, 0) +
-                cylinder().scale(2.1, 2.5, 2.1).translate(0, 6.5, 0) +
+                cylinder().scale(3.3, 1, 3.3).translate(0, 3.5, 0) +
+                cylinder().scale(2.1, 5, 2.1).translate(0, 6.5, 0) +
                 cube().scale(3.2, .8, 1.3).translate(0, 8.8, 0)
     }
 

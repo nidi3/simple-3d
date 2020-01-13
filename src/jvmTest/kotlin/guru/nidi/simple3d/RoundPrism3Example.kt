@@ -122,7 +122,7 @@ fun main() {
         val r = 20.0
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         return -prismRing(2.0, 2.5, points).translate(0, 0, 2.5) +
-                -prismRing(.2, 20.0, points).translate(0, 0, 20.0)
+                -prismRing(.2, 20, points).translate(0, 0, 20.0)
     }
 
     fun small(): Csg {
@@ -133,14 +133,14 @@ fun main() {
         val r = 10.0
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = -prismRing(.2, 22.5, points).translate(0, 0, 20)
-        val longFull = prism(25.0, points).translate(0, 0, -5)
+        val longFull = prism(25, points).translate(0, 0, -5)
         val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
     fun puller(): Csg {
         return (fingerFull(2.5) - finger(1.0, 2.5)).scale(-1, 1, 1) +
-                cylinder(radius = 5.0).scale(1, 12, 1).rotateX(90.deg).translate(-21, 52, 12)
+                cylinder(radius = 5).scale(1, 24, 1).rotateX(90.deg).translate(-21, 52, 12)
     }
 
     model(File("target/round2.stl")) {

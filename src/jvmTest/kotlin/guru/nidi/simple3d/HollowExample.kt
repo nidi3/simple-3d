@@ -44,8 +44,10 @@ fun main() {
         val d3 = r - .5 * b2
         val base = cube(radius = v(r, r, b / 2))
         val inner = cube(radius = v(r - 2 * b2, b2 / 2, b2))
-        val innerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 4.75 - .5 * z }
-        val outerC = cylinder(slices = 24, start = v(0, 0, -b / 2), end = v(0, 0, 10)) { _, z -> 5.75 - .5 * z }
+        val innerC = cylinder(height = 10 + b / 2, slices = 24) { _, z -> 4.75 - .5 * z }
+            .translate(0, 5 - b / 4, 0).rotateX(90.deg)
+        val outerC = cylinder(height = 10 + b / 2, slices = 24) { _, z -> 5.75 - .5 * z }
+            .translate(0, 5 - b / 4, 0).rotateX(90.deg)
         val cone = base + outerC - innerC
         val innerBorders = inner.translate(0, d2, b2) +
                 inner.translate(0, d3, b2) +

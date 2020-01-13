@@ -23,63 +23,63 @@ import kotlin.test.assertFalse
 class VectorTest {
     @Test
     fun neg() {
-        assertEquals(Vector(-1.0, -2.0, -3.0), -Vector(1.0, 2.0, 3.0))
+        assertEquals(v(-1, -2, -3), -v(1, 2, 3))
     }
 
     @Test
     fun plus() {
-        assertEquals(Vector(6.0, 8.0, 10.0), Vector(1.0, 2.0, 3.0) + Vector(5.0, 6.0, 7.0))
+        assertEquals(v(6, 8, 10), v(1, 2, 3) + v(5, 6, 7))
     }
 
     @Test
     fun minus() {
-        assertEquals(Vector(-4.0, -2.0, 0.0), Vector(1.0, 2.0, 3.0) - Vector(5.0, 4.0, 3.0))
+        assertEquals(v(-4, -2, 0), v(1, 2, 3) - v(5, 4, 3))
     }
 
     @Test
     fun mult() {
-        assertEquals(Vector(2.0, 4.0, 6.0), Vector(1.0, 2.0, 3.0) * 2.0)
+        assertEquals(v(2, 4, 6), v(1, 2, 3) * 2.0)
     }
 
     @Test
     fun div() {
-        assertEquals(Vector(.5, 1.0, 1.5), Vector(1.0, 2.0, 3.0) / 2.0)
+        assertEquals(v(.5, 1, 1.5), v(1, 2, 3) / 2.0)
     }
 
     @Test
     fun dot() {
-        assertEquals(20.0, Vector(1.0, 2.0, 3.0) * Vector(2.0, 3.0, 4.0))
+        assertEquals(20.0, v(1, 2, 3) * v(2, 3, 4))
     }
 
     @Test
     fun cross() {
-        assertEquals(Vector(-1.0, 2.0, -1.0), Vector(1.0, 2.0, 3.0) x Vector(2.0, 3.0, 4.0))
+        assertEquals(v(-1, 2, -1), v(1, 2, 3) x v(2, 3, 4))
     }
 
     @Test
     fun length() {
-        assertEquals(sqrt(4.0 + 9.0 + 16.0), Vector(2.0, 3.0, 4.0).length)
+        assertEquals(sqrt(4.0 + 9 + 16), v(2, 3, 4).length)
     }
 
     @Test
     fun unit() {
-        val len = sqrt(4.0 + 16.0 + 64.0)
-        assertEquals(Vector(2.0 / len, 4.0 / len, 8.0 / len), Vector(2.0, 4.0, 8.0).unit())
+        val len = sqrt(4.0 + 16 + 64)
+        assertEquals(v(2 / len, 4 / len, 8 / len), v(2, 4, 8).unit())
     }
 
     @Test
     fun interpolate() {
-        val v = Vector(3.0, 5.0, 7.0)
-        assertEquals(Vector(2.0, 3.0, 4.0), Vector(2.0, 3.0, 4.0).interpolate(v, 0.0))
-        assertEquals(Vector(2.5, 4.0, 5.5), Vector(2.0, 3.0, 4.0).interpolate(v, 0.5))
-        assertEquals(Vector(3.0, 5.0, 7.0), Vector(2.0, 3.0, 4.0).interpolate(v, 1.0))
+        val v = v(3, 5, 7)
+        assertEquals(v(2, 3, 4), v(2, 3, 4).interpolate(v, 0.0))
+        assertEquals(v(2.5, 4, 5.5), v(2, 3, 4).interpolate(v, 0.5))
+        assertEquals(v(3, 5, 7), v(2, 3, 4).interpolate(v, 1.0))
     }
 
     @Test
     fun inSegment() {
-        val pos = Vector(12.5, 1.9015085966428351, -3.338178405040813)
-        val a = Vector(12.5, 1.9615705608064604, -3.1401806440322546)
-        val b = Vector(12.5, 1.9015085966428351, -3.7500000000000004)
+        val pos = v(12.5, 1.9015085966428351, -3.338178405040813)
+        val a = v(12.5, 1.9615705608064604, -3.1401806440322546)
+        val b = v(12.5, 1.9015085966428351, -3.7500000000000004)
         assertFalse(pos in Segment(a, b))
     }
 }

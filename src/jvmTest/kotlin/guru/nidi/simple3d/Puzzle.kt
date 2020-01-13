@@ -29,15 +29,14 @@ fun main() {
     val rt2 = .1 * len
     val holeScale = v(1.03, 1.03, 1.03)
 
-    val cs = cylinder(slices = 64, radiusFunc = { angle, _ -> ellipseFunc(rs1, rs2)(angle) }).rotateX(90.deg)
-        .scale(1, 1, h / 2)
-    val ct = cylinder(slices = 64, radiusFunc = { angle, _ -> ellipseFunc(rt1, rt2)(angle) }).rotateX(90.deg)
-        .scale(1, 1, h / 2)
-
+    val cs = cylinder(height = 2, slices = 64) { angle, _ -> ellipseFunc(rs1, rs2)(angle) }
+        .rotateX(90.deg).scale(1, 1, h / 2)
+    val ct = cylinder(height = 2, slices = 64) { angle, _ -> ellipseFunc(rt1, rt2)(angle) }
+        .rotateX(90.deg).scale(1, 1, h / 2)
 
     fun round(len: Double, r: Double): Csg {
         val corner = (cube() -
-                cylinder(end = 2.0 * yUnit, radius = 2.0, slices = 64).rotateX(90.deg).translate(-1, -1, 0))
+                cylinder(radius = 2, height = 4, slices = 64).rotateX(90.deg).translate(-1, -1, 0))
             .scale(r, r, h * 2)
         return cube(center = unit).scale(len / 2, len / 2, h / 2) -
                 corner.rotateZ(0.deg).translate(len - r, len - r, 0) -

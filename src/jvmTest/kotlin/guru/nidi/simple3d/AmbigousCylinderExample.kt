@@ -16,10 +16,10 @@
 package guru.nidi.simple3d
 
 import guru.nidi.simple3d.io.model
-import guru.nidi.simple3d.model.Vector
 import guru.nidi.simple3d.model.deg
 import guru.nidi.simple3d.model.heightModel
 import guru.nidi.simple3d.model.prismRing
+import guru.nidi.simple3d.model.v
 import java.io.File
 import kotlin.math.*
 
@@ -34,10 +34,10 @@ fun main() {
 //            Vector(r * sin((a + 0).deg()), r * cos((a + 0).deg()), 0.0)
             val c = cos((a + 0).deg)
             val s = sin((a + 0).deg)
-            Vector(9.0 * sqrt(abs(c)) * sign(c), 9.0 * sqrt(abs(s)) * sign(s), 0.0)
+            v(9.0 * sqrt(abs(c)) * sign(c), 9.0 * sqrt(abs(s)) * sign(s), 0.0)
         }
         val len = 25.0
-        val r = prismRing(1.0, len, points)
+        val r = prismRing(1, len, points)
         val xh = mutableListOf<List<Double>>()
         for (x in 0..20) {
             val yh = mutableListOf<Double>()

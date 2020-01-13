@@ -21,9 +21,9 @@ import kotlin.test.assertEquals
 class PolygonTest {
     @Test
     fun flip() {
-        val a = Vector(1.0, 2.0, 3.0)
-        val b = Vector(1.0, 2.0, 3.0)
-        val c = Vector(1.0, 2.0, 3.0)
+        val a = v(1, 2, 3)
+        val b = v(1, 2, 3)
+        val c = v(1, 2, 3)
         assertEquals(
             Polygon(Vertex(c, -c), Vertex(b, -b), Vertex(a, -a)),
             -Polygon(Vertex(a, a), Vertex(b, b), Vertex(c, c))

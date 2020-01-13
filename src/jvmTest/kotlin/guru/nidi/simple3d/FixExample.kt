@@ -24,7 +24,7 @@ import java.io.File
 
 fun main() {
     model(File("target/fix.stl")) {
-        val base = prism(30.0, v(-2, 0, 0), v(-4, 0, 4), v(4, 0, 4), v(2, 0, 0))
+        val base = prism(30, v(-2, 0, 0), v(-4, 0, 4), v(4, 0, 4), v(2, 0, 0))
 //                val bigConn = conn.scale(1.2 * unit)
         val conn = base.rotateZ(45.deg)
         val bigConn = base.growLinear(v(1, 1, 0)).translate(0, 0, 0).rotateZ(45.deg)

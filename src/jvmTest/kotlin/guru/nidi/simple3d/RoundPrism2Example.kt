@@ -168,13 +168,13 @@ fun main() {
         val c = outline(peace) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.2, .2, 1) }
-        val p = -prismRing(.2, 20.0, c).translate(-20, -20, 0)
+        val p = -prismRing(.2, 20, c).translate(-20, -20, 0)
         val q = -prismRing(3.5, .2, 2.5, c).translate(-20, -20, 0)
 
         val r = 20.0
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val base = -prismRing(1.5, 2.5, points).translate(0, 0, 2.5)
-        val rest = -prismRing(.2, 20.0, points).translate(0, 0, 20.0)
+        val rest = -prismRing(.2, 20, points).translate(0, 0, 20.0)
         return p + q + base + rest
     }
 
@@ -186,7 +186,7 @@ fun main() {
         val r = 10.0
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val long = -prismRing(.2, 22.5, points).translate(0, 0, 20)
-        val longFull = prism(25.0, points).translate(0, 0, -5)
+        val longFull = prism(25, points).translate(0, 0, -5)
         val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
@@ -200,7 +200,7 @@ fun main() {
         val min = ps.fold(v(1000, 1000, 1000)) { a, n -> v(min(a.x, n.x), min(a.y, n.y), min(a.z, n.z)) }
         val points = ps.map { .25 * v(it.x - min.x, it.y - min.y, it.z - min.z) }
         val long = prismRing(.2, 22.5, points).translate(-10.5, -13.5, 20)
-        val longFull = prism(25.0, points).translate(-10.5, -13.5, 20)
+        val longFull = prism(25, points).translate(-10.5, -13.5, 20)
         val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
@@ -219,9 +219,9 @@ fun main() {
         val long = -prismRing(.2, 22.5, points).translate(-d, 0, 20) +
                 -prismRing(.2, 22.5, points).translate(d, f, 20) +
                 -prismRing(.2, 22.5, points).translate(d, -f, 20)
-        val longFull = prism(35.0, points2).translate(d, -f, -5) +
-                prism(35.0, points2).translate(d, f, -5) +
-                prism(35.0, points2).translate(-d, 0, -5)
+        val longFull = prism(35, points2).translate(d, -f, -5) +
+                prism(35, points2).translate(d, f, -5) +
+                prism(35, points2).translate(-d, 0, -5)
         val base = cube(radius = v(12, 25, 2.5))
         return (base + long - longFull - m).translate(0, 0, 2.5)
     }
@@ -247,7 +247,7 @@ fun main() {
             v(r / 3, r / 3, 0)
         )
         val long = -prismRing(.2, 22.5, points).translate(-r / 2, -r / 2, 20)
-        val longFull = prism(25.0, points).translate(-r / 2, -r / 2, -5)
+        val longFull = prism(25, points).translate(-r / 2, -r / 2, -5)
         val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
@@ -269,7 +269,7 @@ fun main() {
             v(0, r, 0)
         ).map { v(it.x * xs, it.y, it.z) }
         val long = -prismRing(.2, 22.5, points).translate(-r * xs / 2, -r, 20)
-        val longFull = prism(25.0, points).translate(-r * xs / 2, -r, -5)
+        val longFull = prism(25, points).translate(-r * xs / 2, -r, -5)
         val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
@@ -292,7 +292,7 @@ fun main() {
             v(r / 3, r, 0)
         ).map { v(it.x * xs, it.y, it.z) }
         val long = -prismRing(.2, 22.5, points).translate(-r * xs / 2, -r, 20)
-        val longFull = prism(25.0, points).translate(-r * xs / 2, -r, -5)
+        val longFull = prism(25, points).translate(-r * xs / 2, -r, -5)
         val base = cube(radius = v(12, 25, 2.5))
         return (base - longFull + long - m).translate(0, 0, 2.5)
     }
@@ -307,7 +307,7 @@ fun main() {
             .simplify(2.0)
             .map { it.toVector().scale(.2, .2, 1) }
         val long = prismRing(.2, 22.5, c).translate(-20, -20, 20)
-        val longFull = prism(25.0, c).translate(-20, -20, 20)
+        val longFull = prism(25, c).translate(-20, -20, 20)
 //        val q = prismRing(3.5, .2, 2.5, false, c).translate(-20, -20, 0)
 
 //        val long = prismRing(.2, 22.5, false, points).translate(0, 0, 20)
@@ -319,7 +319,7 @@ fun main() {
 
     fun puller(): Csg {
         return (fingerFull(2.5) - finger(1.0, 2.5)).scale(-1, 1, 1) +
-                cylinder(radius = 5.0).scale(1, 12, 1).rotateX(90.deg).translate(-21, 52, 12)
+                cylinder(radius = 5).scale(1, 24, 1).rotateX(90.deg).translate(-21, 52, 12)
     }
 
     model(File("target/small-fist.stl")) {

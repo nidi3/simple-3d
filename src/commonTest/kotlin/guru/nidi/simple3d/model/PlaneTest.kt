@@ -25,9 +25,9 @@ class PlaneTest {
     fun splitPolygonSimple() {
         val xyPlane = Plane.fromPoints(origin, xUnit, yUnit)
         val n = zUnit
-        val high = Polygon(Vertex(zUnit, n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, 1.0), n))
-        val low = Polygon(Vertex(-zUnit, n), Vertex(Vector(1.0, 0.0, -1.0), n), Vertex(Vector(0.0, 1.0, -1.0), n))
-        val zero = Polygon(Vertex(origin, n), Vertex(Vector(1.0, 0.0, 0.0), n), Vertex(Vector(0.0, 1.0, 0.0), n))
+        val high = Polygon(Vertex(zUnit, n), Vertex(v(1, 0, 1), n), Vertex(v(0, 1, 1), n))
+        val low = Polygon(Vertex(-zUnit, n), Vertex(v(1, 0, -1), n), Vertex(v(0, 1, -1), n))
+        val zero = Polygon(Vertex(origin, n), Vertex(v(1, 0, 0), n), Vertex(v(0, 1, 0), n))
         val mzero = Polygon(Vertex(origin, n), Vertex(yUnit, n), Vertex(xUnit, n))
         test(xyPlane, high, listOf(listOf(), listOf(), listOf(high), listOf()))
         test(xyPlane, low, listOf(listOf(), listOf(), listOf(), listOf(low)))
@@ -40,17 +40,17 @@ class PlaneTest {
     fun splitPolygon() {
         val xyPlane = Plane.fromPoints(origin, xUnit, yUnit)
         val n = zUnit
-        val p = Polygon(Vertex(zUnit, n), Vertex(Vector(1.0, 0.0, 1.0), n), Vertex(Vector(0.0, 1.0, -1.0), n))
+        val p = Polygon(Vertex(zUnit, n), Vertex(v(1, 0, 1), n), Vertex(v(0, 1, -1), n))
         val up = Polygon(
             Vertex(zUnit, n),
-            Vertex(Vector(1.0, 0.0, 1.0), n),
-            Vertex(Vector(0.5, 0.5, 0.0), n),
-            Vertex(Vector(0.0, 0.5, 0.0), n)
+            Vertex(v(1, 0, 1), n),
+            Vertex(v(0.5, 0.5, 0), n),
+            Vertex(v(0, 0.5, 0), n)
         )
         val down = Polygon(
-            Vertex(Vector(0.5, 0.5, 0.0), n),
-            Vertex(Vector(0.0, 1.0, -1.0), n),
-            Vertex(Vector(0.0, 0.5, 0.0), n)
+            Vertex(v(0.5, 0.5, 0), n),
+            Vertex(v(0, 1, -1), n),
+            Vertex(v(0, 0.5, 0), n)
         )
         test(xyPlane, p, listOf(listOf(), listOf(), listOf(up), listOf(down)))
     }

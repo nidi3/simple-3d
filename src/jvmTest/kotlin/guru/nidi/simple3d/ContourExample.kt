@@ -28,6 +28,6 @@ fun main() {
         val c = outline(img) { rgb -> rgb < 0xffffff }
             .simplify(5.0)
             .map { it.toVector() / 10.0 }
-        add(prism(10.0, c))
+        add(prism(10, c))
     }
 }

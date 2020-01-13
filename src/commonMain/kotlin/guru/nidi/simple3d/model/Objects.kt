@@ -16,7 +16,10 @@
 package guru.nidi.simple3d.model
 
 import kotlin.js.JsName
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
     listOf(
@@ -37,11 +40,11 @@ fun cube(center: Vector = origin, radius: Vector = unit) = Csg(
         })
     })
 
-fun prism(length: Double, vararg points: Vector) = prism(length, points.toList())
+fun prism(height: Number, vararg points: Vector) = prism(height, points.toList())
 
-fun prism(length: Double, points: List<Vector>): Csg {
+fun prism(height: Number, points: List<Vector>): Csg {
     val n = Plane.fromPoints(points).normal
-    val dn = n * length
+    val dn = n * height.toDouble()
 
     fun side(p1: Vector, p2: Vector): Polygon {
         val r = n x (p1 - p2).unit()
@@ -57,36 +60,38 @@ fun prism(length: Double, points: List<Vector>): Csg {
     }
 }
 
-fun prismRing(width: Double, length: Double, vararg points: Vector) =
-    prismRing(width, length, points.toList())
+fun prismRing(width: Number, height: Number, vararg points: Vector) =
+    prismRing(width, height, points.toList())
 
 @JsName("prismRing")
-fun prismRing(width: Double, length: Double, points: List<Vector>) =
-    prismRing(width, width, length, points)
+fun prismRing(width: Number, height: Number, points: List<Vector>) =
+    prismRing(width, width, height, points)
 
-fun prismRing(width1: Double, width2: Double, length: Double, points: List<Vector>): Csg {
+fun prismRing(width1: Number, width2: Number, height: Number, points: List<Vector>): Csg {
     val n = Plane.fromPoints(points).normal
-    val dn = n * length
+    val dn = n * height.toDouble()
+    val w1 = width1.toDouble()
+    val w2 = width2.toDouble()
 
     fun side(p0: Vector, p1: Vector, p2: Vector, p3: Vector): List<Polygon> {
         val r0 = n x (p1 - p0).unit()
         val r1 = n x (p2 - p1).unit()
         val r2 = n x (p3 - p2).unit()
-        val e1 = Plane.fromVertex(Vertex(p1 + r1 * width1, r1))
-        val f1 = Plane.fromVertex(Vertex(p1 - r1 * width2, -r1))
-        val (p11, p12) = if (r0 == r1) Pair(p1 + r1 * width1, p1 - r1 * width2)
+        val e1 = Plane.fromVertex(Vertex(p1 + r1 * w1, r1))
+        val f1 = Plane.fromVertex(Vertex(p1 - r1 * w2, -r1))
+        val (p11, p12) = if (r0 == r1) Pair(p1 + r1 * w1, p1 - r1 * w2)
         else {
-            val e0 = Plane.fromVertex(Vertex(p0 + r0 * width1, r0))
-            val f0 = Plane.fromVertex(Vertex(p0 - r0 * width2, -r0))
+            val e0 = Plane.fromVertex(Vertex(p0 + r0 * w1, r0))
+            val f0 = Plane.fromVertex(Vertex(p0 - r0 * w2, -r0))
             Pair(
                 (Plane.fromVertex(Vertex(p1, n)) and (e0 and e1)).pos,
                 (Plane.fromVertex(Vertex(p1, n)) and (f0 and f1)).pos
             )
         }
-        val (p21, p22) = if (r1 == r2) Pair(p2 + r1 * width1, p2 - r1 * width2)
+        val (p21, p22) = if (r1 == r2) Pair(p2 + r1 * w1, p2 - r1 * w2)
         else {
-            val e2 = Plane.fromVertex(Vertex(p2 + r2 * width1, r2))
-            val f2 = Plane.fromVertex(Vertex(p2 - r2 * width2, -r2))
+            val e2 = Plane.fromVertex(Vertex(p2 + r2 * w1, r2))
+            val f2 = Plane.fromVertex(Vertex(p2 - r2 * w2, -r2))
             Pair(
                 (Plane.fromVertex(Vertex(p2, n)) and (e1 and e2)).pos,
                 (Plane.fromVertex(Vertex(p2, n)) and (f1 and f2)).pos
@@ -108,12 +113,12 @@ fun prismRing(width1: Double, width2: Double, length: Double, points: List<Vecto
 }
 
 fun sphere(
-    center: Vector = origin, radius: Double = 1.0, slices: Int = 32, stacks: Int = 16,
-    radiusFunc: ((Double, Double) -> Double)? = null
+    center: Vector = origin, radius: Number = 1.0, slices: Int = 32, stacks: Int = 16,
+    radiusFunc: ((phi: Double, theta: Double) -> Double)? = null
 ): Csg {
     fun vertex(phi: Double, theta: Double): Vector {
         val dir = Vector.ofSpherical(-1.0, theta * PI, phi * PI * 2)
-        return center + dir * (radiusFunc?.invoke(phi, theta) ?: radius)
+        return center + dir * (radiusFunc?.invoke(phi, theta) ?: radius.toDouble())
     }
 
     return Csg {
@@ -132,28 +137,28 @@ fun sphere(
     }
 }
 
-fun ellipseFunc(min: Double, max: Double): (Double) -> Double {
+fun ellipseFunc(a: Number, b: Number): (Double) -> Double {
+    val al = a.toDouble()
+    val bl = b.toDouble()
     return { angle ->
-        val a = min * sin(angle)
-        val b = max * cos(angle)
-        min * max / (sqrt(a * a + b * b))
+        val n1 = al * cos(angle)
+        val n2 = bl * sin(angle)
+        al * bl / (sqrt(n1 * n1 + n2 * n2))
     }
 }
 
 fun cylinder(
-    start: Vector = -yUnit, end: Vector = yUnit, radius: Double = 1.0,
-    slices: Int = 32, stacks: Int = 16, radiusFunc: ((Double, Double) -> Double)? = null
+    center: Vector = origin, radius: Number = 1.0, height: Number = 1.0,
+    slices: Int = 32, stacks: Int = 16, radiusFunc: ((angle: Double, stack: Double) -> Double)? = null
 ): Csg {
-    val ray = end - start
-    val axisZ = ray.unit()
-    val isY = if (abs(axisZ.y) > 0.5) 1.0 else 0.0
-    val axisX = (Vector(isY, 1.0 - isY, 0.0) x axisZ).unit()
-    val axisY = (axisX x axisZ).unit()
+    val ray = height.toDouble() * yUnit
+    val start = center - .5 * ray
+    val end = center + .5 * ray
 
     fun point(stack: Double, slice: Double): Vector {
         val angle = slice * PI * 2
-        val out = axisX * cos(angle) + axisY * sin(angle)
-        return start + ray * stack + out * (radiusFunc?.invoke(angle, stack) ?: radius)
+        val out = xUnit * cos(angle) + zUnit * sin(angle)
+        return start + ray * stack + out * (radiusFunc?.invoke(angle, stack) ?: radius.toDouble())
     }
 
     return Csg {
