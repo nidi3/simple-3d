@@ -71,20 +71,9 @@ fun main() {
         round(l2, r1).scale(1, 1, 1) - round(l1, r1).translate((l2 - l1) / 2, (l2 - l1) / 2, h / 2)
     }
 
-    model(File("target/p1/piece1.stl")) {
-       add(piece1())
-    }
-    model(File("target/p1/piece2.stl")) {
-        add(piece2())
-    }
-    model(File("target/p1/piece3.stl")) {
-        add(piece3())
-    }
-    model(File("target/p1/piece4.stl")) {
-        add(piece4())
-    }
-    model(File("target/p1/base.stl")) {
-        add(base())
-    }
-
+    model(File("target/p1/piece1.stl"), piece1())
+    model(File("target/p1/piece2.stl"), piece2())
+    model(File("target/p1/piece3.stl"), piece3())
+    model(File("target/p1/piece4.stl"), piece4())
+    model(File("target/p1/base.stl"), base())
 }

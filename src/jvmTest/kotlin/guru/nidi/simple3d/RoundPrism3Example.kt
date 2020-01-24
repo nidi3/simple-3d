@@ -135,14 +135,13 @@ fun main() {
     fun puller() = (fingerFull(2.5) - finger(2.0, 2.5)).scale(-1, 1, 1) +
             cylinder(radius = 5).scale(1, 24, 1).rotateX(90.deg).translate(-21, 52, 12)
 
-    model(File("target/round2.stl")) {
-        add(
+    model(
+        File("target/round2.stl"),
 //            puller(),
 //            handForm(),
-            fingerForm().translate(50, 0, 0)
+        fingerForm().translate(50, 0, 0)
 //            round().translate(35, -25, 0),
 //            small().translate(60, 20, 0)
-        )
-    }
+    )
 
 }

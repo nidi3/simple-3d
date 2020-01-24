@@ -87,13 +87,12 @@ fun main() {
                 cylinder(radius = 5).scale(1, 24, 1).rotateX(90.deg).translate(-21, 52, 12)
     }
 
-    model(File("target/guitar.stl")) {
-        add(
+    model(
+        File("target/guitar.stl"),
 //        puller(),
-            dinoForm()
+        dinoForm()
 //            round().translate(35, -25, 0),
 //            small().translate(60, 20, 0)
-        )
-    }
+    )
 
 }

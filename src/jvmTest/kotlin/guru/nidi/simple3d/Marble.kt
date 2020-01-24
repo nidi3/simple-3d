@@ -65,42 +65,30 @@ fun main() {
             cylinder().scale(2.1, 5, 2.1).translate(0, 6.5, 0) +
             cube().scale(3.2, .8, 1.3).translate(0, 8.8, 0)
 
-    model(File("target/m/base.stl")) {
-        //        add(base(.5))
-        add(base(.5).rotateX(270.deg).translate(20, 0, 0))
-//        add(base(2).translate(20, 0, 0))
-//        splitPolygons()
-    }
+    model(
+        File("target/m/base.stl"),
+//        base(.5),
+        base(.5).rotateX(270.deg).translate(20, 0, 0)
+//        base(2.0).translate(20, 0, 0)
+    )
 
-    model(File("target/m/stud.stl")) {
-        add(
-            cube().scale(7.5, 7.5, 1).translate(0, 0, 1) +
-                    stud.translate(0, 0, 2)
-        )
-//        splitPolygons()
-    }
+    model(
+        File("target/m/stud.stl"),
+        cube().scale(7.5, 7.5, 1).translate(0, 0, 1) + stud.translate(0, 0, 2)
+    )
 
-    model(File("target/m/axle.stl")) {
-        add(cube().scale(5, 5, .5) + axle(15.0).rotateX(90.deg).translate(0, 0, 7.5))
-//        splitPolygons()
-    }
+    model(
+        File("target/m/axle.stl"),
+        cube().scale(5, 5, .5) + axle(15.0).rotateX(90.deg).translate(0, 0, 7.5)
+    )
 
-    model(File("target/m/profile1.stl")) {
-        add(profile(1))
-//        splitPolygons()
-    }
-    model(File("target/m/profile2.stl")) {
-        add(profile(2))
-//        splitPolygons()
-    }
-    model(File("target/m/profile4.stl")) {
-        add(profile(4))
-//        splitPolygons()
-    }
+    model(File("target/m/profile1.stl"), profile(1))
 
-    model(File("target/m/ball.stl")) {
-        add(sphere(radius = 5.5))
-    }
+    model(File("target/m/profile2.stl"), profile(2))
+
+    model(File("target/m/profile4.stl"), profile(4))
+
+    model(File("target/m/ball.stl"), sphere(radius = 5.5))
 
     model(File("target/m/bolt.stl")) {
         add(bolt(1).rotateX(45.deg))
