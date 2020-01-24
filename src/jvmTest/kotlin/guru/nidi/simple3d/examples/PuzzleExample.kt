@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package guru.nidi.simple3d
+package guru.nidi.simple3d.examples
 
 import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
 /**
- * A little puzzle seen here: https://youtu.be/s4EcAQGNn6M
+ * A puzzle seen here: https://youtu.be/s4EcAQGNn6M
  */
 fun main() {
     val h = 3.0

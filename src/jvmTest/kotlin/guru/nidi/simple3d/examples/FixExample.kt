@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package guru.nidi.simple3d
+package guru.nidi.simple3d.examples
 
 import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
