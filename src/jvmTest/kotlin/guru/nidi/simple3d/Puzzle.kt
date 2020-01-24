@@ -19,6 +19,9 @@ import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
+/**
+ * A little puzzle seen here: https://youtu.be/s4EcAQGNn6M
+ */
 fun main() {
     val h = 3.0
     val len = 30.0
@@ -35,45 +38,56 @@ fun main() {
         .rotateX(90.deg).scale(1, 1, h / 2)
 
     fun round(len: Double, r: Double) = csg {
-        val corner = (cube() -
-                cylinder(radius = 2, height = 4, slices = 64).rotateX(90.deg).translate(-1, -1, 0))
+        val corner = (cube().scale(2, 2, 2) -
+                cylinder(height = 4, radius = 2, slices = 64).rotateX(90.deg).translate(-1, -1, 0))
             .scale(r, r, h * 2)
-        cube(center = unit).scale(len / 2, len / 2, h / 2) -
-                corner.rotateZ(0.deg).translate(len - r, len - r, 0) -
-                corner.rotateZ(180.deg).translate(r, r, 0) -
-                corner.rotateZ(90.deg).translate(len - r, r, 0) -
-                corner.rotateZ(270.deg).translate(r, len - r, 0)
+        val d = len / 2 - r
+        cube().scale(len, len, h) -
+                corner.rotateZ(0.deg).translate(d, d, 0) -
+                corner.rotateZ(180.deg).translate(-d, -d, 0) -
+                corner.rotateZ(90.deg).translate(d, -d, 0) -
+                corner.rotateZ(270.deg).translate(-d, d, 0)
     }
 
     fun round() = round(len, r1)
 
     fun piece1() = round() +
-            cs.translate(0, len / 2, h / 2) -
-            cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2) -
-            cs.scale(holeScale).translate(len, len / 2, h / 2)
+            cs.translate(-len / 2, 0, 0) -
+            cs.scale(holeScale).rotateZ(90.deg).translate(0, len / 2, 0) -
+            cs.scale(holeScale).translate(len / 2, 0, 0)
 
     fun piece2() = round() +
-            cs.translate(0, len / 2, h / 2) -
-            cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2) -
-            ct.scale(holeScale).rotateZ(90.deg).translate(len, len / 2, h / 2)
+            cs.translate(-len / 2, 0, 0) -
+            cs.scale(holeScale).rotateZ(90.deg).translate(0, len / 2, 0) -
+            ct.scale(holeScale).rotateZ(90.deg).translate(len / 2, 0, 0)
 
     fun piece3() = round() +
-            ct.rotateZ(90.deg).translate(0, len / 2, h / 2) -
-            cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2)
+            ct.rotateZ(90.deg).translate(-len / 2, 0, 0) -
+            cs.scale(holeScale).rotateZ(90.deg).translate(0, len / 2, 0)
 
     fun piece4() = round() +
-            ct.rotateZ(90.deg).translate(0, len / 2, h / 2) +
-            ct.translate(len / 2, 0, h / 2)
+            ct.rotateZ(90.deg).translate(-len / 2, 0, 0) +
+            ct.translate(0, -len / 2, 0)
 
     fun base() = csg {
         val l1 = 3.02 * len
         val l2 = 3.2 * len
-        round(l2, r1).scale(1, 1, 1) - round(l1, r1).translate((l2 - l1) / 2, (l2 - l1) / 2, h / 2)
+        round(l2, r1) - round(l1, r1).translate(0, 0, h / 2)
     }
 
-    model(File("target/p1/piece1.stl"), piece1())
-    model(File("target/p1/piece2.stl"), piece2())
-    model(File("target/p1/piece3.stl"), piece3())
-    model(File("target/p1/piece4.stl"), piece4())
-    model(File("target/p1/base.stl"), base())
+    val a = 1.3 * len
+    model(
+        File("target/puzzle-pieces.stl"),
+        piece1().translate(0, 0, 0),
+        piece1().translate(a, 0, 0),
+        piece2().translate(2 * a, 0, 0),
+        piece2().translate(0, a, 0),
+        piece2().translate(a, a, 0),
+        piece2().translate(2 * a, a, 0),
+        piece3().translate(0, 2 * a, 0),
+        piece3().translate(a, 2 * a, 0),
+        piece4().translate(2 * a, 2 * a, 0)
+    )
+
+    model(File("target/puzzle-base.stl"), base())
 }

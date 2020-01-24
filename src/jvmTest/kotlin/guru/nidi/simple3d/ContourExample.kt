@@ -22,8 +22,11 @@ import guru.nidi.simple3d.vectorize.outline
 import guru.nidi.simple3d.vectorize.simplify
 import java.io.File
 
+/**
+ * A prism created from an image.
+ */
 fun main() {
-    model(File("target/dino.stl")) {
+    model(File("target/brontosaur.stl")) {
         val img = Image.fromClasspath("brontosaurus-pattern.gif")
         val c = outline(img) { rgb -> rgb < 0xffffff }
             .simplify(5.0)

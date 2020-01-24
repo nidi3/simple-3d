@@ -19,6 +19,9 @@ import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
+/**
+ * Show the different CSG operators
+ */
 fun main() {
     model(File("target/csg.obj")) {
         val red = material("red", Color(1.0, 0.0, 0.0))
@@ -26,13 +29,13 @@ fun main() {
         val blue = material("blue", Color(0.0, 0.0, 1.0))
 
         val cy = cylinder(height = 2)
-        val r = (cylinder().scale(3, 2, 3) - cylinder().scale(2, 2, 2))
+        val ring = (cylinder().scale(3, 2, 3) - cylinder().scale(2, 2, 2))
             .material(blue).rotateX(90.deg).translate(2, 2, 0)
         val s = sphere(center = v(0, 8, 0), radius = 2, material = red)
         val c = cube(center = unit, length = v(4, 6, 10), material = green)
         val c2 = cube(center = v(3, 4, 2), length = v(6, 8, 4))
 
-        add(cy.translate(0, 0, 10), r, s, c, c2, (c2 + c + s).translate(10, 0, 0))
+        add(cy.translate(0, 0, 10), ring, s, c, c2, (c2 + c + s).translate(10, 0, 0))
 
         fun ops(a: Csg, b: Csg) = add(
             (a * b).translate(20, 0, 0),
@@ -47,7 +50,7 @@ fun main() {
         }
 
         transformed(translate(0, 25, 0)) {
-            ops(c, r)
+            ops(c, ring)
         }
     }
 }

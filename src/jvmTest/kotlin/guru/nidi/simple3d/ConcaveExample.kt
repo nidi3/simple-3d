@@ -20,6 +20,9 @@ import guru.nidi.simple3d.model.prism
 import guru.nidi.simple3d.model.v
 import java.io.File
 
+/**
+ * Just a concave object.
+ */
 fun main() {
     model(File("target/concave.stl")) {
         val vs = listOf(v(0, 0, 0), v(1, 1, 0), v(0, 2, 0), v(3, 2, 0), v(2, 1, 0), v(3, 0, 0))

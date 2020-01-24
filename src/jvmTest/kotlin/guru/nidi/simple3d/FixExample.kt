@@ -19,22 +19,29 @@ import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
 import java.io.File
 
+/**
+ * A little puzzle of 2 pieces.
+ */
 fun main() {
-    model(File("target/fix.stl")) {
+    model(File("target/fix.obj")) {
         val base = prism(30, listOf(v(-2, 0, 0), v(-4, 0, 4), v(4, 0, 4), v(2, 0, 0)))
-//                val bigConn = conn.scale(1.2 * unit)
         val conn = base.rotateZ(45.deg)
-        val bigConn = base.growLinear(v(1, 1, 0)).translate(0, 0, 0).rotateZ(45.deg)
+        val bigConn = base.growLinear(v(1, 1, 0)).rotateZ(45.deg)
 
-//                add(conn)
-//                add(bigConn)
-        val neg = cube(v(30, 10, 0), v(10, 10, 5)) - bigConn.translate(15, 5, -5) - bigConn.translate(25, -5, -5)
+        val partA = cube(v(0, 0, 3), v(20, 20, 6)) +
+                (conn.translate(-15, -5, 6) and cube(length = 20 * unit)) +
+                (conn.translate(-5, -15, 6) and cube(length = 20 * unit))
+
+        val partB = cube(v(30, 10, 0), v(20, 20, 10)) -
+                bigConn.translate(15, 5, -5) -
+                bigConn.translate(25, -5, -5)
+
+        val green = material("green", Color(0.0, 1.0, 0.0))
+        val red = material("red", Color(1.0, 0.0, 0.0))
 
         add(
-            cube(v(0, 0, 3), v(10, 10, 3)),
-            conn.translate(-15, -5, 6) and cube(length = 20 * unit),
-            conn.translate(-5, -15, 6) and cube(length = 20 * unit),
-            neg.rotateX(180.deg).translate(0, 0, 5)
+            partA.material(green),
+            partB.material(red).rotateX(180.deg).translate(0, 0, 5)
         )
     }
 }

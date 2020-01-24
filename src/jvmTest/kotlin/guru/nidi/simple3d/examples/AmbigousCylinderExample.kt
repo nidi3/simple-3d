@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package guru.nidi.simple3d
+package guru.nidi.simple3d.examples
 
 import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.deg
@@ -23,15 +23,12 @@ import guru.nidi.simple3d.model.v
 import java.io.File
 import kotlin.math.*
 
+/**
+ * A cylinder that looks round or quadratic, depending on the view angle
+ */
 fun main() {
     model(File("target/ambCylinder.stl")) {
-        //        val c = cylinder() { angle, _ -> 1 / cos(PI / 4 - angle % (PI / 2)) }
-//        val c2 = cylinder() { angle, _ -> 1 / (.5 + .5 * cos(PI / 4 - angle % (PI / 2))) }
-//            add(c)
-//            add(c2.translate(2, 0, 0))
         val points = (0 until 360 step 5).map { a ->
-            //            val r = 9.0 / (.5 + .5 * cos((45 - a % 90).deg()))
-//            Vector(r * sin((a + 0).deg()), r * cos((a + 0).deg()), 0.0)
             val c = cos((a + 0).deg)
             val s = sin((a + 0).deg)
             v(9.0 * sqrt(abs(c)) * sign(c), 9.0 * sqrt(abs(s)) * sign(s), 0.0)
@@ -47,10 +44,6 @@ fun main() {
             xh.add(yh)
         }
         val h = heightModel(xh).translate(-10, -10, -len).rotateX(180.deg)
-        add(
-            (r - h).rotateZ(45.deg).scale(1.5, 1.5, 1)
-//            (r - h).scale(1.2, 1.2, 1),
-//            h
-        )
+        add((r - h).rotateZ(45.deg).scale(1.5, 1.5, 1))
     }
 }

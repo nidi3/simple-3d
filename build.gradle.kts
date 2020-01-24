@@ -10,7 +10,23 @@ plugins {
 
 group = "guru.nidi.simple-3d"
 version = "0.0.2-SNAPSHOT"
+
 fun isSnapshot() = version.toString().endsWith("SNAPSHOT")
+
+val dokka by tasks.getting(DokkaTask::class) {
+    outputDirectory = "$buildDir/dokka"
+    outputFormat = "html"
+
+    multiplatform {
+        val jvm by creating {}
+    }
+}
+
+val dokkaJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    archiveClassifier.set("javadoc")
+    from(dokka)
+}
 
 kotlin {
     jvm {
@@ -75,21 +91,6 @@ kotlin {
             }
         }
     }
-}
-
-val dokka by tasks.getting(DokkaTask::class) {
-    outputDirectory = "$buildDir/dokka"
-    outputFormat = "html"
-
-    multiplatform {
-        val jvm by creating {}
-    }
-}
-
-val dokkaJar by tasks.creating(Jar::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    archiveClassifier.set("javadoc")
-    from(dokka)
 }
 
 repositories {
