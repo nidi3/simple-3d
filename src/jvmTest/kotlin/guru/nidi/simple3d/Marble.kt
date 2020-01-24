@@ -32,22 +32,18 @@ fun main() {
                     smallHole.translate(0, 0, 2.1) *
                     smallHole.rotateZ(90.deg).translate(0, 0, 2.1))
 
-    fun base(len: Double): Csg {
-        return cube().scale(7.5, 7.5 * len, 7.5).translate(0, 0, 0) -
-                bigHole.translate(0, 0, 5.5) -
-                bigHole.translate(0, 0, -5.5) -
-                bigHole.translate(5.5, 0, 0) -
-                bigHole.translate(-5.5, 0, 0) -
-                bigHole.rotateZ(90.deg).translate(0, 7.5 * len - 2, 0) +
-                stud.rotateX(90.deg).translate(0, -7.5 * len, 0)
-    }
+    fun base(len: Double) = cube().scale(7.5, 7.5 * len, 7.5).translate(0, 0, 0) -
+            bigHole.translate(0, 0, 5.5) -
+            bigHole.translate(0, 0, -5.5) -
+            bigHole.translate(5.5, 0, 0) -
+            bigHole.translate(-5.5, 0, 0) -
+            bigHole.rotateZ(90.deg).translate(0, 7.5 * len - 2, 0) +
+            stud.rotateX(90.deg).translate(0, -7.5 * len, 0)
 
-    fun axle(len: Double): Csg {
-        return cylinder(slices = 128) { angle, _ -> if ((angle) % (PI / 2) < 3 * PI / 8) 1.0 else .5 }
-            .scale(smallR * 1.05, len, smallR * 1.05)
-    }
+    fun axle(len: Double) = cylinder(slices = 128) { angle, _ -> if ((angle) % (PI / 2) < 3 * PI / 8) 1.0 else .5 }
+        .scale(smallR * 1.05, len, smallR * 1.05)
 
-    fun profile(len: Int): Csg {
+    fun profile(len: Int) = csg {
         val hole = bigHole + cube().scale(1.6, 10, 3.4)
         var base = cube().scale(7.5, 7.5 * len, 1).translate(0, 0, 1) +
                 cube().scale(7.5, 7.5 * len, 1).rotateY(90.deg).translate(4.5, 0, 7.5) +
@@ -61,15 +57,13 @@ fun main() {
             base -= hole.rotateX(90.deg).translate(0, y, 0)
             base -= hole.rotateZ(90.deg).rotateX(90.deg).translate(0, y, 7.5)
         }
-        return base
+        base
     }
 
-    fun bolt(len: Int): Csg {
-        return cube().scale(4, 3, 1) +
-                cylinder().scale(3.3, 1, 3.3).translate(0, 3.5, 0) +
-                cylinder().scale(2.1, 5, 2.1).translate(0, 6.5, 0) +
-                cube().scale(3.2, .8, 1.3).translate(0, 8.8, 0)
-    }
+    fun bolt(len: Int) = cube().scale(4, 3, 1) +
+            cylinder().scale(3.3, 1, 3.3).translate(0, 3.5, 0) +
+            cylinder().scale(2.1, 5, 2.1).translate(0, 6.5, 0) +
+            cube().scale(3.2, .8, 1.3).translate(0, 8.8, 0)
 
     model(File("target/m/base.stl")) {
         //        add(base(.5))

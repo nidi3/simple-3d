@@ -60,84 +60,77 @@ fun main() {
             .map { it.toVector().scale(.15, .15, 1) }
     }
 
-    fun hand(w: Double, h: Double): Csg {
+    fun hand(w: Double, h: Double) = csg {
         val img = Image.fromClasspath("middle.jpg")
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prismRing(w, h, c)
-        return dino.translate(0, 0, h)
+        prismRing(w, h, c).translate(0, 0, h)
     }
 
-    fun peaceForm(w: Double, h: Double, img: Image): Csg {
+    fun peaceForm(w: Double, h: Double, img: Image) = csg {
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prismRing(w, h, c)
-        return dino.translate(0, 0, h)
+        prismRing(w, h, c).translate(0, 0, h)
     }
 
-    fun finger(w: Double, h: Double): Csg {
+    fun finger(w: Double, h: Double) = csg {
         val img = Image.fromClasspath("middleOnly.png")
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prismRing(w, h, c)
-        return dino.translate(0, 0, h)
+        prismRing(w, h, c).translate(0, 0, h)
     }
 
-    fun fingerOpen(w: Double, h: Double): Csg {
+    fun fingerOpen(w: Double, h: Double) = csg {
         val img = Image.fromClasspath("middleOpen2.png")
         val c = outline(img) { isBlack(it) }
             .simplify(1.5)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prismRing(w, h, c)
-        return dino.translate(0, 0, h)
+        prismRing(w, h, c).translate(0, 0, h)
     }
 
-    fun nail(w: Double, h: Double): Csg {
+    fun nail(w: Double, h: Double) = csg {
         val img = Image.fromClasspath("nail.png")
         asBlackAndWhite(img.img)
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prismRing(w, h, c)
-        return dino.translate(0, 0, h)
+        prismRing(w, h, c).translate(0, 0, h)
     }
 
-    fun nailFull(h: Double): Csg {
+    fun nailFull(h: Double) = csg {
         val img = Image.fromClasspath("nail.png")
         asBlackAndWhite(img.img)
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prism(h, c)
-        return dino.translate(0, 0, h)
+        prism(h, c).translate(0, 0, h)
     }
 
-    fun fingerFull(h: Double): Csg {
+    fun fingerFull(h: Double) = csg {
         val img = Image.fromClasspath("middleOnly.png")
         val c = outline(img) { isBlack(it) }
             .simplify(2.0)
             .map { it.toVector().scale(.15, .15, 1) }
-        val dino = prism(h, c)
-        return dino.translate(0, 0, h)
+        prism(h, c).translate(0, 0, h)
     }
 
-    fun handForm(): Csg {
+    fun handForm() = csg {
         val base = hand(2.0, 2.5)
         val rest = hand(.2, 20.0)
-        return base + rest
+        base + rest
     }
 
-    fun fingerForm(): Csg {
+    fun fingerForm() = csg {
         val base = fingerOpen(3.6, 2.5) //- cube(center = v(25, 4, 1.25), radius = v(10, 8, 1.25))
         val rest = fingerOpen(.4, 17.5).translate(0, 0, 2.5)
         val top = cube(center = v(25, 4, 1.25), length = v(8, 16, 2.5)) +
                 cube(center = v(35, 4, 1.25), length = v(8, 16, 2.5))
 //        val nail = nail(.4, 20.0)
 //        val holder = cube(center = origin, radius = v(6, 6, 1.25)).translate(26, 8, 1.25)
-        return base + rest// +top// +holder - nailFull(2.5) + nail + base
+        base + rest// +top// +holder - nailFull(2.5) + nail + base
     }
 
     fun peace(): Image {
@@ -161,7 +154,7 @@ fun main() {
         return Image(img)
     }
 
-    fun round(): Csg {
+    fun round() = csg {
         val peace = peace()
         val c = outline(peace) { isBlack(it) }
             .simplify(2.0)
@@ -173,10 +166,10 @@ fun main() {
         val points = (0 until 360 step 9).map { v(r * cos(it.deg), r * sin(it.deg), 0) }
         val base = -prismRing(3, 2.5, points).translate(0, 0, 2.5)
         val rest = -prismRing(.4, 20, points).translate(0, 0, 20.0)
-        return p + q + base + rest
+        p + q + base + rest
     }
 
-    fun small(): Csg {
+    fun small() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -186,10 +179,10 @@ fun main() {
         val long = -prismRing(.4, 22.5, points).translate(0, 0, 20)
         val longFull = prism(25, points).translate(0, 0, -5)
         val base = cube(length = v(24, 50, 5))
-        return (base - longFull + long - m).translate(0, 0, 2.5)
+        (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
-    fun smallFist(): Csg {
+    fun smallFist() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -200,10 +193,10 @@ fun main() {
         val long = prismRing(.4, 22.5, points).translate(-10.5, -13.5, 20)
         val longFull = prism(25, points).translate(-10.5, -13.5, 20)
         val base = cube(length = v(24, 50, 5))
-        return (base - longFull + long - m).translate(0, 0, 2.5)
+        (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
-    fun smallFlower(): Csg {
+    fun smallFlower() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -221,10 +214,10 @@ fun main() {
                 prism(35, points2).translate(d, f, -5) +
                 prism(35, points2).translate(-d, 0, -5)
         val base = cube(length = v(24, 50, 5))
-        return (base + long - longFull - m).translate(0, 0, 2.5)
+        (base + long - longFull - m).translate(0, 0, 2.5)
     }
 
-    fun smallCross(): Csg {
+    fun smallCross() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -247,10 +240,10 @@ fun main() {
         val long = -prismRing(.4, 22.5, points).translate(-r / 2, -r / 2, 20)
         val longFull = prism(25, points).translate(-r / 2, -r / 2, -5)
         val base = cube(length = v(24, 50, 5))
-        return (base - longFull + long - m).translate(0, 0, 2.5)
+        (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
-    fun smallFlash(): Csg {
+    fun smallFlash() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -269,10 +262,10 @@ fun main() {
         val long = -prismRing(.4, 22.5, points).translate(-r * xs / 2, -r, 20)
         val longFull = prism(25, points).translate(-r * xs / 2, -r, -5)
         val base = cube(length = v(24, 50, 5))
-        return (base - longFull + long - m).translate(0, 0, 2.5)
+        (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
-    fun smallLambda(): Csg {
+    fun smallLambda() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -292,11 +285,11 @@ fun main() {
         val long = -prismRing(.4, 22.5, points).translate(-r * xs / 2, -r, 20)
         val longFull = prism(25, points).translate(-r * xs / 2, -r, -5)
         val base = cube(length = v(24, 50, 5))
-        return (base - longFull + long - m).translate(0, 0, 2.5)
+        (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
 
-    fun smallPeace(): Csg {
+    fun smallPeace() = csg {
         val r2 = 20.0
         val p2 = (0 until 360 step 9).map { v(r2 * cos(it.deg), r2 * sin(it.deg), 0) }
         val m = -prismRing(4.2, 2.5, p2).translate(0, 0, 2.5)
@@ -312,21 +305,21 @@ fun main() {
 //        val longFull = prism(25.0, true, points).translate(0, 0, -5)
 
         val base = cube(length = v(30, 50, 5))
-        return (base - longFull + long - m).translate(0, 0, 2.5)
+        (base - longFull + long - m).translate(0, 0, 2.5)
     }
 
-    fun puller(): Csg {
-        return (fingerFull(2.5) - finger(2.0, 2.5)).scale(-1, 1, 1) +
-                cylinder(radius = 5).scale(1, 24, 1).rotateX(90.deg).translate(-21, 52, 12)
-    }
+    fun puller() = (fingerFull(2.5) - finger(2.0, 2.5)).scale(-1, 1, 1) +
+            cylinder(radius = 5).scale(1, 24, 1).rotateX(90.deg).translate(-21, 52, 12)
 
     model(File("target/small-fist.stl")) {
-        //        add(puller())
-//        add(handForm())
-//        add(fingerForm().translate(50, 0, 0))
-//        asBlackAndWhite(peace())
-//        add(smallFlower().translate(60, 20, 0))
-        add(smallFist())
+//        asBlackAndWhite(peace().img)
+        add(
+//            puller(),
+//            handForm(),
+//            fingerForm().translate(50, 0, 0),
+//            smallFlower().translate(60, 20, 0),
+            smallFist()
+        )
     }
 
 }

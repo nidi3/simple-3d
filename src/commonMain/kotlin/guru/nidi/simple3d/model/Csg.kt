@@ -32,6 +32,8 @@ private class PolygonList(val list: MutableList<Polygon>) : PolygonSink {
     }
 }
 
+fun csg(producer: () -> Csg) = producer()
+
 class Csg internal constructor(val polygons: List<Polygon>, n: Node?) {
     private constructor(node: Node) : this(node.allPolygons(), node)
     constructor(polygons: List<Polygon>) : this(polygons, null)

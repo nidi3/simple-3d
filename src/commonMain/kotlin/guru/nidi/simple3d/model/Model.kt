@@ -47,7 +47,11 @@ class Model {
     }
 
     @JsName("add")
-    fun add(csg: Csg) = csgs.add(transform.applyTo(csg))
+    fun add(csg: Csg) = transform.applyTo(csg).also { csgs.add(it) }
+
+    fun add(vararg csgs: Csg) = csgs.forEach { add(it) }
+
+    fun add(model: Model) = model.csgs.forEach { add(it) }
 
     fun material(name: String, diffuseColor: Color, ambientColor: Color? = null, transparency: Double? = null) =
         Material(name, diffuseColor, ambientColor, transparency).also { materials.add(it) }

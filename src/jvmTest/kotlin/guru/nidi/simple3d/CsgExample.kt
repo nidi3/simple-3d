@@ -31,19 +31,14 @@ fun main() {
         val s = sphere(center = v(0, 8, 0), radius = 2, material = red)
         val c = cube(center = unit, length = v(4, 6, 10), material = green)
         val c2 = cube(center = v(3, 4, 2), length = v(6, 8, 4))
-        add(cy.translate(0, 0, 10))
-        add(r)
-        add(s)
-        add(c)
-        add(c2)
 
-        add((c2 + c + s).translate(10, 0, 0))
+        add(cy.translate(0, 0, 10), r, s, c, c2, (c2 + c + s).translate(10, 0, 0))
 
-        fun ops(a: Csg, b: Csg) {
-            add((a * b).translate(20, 0, 0))
-            add((a - b).translate(30, 0, 0))
-            add((b - a).translate(40, 0, 0))
-        }
+        fun ops(a: Csg, b: Csg) = add(
+            (a * b).translate(20, 0, 0),
+            (a - b).translate(30, 0, 0),
+            (b - a).translate(40, 0, 0)
+        )
 
         ops(c2, c)
 

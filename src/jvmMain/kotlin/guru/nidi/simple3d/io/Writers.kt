@@ -5,7 +5,9 @@ import java.io.File
 
 fun model(file: File, actions: Model.() -> Unit) {
     val model = Model().also(actions)
-    when (val format = file.name.substring(file.name.lastIndexOf('.'))) {
+    val dot = file.name.lastIndexOf('.')
+    if (dot < 0) throw IllegalArgumentException("Filename must have an extension to determine the file type")
+    when (val format = file.name.substring(dot)) {
         ".stl" -> model.writeBinaryStl(file)
         ".obj" -> model.writeObj(file)
         ".ply" -> model.writePly(file)

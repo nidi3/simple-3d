@@ -34,53 +34,45 @@ fun main() {
     val ct = cylinder(height = 2, slices = 64) { angle, _ -> ellipseFunc(rt1, rt2)(angle) }
         .rotateX(90.deg).scale(1, 1, h / 2)
 
-    fun round(len: Double, r: Double): Csg {
+    fun round(len: Double, r: Double) = csg {
         val corner = (cube() -
                 cylinder(radius = 2, height = 4, slices = 64).rotateX(90.deg).translate(-1, -1, 0))
             .scale(r, r, h * 2)
-        return cube(center = unit).scale(len / 2, len / 2, h / 2) -
+        cube(center = unit).scale(len / 2, len / 2, h / 2) -
                 corner.rotateZ(0.deg).translate(len - r, len - r, 0) -
                 corner.rotateZ(180.deg).translate(r, r, 0) -
                 corner.rotateZ(90.deg).translate(len - r, r, 0) -
                 corner.rotateZ(270.deg).translate(r, len - r, 0)
     }
 
-    fun round(): Csg = round(len, r1)
+    fun round() = round(len, r1)
 
-    fun piece1(): Csg {
-        return round() +
-                cs.translate(0, len / 2, h / 2) -
-                cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2) -
-                cs.scale(holeScale).translate(len, len / 2, h / 2)
-    }
+    fun piece1() = round() +
+            cs.translate(0, len / 2, h / 2) -
+            cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2) -
+            cs.scale(holeScale).translate(len, len / 2, h / 2)
 
-    fun piece2(): Csg {
-        return round() +
-                cs.translate(0, len / 2, h / 2) -
-                cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2) -
-                ct.scale(holeScale).rotateZ(90.deg).translate(len, len / 2, h / 2)
-    }
+    fun piece2() = round() +
+            cs.translate(0, len / 2, h / 2) -
+            cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2) -
+            ct.scale(holeScale).rotateZ(90.deg).translate(len, len / 2, h / 2)
 
-    fun piece3(): Csg {
-        return round() +
-                ct.rotateZ(90.deg).translate(0, len / 2, h / 2) -
-                cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2)
-    }
+    fun piece3() = round() +
+            ct.rotateZ(90.deg).translate(0, len / 2, h / 2) -
+            cs.scale(holeScale).rotateZ(90.deg).translate(len / 2, len, h / 2)
 
-    fun piece4(): Csg {
-        return round() +
-                ct.rotateZ(90.deg).translate(0, len / 2, h / 2) +
-                ct.translate(len / 2, 0, h / 2)
-    }
+    fun piece4() = round() +
+            ct.rotateZ(90.deg).translate(0, len / 2, h / 2) +
+            ct.translate(len / 2, 0, h / 2)
 
-    fun base(): Csg {
+    fun base() = csg {
         val l1 = 3.02 * len
         val l2 = 3.2 * len
-        return round(l2, r1).scale(1, 1, 1) - round(l1, r1).translate((l2 - l1) / 2, (l2 - l1) / 2, h / 2)
+        round(l2, r1).scale(1, 1, 1) - round(l1, r1).translate((l2 - l1) / 2, (l2 - l1) / 2, h / 2)
     }
 
     model(File("target/p1/piece1.stl")) {
-        add(piece1())
+       add(piece1())
     }
     model(File("target/p1/piece2.stl")) {
         add(piece2())

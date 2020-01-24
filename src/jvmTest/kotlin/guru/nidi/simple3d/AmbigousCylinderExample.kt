@@ -47,8 +47,10 @@ fun main() {
             xh.add(yh)
         }
         val h = heightModel(xh).translate(-10, -10, -len).rotateX(180.deg)
-        add((r - h).rotateZ(45.deg).scale(1.5, 1.5, 1))
-//        add((r - h).scale(1.2, 1.2, 1))
-//        add(h)
+        add(
+            (r - h).rotateZ(45.deg).scale(1.5, 1.5, 1)
+//            (r - h).scale(1.2, 1.2, 1),
+//            h
+        )
     }
 }

@@ -51,27 +51,12 @@ fun main() {
 
         fun mosely(level: Int) {
             if (level == 0) {
-                add(ppo)
-                add(mmo)
-                add(pmo)
-                add(mpo)
-
-                add(pop)
-                add(mom)
-                add(mop)
-                add(pom)
-
-                add(opp)
-                add(omm)
-                add(omp)
-                add(opm)
-
-                add(poo)
-                add(opo)
-                add(oop)
-                add(moo)
-                add(omo)
-                add(oom)
+                add(
+                    ppo, mmo, pmo, mpo,
+                    pop, mom, mop, pom,
+                    opp, omm, omp, opm,
+                    poo, opo, oop, moo, omo, oom
+                )
             } else {
                 transformed(scale(unit / 3.0)) {
                     transformed(translate(6, 6, 0)) { mosely(level - 1) }
@@ -102,30 +87,13 @@ fun main() {
 
         fun menger(level: Int) {
             if (level == 0) {
-                add(ppo)
-                add(mmo)
-                add(pmo)
-                add(mpo)
-
-                add(pop)
-                add(mom)
-                add(mop)
-                add(pom)
-
-                add(opp)
-                add(omm)
-                add(omp)
-                add(opm)
-
-                add(ppp)
-                add(mmm)
-
-                add(mpp)
-                add(pmp)
-                add(ppm)
-                add(pmm)
-                add(mpm)
-                add(mmp)
+                add(
+                    ppo, mmo, pmo, mpo,
+                    pop, mom, mop, pom,
+                    opp, omm, omp, opm,
+                    ppp, mmm,
+                    mpp, pmp, ppm, pmm, mpm, mmp
+                )
             } else {
                 transformed(scale(unit / 3.0)) {
                     transformed(translate(6, 6, 0)) { menger(level - 1) }

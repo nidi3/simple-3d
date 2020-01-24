@@ -88,10 +88,12 @@ fun main() {
     }
 
     model(File("target/guitar.stl")) {
-        //        add(puller())
-        add(dinoForm())
-//        add(round().translate(35, -25, 0))
-//        add(small().translate(60, 20, 0))
+        add(
+//        puller(),
+            dinoForm()
+//            round().translate(35, -25, 0),
+//            small().translate(60, 20, 0)
+        )
     }
 
 }

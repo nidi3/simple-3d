@@ -24,7 +24,9 @@ fun main() {
     model(File("target/concave.stl")) {
         val vs = listOf(v(0, 0, 0), v(1, 1, 0), v(0, 2, 0), v(3, 2, 0), v(2, 1, 0), v(3, 0, 0))
         val xs = listOf(v(1, 1, 0), v(0, 2, 0), v(3, 2, 0), v(2, 1, 0), v(3, 0, 0), v(0, 0, 0))
-        add(prism(10, xs))
-        add(-prism(10, vs).translate(5, 0, 0))
+        add(
+            prism(10, xs),
+            -prism(10, vs).translate(5, 0, 0)
+        )
     }
 }
