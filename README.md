@@ -16,7 +16,8 @@ To use it with kotlin, add it as a dependency:
 </dependency>
 ```
 
-Then, create a model an add objects to it:
+Then, create a model an add objects to it.
+The model will be saved under the given file name, .stl and .obj formats are supported.
 ```kotlin 
 model(
     File("examples/simple.stl"),
@@ -26,5 +27,7 @@ model(
 ```
 
 <iframe src="https://www.viewstl.com/?embedded&url=https://github.com/nidi3/simple-3d/tree/master/examples/simple.stl&color=green" style="border:0;margin:0;width:500px;height:300px;"></iframe>
+
+<script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/simple.stl"></script>
 
 More examples can be found [here](https://github.com/nidi3/simple-3d/tree/master/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
