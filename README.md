@@ -24,6 +24,7 @@ model(
     sphere(center = v(3, 0, 0))
 )
 ```
-<iframe src="https://www.viewstl.com/?embedded&url=https%3A%2Fgithub.com/nidi3/simple-3d/examples/simple.stl&color=green" style="border:0;margin:0;width:500px;height:300px;"></iframe>
 
-More examples can be found [here](/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
+<iframe src="https://www.viewstl.com/?embedded&url=https://github.com/nidi3/simple-3d/tree/master/examples/simple.stl&color=green" style="border:0;margin:0;width:500px;height:300px;"></iframe>
+
+More examples can be found [here](https://github.com/nidi3/simple-3d/tree/master/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
