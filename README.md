@@ -1,10 +1,13 @@
 # simple-3d
+
+**To see the models described here, go to (https://nidi3.github.io/simple-3d/).**
+
 A simple CSG library to create models for 3D printing.
 Originally, the code is based on [csg.js](https://github.com/evanw/csg.js/).
 
 This is a kotlin multi platform project, so it can be used from both javascript and kotlin.
 The javascript part is currently unpolished,
-but for an example what can be done, [see here](https://nidi3.github.io/simple-3d/). 
+but for an example what can be done, [see here](https://nidi3.github.io/simple-3d/docs). 
 
 To use it with kotlin, add it as a dependency:
 
