@@ -1,10 +1,7 @@
 package guru.nidi.simple3d.examples
 
 import guru.nidi.simple3d.io.model
-import guru.nidi.simple3d.model.cube
-import guru.nidi.simple3d.model.deg
-import guru.nidi.simple3d.model.sphere
-import guru.nidi.simple3d.model.v
+import guru.nidi.simple3d.model.*
 import java.io.File
 
 fun main() {
@@ -13,4 +10,32 @@ fun main() {
         cube(length = v(1, 2, 3)).rotateX(45.deg),
         sphere(center = v(3, 0, 0))
     )
+
+    model(File("examples/csg.stl")) {
+        val a = cube(center = v(1, 0, 0))
+        val b = sphere()
+
+        add(
+            (a union b).translate(3, 0, 0),
+            (a subtract b).translate(6, 0, 0),
+            (a intersect b).translate(0, 0, 0)
+        )
+    }
+
+    model(File("examples/transform.stl")) {
+        val a = cube(length = v(1, 1, 2)) + cube(length = v(1, 2, 1))
+        add(a)
+        transformed(scale(.25, .25, .25)) {
+            add(
+                a.translate(0, 3, 3), a.translate(0, -3, 3),
+                a.translate(0, 3, -3), a.translate(0, -3, -3)
+            )
+        }
+    }
+
+    model(File("examples/material.obj")) {
+        val red = material("red", Color(1.0, 0.0, 0.0))
+        val green = material("green", Color(0.0, 1.0, 0.0))
+        add(cube().material(red) - cube(center = v(.5, .5, 0)).material(green))
+    }
 }
