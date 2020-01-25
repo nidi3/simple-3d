@@ -56,11 +56,15 @@ data class AffineTransform constructor(
         this * a.m20, this * a.m21, this * a.m22, this * a.m23
     )
 
+    fun translate(x: Number, y: Number, z: Number) = translate(v(x, y, z))
+
     fun translate(v: Vector) = AffineTransform(
         m00, m01, m02, m03 + m00 * v.x + m01 * v.y + m02 * v.z,
         m10, m11, m12, m13 + m10 * v.x + m11 * v.y + m12 * v.z,
         m20, m21, m22, m23 + m20 * v.x + m21 * v.y + m22 * v.z
     )
+
+    fun scale(x: Number, y: Number, z: Number) = scale(v(x, y, z))
 
     fun scale(v: Vector) = AffineTransform(
         m00 * v.x, m01 * v.y, m02 * v.z, m03,
@@ -119,9 +123,9 @@ data class AffineTransform constructor(
 }
 
 fun translate(v: Vector) = AffineTransform().translate(v)
-fun translate(x: Number, y: Number, z: Number) = translate(Vector(x.toDouble(), y.toDouble(), z.toDouble()))
+fun translate(x: Number, y: Number, z: Number) = translate(v(x, y, z))
 fun scale(v: Vector) = AffineTransform().scale(v)
-fun scale(x: Number, y: Number, z: Number) = scale(Vector(x.toDouble(), y.toDouble(), z.toDouble()))
+fun scale(x: Number, y: Number, z: Number) = scale(v(x, y, z))
 fun rotateX(a: Double) = AffineTransform().rotateX(a)
 fun rotateY(a: Double) = AffineTransform().rotateY(a)
 fun rotateZ(a: Double) = AffineTransform().rotateZ(a)

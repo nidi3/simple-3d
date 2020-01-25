@@ -36,7 +36,7 @@ fun cube(center: Vector = origin, length: Vector = unit, material: Material? = n
                 center.y + length.y * (((i shr 1) and 1) - .5),
                 center.z + length.z * (((i shr 2) and 1) - .5)
             )
-            Vertex(pos, Vector(info[1][0].toDouble(), info[1][1].toDouble(), info[1][2].toDouble()))
+            Vertex(pos, v(info[1][0], info[1][1], info[1][2]))
         })
     })
 

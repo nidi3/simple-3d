@@ -51,6 +51,6 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     fun interpolate(a: Vector, t: Double) = this + (a - this) * t
     fun abs() = Vector(abs(x), abs(y), abs(z))
     infix fun scale(a: Vector) = Vector(x * a.x, y * a.y, z * a.z)
-    fun scale(x: Number, y: Number, z: Number) = scale(Vector(x.toDouble(), y.toDouble(), z.toDouble()))
+    fun scale(x: Number, y: Number, z: Number) = scale(v(x, y, z))
     infix fun scaleInv(a: Vector) = Vector(x / a.x, y / a.y, z / a.z)
 }

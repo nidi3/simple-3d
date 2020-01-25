@@ -45,11 +45,11 @@ fun main() {
 
         ops(c2, c)
 
-        transformed(translate(0, 10, 0)) {
+        translate(0, 10, 0).apply {
             ops(c2, s)
         }
 
-        transformed(translate(0, 25, 0)) {
+        translate(0, 25, 0).apply {
             ops(c, ring)
         }
     }

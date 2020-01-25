@@ -36,7 +36,7 @@ class Model {
     internal val materials = mutableListOf<Material>()
     private var transform = AffineTransform()
 
-    fun <T> transformed(a: AffineTransform, block: Model.() -> T): T {
+    fun <T> transform(a: AffineTransform, block: Model.() -> T): T {
         val orig = transform
         try {
             transform = transform.applyTo(a)
@@ -45,6 +45,8 @@ class Model {
             transform = orig
         }
     }
+
+    fun <T> AffineTransform.apply(block: Model.() -> T): T = transform(this, block)
 
     @JsName("add")
     fun add(csg: Csg) = transform.applyTo(csg).also { csgs.add(it) }

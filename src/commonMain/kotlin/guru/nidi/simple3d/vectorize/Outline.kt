@@ -15,7 +15,7 @@
  */
 package guru.nidi.simple3d.vectorize
 
-import guru.nidi.simple3d.model.Vector
+import guru.nidi.simple3d.model.v
 import kotlin.js.JsName
 import kotlin.math.sign
 
@@ -31,7 +31,7 @@ data class Point(val x: Int, val y: Int) {
     fun isOneLine(p1: Point, p2: Point) = (p1.x - this.x).sign == (p2.x - p1.x).sign
             && (p1.y - this.y).sign == (p2.y - p1.y).sign
 
-    fun toVector() = Vector(x.toDouble(), y.toDouble(), 0.0)
+    fun toVector() = v(x, y, 0)
 }
 
 //TODO only one outline supported, endless loop is first point has no neighbors

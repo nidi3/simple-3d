@@ -26,14 +26,19 @@ fun main() {
     }
 
     model(File("examples/transform.stl")) {
-        val a = cube(length = v(1, 1, 2)) + cube(length = v(1, 2, 1))
-        add(a)
-        transformed(scale(.25, .25, .25)) {
-            add(
-                a.translate(0, 3, 3), a.translate(0, -3, 3),
-                a.translate(0, 3, -3), a.translate(0, -3, -3)
-            )
+        val cross = cube(length = v(1, 1, 2)) + cube(length = v(1, 2, 1))
+        fun f(level: Int) {
+            if (level > 0) {
+                add(cross)
+                scale(.25, .25, .25).apply {
+                    translate(0, 3, 3).apply { f(level - 1) }
+                    translate(0, -3, 3).apply { f(level - 1) }
+                    translate(0, 3, -3).apply { f(level - 1) }
+                    translate(0, -3, -3).apply { f(level - 1) }
+                }
+            }
         }
+        f(3)
     }
 
     model(File("examples/material.obj")) {
