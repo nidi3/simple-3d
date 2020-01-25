@@ -4,9 +4,9 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/guru.nidi.simple-3d/simple-3d-jvm/badge.svg)](https://maven-badges.herokuapp.com/maven-central/guru.nidi.simple-3d/simple-3d-jvm)
                                                                 
-## To see the models described here, go to https://nidi3.github.io/simple-3d
+## To see the models described here, go [here](https://nidi3.github.io/simple-3d).
 
-The github project is here: https://github.com/nidi3/simple-3d
+The github project is [here](https://github.com/nidi3/simple-3d).
 
 A simple CSG library to create models for 3D printing.
 Originally, the code is based on [csg.js](https://github.com/evanw/csg.js/).
