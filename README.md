@@ -94,7 +94,8 @@ model(File("examples/dinosaur.stl")) {
 }
 ```
 
-<img src="https://rawgit.com/nidi3/simple-3d/master/examples/brontosaurus-pattern.gif" width="500">
+<img src="examples/brontosaurus-pattern.gif" width="300">
+
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/dinosaur.stl"></script>
 ---
 
