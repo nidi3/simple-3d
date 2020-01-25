@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "guru.nidi.simple-3d"
-version = "0.0.2"
+version = "0.0.3"
 
 fun isSnapshot() = version.toString().endsWith("SNAPSHOT")
 

@@ -1,0 +1,2 @@
+./gradlew publishJvmPublicationToSonatypeRepository
+./gradlew closeAndReleaseRepository
