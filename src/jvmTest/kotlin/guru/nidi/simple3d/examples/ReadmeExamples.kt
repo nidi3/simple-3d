@@ -2,6 +2,9 @@ package guru.nidi.simple3d.examples
 
 import guru.nidi.simple3d.io.model
 import guru.nidi.simple3d.model.*
+import guru.nidi.simple3d.vectorize.Image
+import guru.nidi.simple3d.vectorize.outline
+import guru.nidi.simple3d.vectorize.simplify
 import java.io.File
 
 fun main() {
@@ -37,5 +40,13 @@ fun main() {
         val red = material("red", Color(1.0, 0.0, 0.0))
         val green = material("green", Color(0.0, 1.0, 0.0))
         add(cube().material(red) - cube(center = v(.5, .5, 0)).material(green))
+    }
+
+    model(File("examples/dinosaur.stl")) {
+        val img = Image.fromClasspath("brontosaurus-pattern.gif")
+        val c = outline(img) { rgb -> rgb < 0xffffff }
+            .simplify(5.0)
+            .map { it.toVector() / 10.0 }
+        add(prism(10, c))
     }
 }

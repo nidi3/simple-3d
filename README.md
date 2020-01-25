@@ -83,4 +83,18 @@ Unfortunately, the viewer does not support materials :(
 
 ---
 
+There is also a simple vectorizer which can be used to create models from images.
+```kotlin
+model(File("examples/dinosaur.stl")) {
+    val img = Image.fromClasspath("brontosaurus-pattern.gif")
+    val c = outline(img) { rgb -> rgb < 0xffffff }
+        .simplify(5.0)
+        .map { it.toVector() / 10.0 }
+    add(prism(10, c))
+}
+```
+
+<script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/dinosaur.stl"></script>
+---
+
 More examples can be found [here](https://github.com/nidi3/simple-3d/tree/master/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
