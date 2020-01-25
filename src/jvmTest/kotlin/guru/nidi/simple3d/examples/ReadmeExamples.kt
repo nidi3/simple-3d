@@ -50,7 +50,7 @@ fun main() {
     model(File("examples/dinosaur.stl")) {
         val img = Image.fromClasspath("brontosaurus-pattern.gif")
         val c = outline(img) { rgb -> rgb < 0xffffff }
-            .simplify(5.0)
+            .simplify(2.0)
             .map { it.toVector() / 10.0 }
         add(prism(10, c))
     }
