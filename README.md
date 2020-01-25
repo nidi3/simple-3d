@@ -28,9 +28,9 @@ model(
     sphere(center = v(3, 0, 0))
 )
 ```
-<div style="color: white; font-size: 8px">
+
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/simple.stl"></script>
-</div>
+
 
 Objects can be combined with the `union` / `+`, `subtract` / `-` and `intersect` / `*` operators. 
 ```kotlin
@@ -45,7 +45,9 @@ model(File("examples/csg.stl")) {
     )
 }
 ```
+
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/csg.stl"></script>
+
 
 Transformations can be applied before adding objects to the model.
 ```kotlin
@@ -60,7 +62,21 @@ model(File("examples/transform.stl")) {
     }
 }
 ```
+
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/transform.stl"></script>
+
+
+When using the .obj format, materials can be assigned to objects.  
+```kotlin
+model(File("examples/material.obj")) {
+    val red = material("red", Color(1.0, 0.0, 0.0))
+    val green = material("green", Color(0.0, 1.0, 0.0))
+    add(cube().material(red) - cube(center = v(.5, .5, 0)).material(green))
+}
+```
+
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/material.obj"></script>
+
+Unfortunately, the viewer does not support materials :(
 
 More examples can be found [here](https://github.com/nidi3/simple-3d/tree/master/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
