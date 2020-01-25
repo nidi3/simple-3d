@@ -18,8 +18,9 @@ To use it with kotlin, add it as a dependency:
     <version>0.0.1</version>
 </dependency>
 ```
+---
 
-Then, create a model an add objects to it.
+The basic element is the model. Objects are added to a model.
 The model will be saved under the given file name, .stl and .obj formats are supported.
 ```kotlin 
 model(
@@ -31,6 +32,7 @@ model(
 
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/simple.stl"></script>
 ---
+
 Objects can be combined with the `union` / `+`, `subtract` / `-` and `intersect` / `*` operators. 
 ```kotlin
 model(File("examples/csg.stl")) {
@@ -46,7 +48,7 @@ model(File("examples/csg.stl")) {
 ```
 
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/csg.stl"></script>
-
+---
 
 Transformations can be applied before adding objects to the model.
 ```kotlin
@@ -63,7 +65,7 @@ model(File("examples/transform.stl")) {
 ```
 
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/transform.stl"></script>
-
+---
 
 When using the .obj format, materials can be assigned to objects.  
 ```kotlin
@@ -77,5 +79,6 @@ model(File("examples/material.obj")) {
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/material.obj"></script>
 
 Unfortunately, the viewer does not support materials :(
+---
 
 More examples can be found [here](https://github.com/nidi3/simple-3d/tree/master/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
