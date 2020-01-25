@@ -30,8 +30,7 @@ model(
 ```
 
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/simple.stl"></script>
-
-
+---
 Objects can be combined with the `union` / `+`, `subtract` / `-` and `intersect` / `*` operators. 
 ```kotlin
 model(File("examples/csg.stl")) {
