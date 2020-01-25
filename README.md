@@ -33,7 +33,8 @@ model(
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/simple.stl"></script>
 ---
 
-Objects can be combined with the `union` / `+`, `subtract` / `-` and `intersect` / `*` operators. 
+Objects can be combined with the `union` / `+`, `subtract` / `-` and `intersect` / `*` operators.
+They can be translated, rotated and scaled. 
 ```kotlin
 model(File("examples/csg.stl")) {
     val a = cube(center = v(1, 0, 0))
@@ -79,6 +80,7 @@ model(File("examples/material.obj")) {
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/material.obj"></script>
 
 Unfortunately, the viewer does not support materials :(
+
 ---
 
 More examples can be found [here](https://github.com/nidi3/simple-3d/tree/master/src/jvmTest/kotlin/guru/nidi/simple3d/examples).
