@@ -28,7 +28,9 @@ model(
     sphere(center = v(3, 0, 0))
 )
 ```
+<div style="color: white">
 <script src="https://embed.github.com/view/3d/nidi3/simple-3d/master/examples/simple.stl"></script>
+</div>
 
 Objects can be combined with the `union` / `+`, `subtract` / `-` and `intersect` / `*` operators. 
 ```kotlin
