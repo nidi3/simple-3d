@@ -123,13 +123,3 @@ class Csg internal constructor(val polygons: List<Polygon>, n: Node?) {
         return AffineTransform().translate(dist).scale(unit + (value scaleInv b.size())).translate(-dist).applyTo(this)
     }
 }
-
-data class Box(val from: Vector, val to: Vector) {
-    fun size() = to - from
-
-    infix fun intersect(b: Box): Boolean =
-        to.x >= b.from.x &&
-                from.x <= b.to.x &&
-                to.y >= b.from.y &&
-                from.y <= b.to.y
-}

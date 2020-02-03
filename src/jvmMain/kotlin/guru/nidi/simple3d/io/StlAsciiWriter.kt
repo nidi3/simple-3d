@@ -24,20 +24,20 @@ import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
-fun Model.writeAsciiStl(f: File, name: String) {
-    StlAsciiWriter(f, name).use { out ->
+fun Model.writeAsciiStl(f: File) {
+    StlAsciiWriter(f).use { out ->
         csgs.forEach { out.write(it) }
     }
 }
 
-class StlAsciiWriter(file: File, private val name: String) : AutoCloseable {
+class StlAsciiWriter(private val file: File) : AutoCloseable {
     private val out = file.let {
         it.parentFile.mkdirs()
         PrintWriter(OutputStreamWriter(FileOutputStream(file)))
     }
 
     init {
-        out.println("solid $name")
+        out.println("solid ${file.name}")
     }
 
     fun write(csg: Csg) = csg.polygons.forEach { p ->
@@ -61,7 +61,7 @@ class StlAsciiWriter(file: File, private val name: String) : AutoCloseable {
     }
 
     override fun close() {
-        out.println("endsolid $name")
+        out.println("endsolid ${file.name}")
         out.close()
     }
 }

@@ -45,7 +45,7 @@ class StlBinaryWriter(val file: File) : AutoCloseable {
         }
     }
 
-    fun write(p: Polygon) {
+    private fun write(p: Polygon) {
         write(0.0)
         write(0.0)
         write(0.0)
